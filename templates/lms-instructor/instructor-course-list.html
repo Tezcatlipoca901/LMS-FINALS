@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PUPLMS: Course List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/instructor-course-list.css') }}" />
+  <link rel="icon" href="{{ url_for('static', filename='images/logo88x88pup.png') }}" type="image/x-icon">
+</head>
+<body>
+  <div class="mobile-topbar">
+    <div class="mobile-topbar-logo">
+      <img src="{{ url_for('static', filename='images/logo88x88pup.png') }}" alt="PUP Logo">
+      <span>PUPLMS</span>
+    </div>
+    <button class="mobile-hamburger" id="mobile-hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+
+  <div class="mobile-nav-dropdown" id="mobile-nav-dropdown">
+    <a href="/instructor/profile" class="nav-link">Profile (AltF26)</a>
+    <a href="/instructor/home" class="nav-link">Home</a>
+    <a href="/instructor/course-list" class="nav-link active-nav">Course List</a>
+    <a href="/instructor/lmsinbox" class="nav-link">Inbox</a>
+    <a href="/instructor/calendar" class="nav-link">Calendar</a>
+    <a href="{{ url_for('logout') }}" class="nav-link nav-logout">Return to SIS</a>
+  </div>
+
+  <div class="mobile-nav-overlay" id="mobile-nav-overlay"></div>
+
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">
+          <img src="{{ url_for('static', filename='images/logo88x88pup.png') }}" alt="PUP Logo" />
+        </div>
+        <div class="sidebar-logo-text">
+          <strong>PUPLMS: Instructor</strong>
+        </div>
+      </div>
+    </div>
+    <a href="/instructor/profile" class="sidebar-user" style="text-decoration: none; color: inherit; display: block;">
+          <div class="user-avatar">AF</div>
+            <div class="user-name">AltF26</div>
+          <div class="user-number">2024-00123-SM-0</div>
+        </a>
+
+    <div class="sidebar-nav">
+          <a class="nav-item" href="/instructor/home">Home</a>
+          <a class="nav-item active-nav" href="/instructor/course-list">Course List</a>
+          <a class="nav-item" href="/instructor/lmsinbox">Inbox</a>
+          <a class="nav-item" href="/instructor/calendar">Calendar</a>
+    </div> 
+
+    <div class="sidebar-footer">
+      <form action="/sis" method="GET">
+        <button type="submit" class="logout-btn">Return to SIS</button>
+      </form>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <div class="welcome-banner">
+      <h2 class="welcome-title">Course List</h2>
+      <p class="welcome-subtitle">
+        Here is your overview for managing your assigned courses, tracking student activities, and viewing recent submissions.
+      </p>
+    </div>
+
+    <div class="dashboard-split">
+        <div class="left-panel">
+          <div class="custom-dropdown" id="sectionDropdown">
+            <div class="dropdown-header">
+              <span id="selected-value">All Sections</span>
+              <i class="arrow-icon">▼</i>
+            </div>
+            <ul class="dropdown-list">
+              <li data-value="All">All Sections</li>
+              <li data-value="BSIT 1-1">BSIT 1-1</li>
+              <li data-value="BSIT 2-1">BSIT 2-1</li>
+            </ul>
+          </div>
+
+          <div class="banner-courses" id="courseContainer"></div>
+        </div>
+
+        <div class="right-panel">
+          <div class="schedule-card">
+            <h3 class="schedule-title">Class Schedule</h3>
+            <div class="schedule-content" id="scheduleContainer">
+              </div>
+          </div>
+        </div>
+
+    </div>
+    </main>
+  <div class="modal-overlay" id="courseModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="modal-close" id="closeModal">&times;</button>
+        <span class="modal-badge" id="modalCourseCode">COMP 014</span>
+        <h2 class="modal-title" id="modalCourseName">QUANTITATIVE METHODS...</h2>
+      </div>
+      
+      <div class="modal-body">
+        <p class="modal-detail">
+          <strong>Schedule:</strong> <span id="modalSchedule">MON 10:30 AM - 1:30 PM (Room 201)</span>
+        </p>
+      </div>
+      
+      <div class="modal-footer">
+        <a href="/instructor/course-overview">
+        <button class="modal-btn">Enter Full Course Dashboard</button>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script src ="{{ url_for('static', filename='js/modules/lms-instructor/instructor-course-list.js') }}"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const hamburger = document.getElementById("mobile-hamburger");
+      const dropdown = document.getElementById("mobile-nav-dropdown");
+      const overlay = document.getElementById("mobile-nav-overlay");
+
+      if (hamburger && dropdown && overlay) {
+        function toggleNav() {
+          hamburger.classList.toggle("open");
+          dropdown.classList.toggle("open");
+          overlay.classList.toggle("active");
+        }
+        hamburger.addEventListener("click", toggleNav);
+        overlay.addEventListener("click", toggleNav);
+      }
+    });
+  </script>
+</body>
+</html>

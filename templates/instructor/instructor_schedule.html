@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PUP Portal - Teaching Schedule</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+  </head>
+
+  <body>
+    <!-- MOBILE HAMBURGER MENU BUTTON -->
+    <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle Menu">
+      <span class="bar top"></span>
+      <span class="bar middle"></span>
+      <span class="bar bottom"></span>
+    </button>
+
+    <!-- MOBILE OVERLAY -->
+    <div class="mobile-overlay" onclick="toggleMobileMenu()"></div>
+
+    <!-- MAIN DASHBOARD CONTAINER -->
+    <div class="dashboard-container active">
+      
+      <!-- SIDEBAR NAVIGATION -->
+      <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+              <img src="{{ url_for('static', filename='images/logo88x88pup.png') }}" alt="PUP Logo" />
+            </div>
+            <div class="sidebar-logo-text">
+              <strong>PUP</strong> Instructor Portal
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-mobile-header">
+          <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+              <img src="{{ url_for('static', filename='images/logo88x88pup.png') }}" alt="PUP Logo" />
+            </div>
+            <div class="sidebar-logo-text">
+              <strong>PUP</strong> Instructor Portal
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-profile">
+          <div class="profile-avatar">AT</div>
+          <div class="profile-info">
+            <span class="profile-name">Alpha Trion</span>
+            <span class="profile-course">Instructor</span>
+          </div>
+        </div>
+
+        <div class="sidebar-user">
+          <div class="user-avatar">AT</div>
+          <div class="user-name">Alpha Trion</div>
+          <div class="user-number">INST-001</div>
+        </div>
+
+        <div class="sidebar-nav">
+          <a class="nav-item" href="{{ url_for('instructor_dashboard') }}">Home</a>
+          <a class="nav-item" href="{{ url_for('instructor_account') }}">Account Info</a>
+          <a class="nav-item" href="{{ url_for('instructor_classes') }}">My Classes</a>
+          <a class="nav-item" href="{{ url_for('instructor_grades') }}">Manage Grades</a>
+          <a class="nav-item" href="{{ url_for('instructor_students') }}">Students Records</a>
+          <a class="nav-item" href="{{ url_for('instructor_attendance') }}">Attendance</a>
+          <a class="nav-item active" href="{{ url_for('instructor_schedule') }}">Schedule</a>
+          <a class="nav-item" href="{{ url_for('instructor_applications') }}">Applications</a> 
+          <a class="nav-item" href="{{ url_for('instructor_messages') }}">Messages</a>
+          <a class="nav-item" href="{{ url_for('instructor_inbox') }}">Inbox</a>
+        </div>
+
+        <!-- LMS LAUNCH BUTTON -->
+        <div class="lms-launch-wrapper">
+          <button class="lms-launch-btn" onclick="launchLMS()">
+            <span class="lms-btn-icon">⬡</span>
+            <span class="lms-btn-text">Launch LMS</span>
+            <span class="lms-btn-badge">BETA</span>
+          </button>
+        </div>
+
+        <form action="{{ url_for('logout') }}" method="GET">
+          <button type="submit" class="logout-btn">Log Out</button>
+        </form>
+      </nav>
+
+      <!-- MAIN CONTENT AREA -->
+      <main class="main-content">
+        
+        <!-- Page Header -->
+        <header class="top-header">
+          <h1 class="page-title">Teaching Schedule</h1>
+          <span class="header-date" id="currentDate"></span>
+        </header>
+
+        <!-- SCHEDULE CONTENT -->
+        <section class="content-section active">
+          
+          <!-- Weekly Schedule Card -->
+          <div class="card">
+            <div class="card-header">Weekly Schedule - 2nd Semester, AY 2025-2026</div>
+            <div class="card-body">
+              <div class="info-grid">
+                <div class="info-item">
+                  <div class="info-label">Monday</div>
+                  <div class="info-value">No Classes</div>
+                </div>
+
+                <div class="info-item">
+                  <div class="info-label">Tuesday</div>
+                  <div class="info-value">No Classes</div>
+                </div>
+
+                <div class="info-item">
+                  <div class="info-label">Wednesday</div>
+                  <div class="info-value">No Classes</div>
+                </div>
+
+                <div class="info-item">
+                  <div class="info-label">Thursday</div>
+                  <div class="info-value">
+                    2:30PM - 5:30PM — IT101 (LAB) | Computer Lab 1<br />
+                    2:30PM - 5:30PM — IT102 (LAB) | Computer Lab 2
+                  </div>
+                </div>
+
+                <div class="info-item">
+                  <div class="info-label">Friday</div>
+                  <div class="info-value">
+                    8:00AM - 10:00AM — IT071 (LEC) | Computer Lab 2<br />
+                    10:30AM - 12:30PM — IT101 (LEC) | Room 202<br />
+                    10:30AM - 12:30PM — IT102 (LEC) | Room 205
+                  </div>
+                </div>
+
+                <div class="info-item">
+                  <div class="info-label">Saturday</div>
+                  <div class="info-value">No Classes</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Office Hours Card -->
+          <div class="card">
+            <div class="card-header">Office Hours</div>
+            <div class="card-body">
+              <div class="info-grid">
+                <div class="info-item full-width">
+                  <div class="info-label">Office Location</div>
+                  <div class="info-value">Faculty Office</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Monday - Friday</div>
+                  <div class="info-value">9:30 AM - 12:00 PM</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Consultation Days</div>
+                  <div class="info-value">Wed & Fri Afternoons</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+          <!-- FOOTER -->
+          <footer class="footer">
+            <div class="footer-top"></div>
+            <div class="footer-container">
+              <div class="footer-about">
+                <h3>Polytechnic University of the Philippines</h3>
+                <p>
+                  PUPSIS - Polytechnic University Student Information System.
+                  Secure and convenient access to your academic records and applications.
+                </p>
+              </div>
+
+              <div class="footer-contact">
+                <h4>Policies & Legal terms</h4>
+                <p>Privacy Policy</p>
+                <p>Terms of Services</p>
+                <p>Data Protection</p>
+                <p>Code of Conduct</p>
+              </div>
+
+              <div class="footer-contact">
+                <h4>Contact Us</h4>
+                <p>Email: support@pup.edu.ph</p>
+                <p>Phone: (63+) 09XX-XXXX-XX</p>
+                <p>Address: Sta. Mesa, Manila, Philippines</p>
+              </div>
+            </div>
+
+            <div class="footer-bottom">
+              <p>&copy; 2026 Polytechnic University of the Philippines. All Rights Reserved.</p>
+            </div>
+          </footer>
+      </main>
+    </div>
+
+    <!-- LMS LAUNCH OVERLAY -->
+    <div id="lmsOverlay" class="lms-overlay">
+      <div class="lms-overlay-ring lms-ring-1"></div>
+      <div class="lms-overlay-ring lms-ring-2"></div>
+      <div class="lms-overlay-ring lms-ring-3"></div>
+      <div class="lms-overlay-content">
+        <div class="lms-overlay-logo">⬡</div>
+        <div class="lms-overlay-title">PUP Learning Management System</div>
+        <div class="lms-overlay-subtitle" id="lmsOverlaySubtitle">Initializing...</div>
+        <div class="lms-progress-bar-wrapper">
+          <div class="lms-progress-bar" id="lmsProgressBar"></div>
+        </div>
+        <div class="lms-overlay-note">(Demo Only)</div>
+      </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script type="module" src="{{ url_for('static', filename='js/script.js') }}"></script>
+  </body>
+</html>

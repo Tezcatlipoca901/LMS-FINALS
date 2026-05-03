@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PUP Portal - Degree Audit</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/styles.css') }}"
+    />
+  </head>
+
+  <body>
+    <button
+      class="mobile-menu-btn"
+      onclick="toggleMobileMenu()"
+      aria-label="Toggle Menu"
+    >
+      <span class="bar top"></span><span class="bar middle"></span
+      ><span class="bar bottom"></span>
+    </button>
+    <div class="mobile-overlay" onclick="toggleMobileMenu()"></div>
+
+    <div class="dashboard-container active">
+      <nav class="sidebar" id="sidebar">
+        <div class="sidebar-mobile-header">
+          <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+              <img
+                src="{{ url_for('static', filename='images/logo88x88pup.png') }}"
+                alt="PUP Logo"
+              />
+            </div>
+            <div class="sidebar-logo-text">
+              <strong>PUP</strong> Admin Portal
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-profile">
+          <div class="profile-avatar">A</div>
+          <div class="profile-info">
+            <span class="profile-name">ADMIN1</span
+            ><span class="profile-number">001</span>
+          </div>
+        </div>
+        <div class="sidebar-header">
+          <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+              <img
+                src="{{ url_for('static', filename='images/logo88x88pup.png') }}"
+                alt="PUP Logo"
+              />
+            </div>
+            <div class="sidebar-logo-text">
+              <strong>PUP</strong> Admin Portal
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-user">
+          <div class="user-avatar">A</div>
+          <div class="user-name">ADMIN1</div>
+          <div class="user-number">001</div>
+        </div>
+        <div class="sidebar-nav">
+          <a class="nav-item" href="{{ url_for('admin_dashboard') }}">Home</a>
+          <a class="nav-item" href="{{ url_for('admin_master_data') }}">Master Data</a>
+          <a class="nav-item" href="{{ url_for('admin_acc_info') }}">Account Info</a>
+          <a class="nav-item active" href="{{ url_for('admin_audit') }}">Degree Audit</a>
+
+          <div class="nav-dropdown">
+            <button
+              class="nav-item dropdown-btn"
+              onclick="toggleDropdown('studentMenu', this)"
+            >
+              Student Management<span class="arrow">▼</span>
+            </button>
+            <div class="dropdown-container" id="studentMenu">
+              <a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_student_records') }}"
+                >Student Records & Management</a
+              ><a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_applications') }}"
+                >Application Approvals</a
+              >
+            </div>
+          </div>
+          <div class="nav-dropdown">
+            <button
+              class="nav-item dropdown-btn"
+              onclick="toggleDropdown('instructorMenu', this)"
+            >
+              Instructor Management<span class="arrow">▼</span>
+            </button>
+            <div class="dropdown-container" id="instructorMenu">
+              <a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_instructors') }}"
+                >Manage Instructors</a
+              ><a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_schedule') }}"
+                >Scheduling & Timetable</a
+              >
+            </div>
+          </div>
+          <div class="nav-dropdown">
+            <button
+              class="nav-item dropdown-btn"
+              onclick="toggleDropdown('gradesMenu', this)"
+            >
+              Grades & Attendance<span class="arrow">▼</span>
+            </button>
+            <div class="dropdown-container" id="gradesMenu">
+              <a class="nav-item sub-item" href="{{ url_for('admin_grades') }}"
+                >Grade Overrides</a
+              ><a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_attendance') }}"
+                >Attendance Overrides</a
+              >
+            </div>
+          </div>
+
+          <div class="nav-dropdown">
+            <button
+              class="nav-item dropdown-btn"
+              onclick="toggleDropdown('communicationMenu', this)"
+            >
+              Communication<span class="arrow">▼</span>
+            </button>
+            <div class="dropdown-container" id="communicationMenu">
+              <a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_announcements') }}"
+                >Announcements</a
+              ><a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_messaging') }}"
+                >Messaging</a
+              >
+            </div>
+          </div>
+
+          <form action="{{ url_for('logout') }}" method="GET">
+            <button type="submit" class="logout-btn">Log Out</button>
+          </form>
+        </div>
+      </nav>
+
+      <!--MAIN CONTENT-->
+      <main class="main-content">
+        <header class="top-header">
+          <h1 class="page-title">Degree Audit</h1>
+          <span class="header-date" id="currentDate"></span>
+        </header>
+
+        <section class="content-section active">
+          <div class="welcome-banner">
+            <div class="welcome-title">Degree Audit & Graduation Progress</div>
+            <p class="welcome-subtitle">
+              Track student graduation progress and curriculum completion.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">Search Student</div>
+            <div class="card-body">
+              <div style="display:flex; gap:15px; align-items:flex-end;">
+                <div class="form-group" style="flex:1; margin-bottom:0;">
+                  <label for="searchStudentAudit">Student Number or Name</label>
+                  <input
+                    type="text"
+                    id="searchStudentAudit"
+                    placeholder="Enter student number or name"
+                  />
+                </div>
+                <div style="padding-bottom:1px;">
+                  <button class="cor-btn" id="btnSearchAudit">Search & Audit</button>
+                </div>
+              </div>
+              <div id="auditSearchNotif" style="display:none; margin-top:10px;"></div>
+            </div>
+          </div>
+
+          <!-- AUDIT RESULTS — hidden until search -->
+          <div id="auditResultsWrapper" style="display:none;">
+
+            <div class="card">
+              <div class="card-header" id="auditCardHeader">Degree Audit</div>
+              <div class="card-body">
+                <div class="info-grid">
+                  <div class="info-item">
+                    <div class="info-label">Program</div>
+                    <div class="info-value" id="auditProgram"></div>
+                  </div>
+                  <div class="info-item">
+                    <div class="info-label">Year Level</div>
+                    <div class="info-value" id="auditYear"></div>
+                  </div>
+                  <div class="info-item">
+                    <div class="info-label">Units Completed</div>
+                    <div class="info-value" id="auditUnits"></div>
+                  </div>
+                  <div class="info-item">
+                    <div class="info-label">GWA</div>
+                    <div class="info-value" id="auditGwa"></div>
+                  </div>
+                  <div class="info-item">
+                    <div class="info-label">Completion Rate</div>
+                    <div class="info-value" id="auditRate"></div>
+                  </div>
+                  <div class="info-item">
+                    <div class="info-label">Expected Graduation</div>
+                    <div class="info-value" id="auditGrad"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">Curriculum Checklist</div>
+              <div class="card-body">
+                <div class="data-table-wrapper">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Course Code</th>
+                        <th>Course Name</th>
+                        <th>Units</th>
+                        <th>Grade</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody id="auditCurriculumBody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">Graduation Readiness</div>
+              <div class="card-body">
+                <div class="checklist-container">
+                  <h3>Checklist:</h3>
+                  <div class="checklist-items" id="auditChecklist"></div>
+                  <div class="checklist-status" id="auditStatus"></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+          <!-- FOOTER -->
+          <footer class="footer">
+            <div class="footer-top"></div>
+            <div class="footer-container">
+              <div class="footer-about">
+                <h3>Polytechnic University of the Philippines</h3>
+                <p>
+                  PUPSIS - Polytechnic University Student Information System.
+                  Secure and convenient access to your academic records and applications.
+                </p>
+              </div>
+
+              <div class="footer-contact">
+                <h4>Policies & Legal terms</h4>
+                <p>Privacy Policy</p>
+                <p>Terms of Services</p>
+                <p>Data Protection</p>
+                <p>Code of Conduct</p>
+              </div>
+
+              <div class="footer-contact">
+                <h4>Contact Us</h4>
+                <p>Email: support@pup.edu.ph</p>
+                <p>Phone: (63+) 09XX-XXXX-XX</p>
+                <p>Address: Sta. Mesa, Manila, Philippines</p>
+              </div>
+            </div>
+
+            <div class="footer-bottom">
+              <p>&copy; 2026 Polytechnic University of the Philippines. All Rights Reserved.</p>
+            </div>
+          </footer>
+      </main>
+    </div>
+
+    <script type="module" src="{{ url_for('static', filename='js/script.js') }}"></script>
+  </body>
+</html>

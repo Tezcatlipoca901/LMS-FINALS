@@ -1,0 +1,884 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PUP Portal - Student Management</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/styles.css') }}"
+    />
+  </head>
+
+  <body>
+    <button
+      class="mobile-menu-btn"
+      onclick="toggleMobileMenu()"
+      aria-label="Toggle Menu"
+    >
+      <span class="bar top"></span><span class="bar middle"></span
+      ><span class="bar bottom"></span>
+    </button>
+    <div class="mobile-overlay" onclick="toggleMobileMenu()"></div>
+
+    <div class="dashboard-container active">
+      <nav class="sidebar" id="sidebar">
+        <div class="sidebar-mobile-header">
+          <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+              <img
+                src="{{ url_for('static', filename='images/logo88x88pup.png') }}"
+                alt="PUP Logo"
+              />
+            </div>
+            <div class="sidebar-logo-text">
+              <strong>PUP</strong> Admin Portal
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-profile">
+          <div class="profile-avatar">A</div>
+          <div class="profile-info">
+            <span class="profile-name">ADMIN1</span
+            ><span class="profile-number">001</span>
+          </div>
+        </div>
+        <div class="sidebar-header">
+          <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+              <img
+                src="{{ url_for('static', filename='images/logo88x88pup.png') }}"
+                alt="PUP Logo"
+              />
+            </div>
+            <div class="sidebar-logo-text">
+              <strong>PUP</strong> Admin Portal
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-user">
+          <div class="user-avatar">A</div>
+          <div class="user-name">ADMIN1</div>
+          <div class="user-number">001</div>
+        </div>
+        <div class="sidebar-nav">
+          <a class="nav-item" href="{{ url_for('admin_dashboard') }}"
+            >Home</a
+          >
+          <a class="nav-item" href="{{ url_for('admin_master_data') }}"
+            >Master Data</a>
+          <a class="nav-item" href="{{ url_for('admin_acc_info') }}">Account Info</a>
+          <a class="nav-item" href="{{ url_for('admin_audit') }}">Degree Audit</a>
+
+          <div class="nav-dropdown">
+            <button
+              class="nav-item dropdown-btn active"
+              onclick="toggleDropdown('studentMenu', this)"
+            >
+              Student Management<span class="arrow rotate">▼</span>
+            </button>
+            <div class="dropdown-container show" id="studentMenu">
+              <a
+                class="nav-item sub-item active"
+                href="{{ url_for('admin_student_records') }}"
+                >Student Records & Management</a
+              >
+              <a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_applications') }}"
+                >Application Approvals</a
+              >
+            </div>
+          </div>
+          <div class="nav-dropdown">
+            <button
+              class="nav-item dropdown-btn"
+              onclick="toggleDropdown('instructorMenu', this)"
+            >
+              Instructor Management<span class="arrow">▼</span>
+            </button>
+            <div class="dropdown-container" id="instructorMenu">
+              <a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_instructors') }}"
+                >Manage Instructors</a
+              >
+              <a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_schedule') }}"
+                >Scheduling & Timetable</a
+              >
+            </div>
+          </div>
+          <div class="nav-dropdown">
+            <button
+              class="nav-item dropdown-btn"
+              onclick="toggleDropdown('gradesMenu', this)"
+            >
+              Grades & Attendance<span class="arrow">▼</span>
+            </button>
+            <div class="dropdown-container" id="gradesMenu">
+              <a class="nav-item sub-item" href="{{ url_for('admin_grades') }}"
+                >Grade Overrides</a
+              >
+              <a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_attendance') }}"
+                >Attendance Overrides</a
+              >
+            </div>
+          </div>
+
+          <div class="nav-dropdown">
+            <button
+              class="nav-item dropdown-btn"
+              onclick="toggleDropdown('communicationMenu', this)"
+            >
+              Communication<span class="arrow">▼</span>
+            </button>
+            <div class="dropdown-container" id="communicationMenu">
+              <a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_announcements') }}"
+                >Announcements</a
+              >
+              <a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_messaging') }}"
+                >Messaging</a
+              >
+            </div>
+          </div>
+
+          <form action="{{ url_for('logout') }}" method="GET">
+            <button type="submit" class="logout-btn">Log Out</button>
+          </form>
+        </div>
+      </nav>
+
+      <!--MAIN CONTENT-->
+      <main class="main-content">
+        <header class="top-header">
+          <h1 class="page-title">Student Management</h1>
+          <span class="header-date" id="currentDate"></span>
+        </header>
+
+        <section class="content-section active">
+
+          <!-- Actions Card -->
+          <div class="card">
+            <div class="card-header">Actions</div>
+            <div class="card-body">
+              <button class="btn-save" onclick="openEnrollStudentModal()">Enroll New Student</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">Search & Filter</div>
+            <div class="card-body">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="searchStudent">Search Student</label>
+                  <input
+                    type="text"
+                    id="searchStudent"
+                    placeholder="Enter student number or name"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="filterProgram">Program</label>
+                  <select id="filterProgram">
+                    <option value="">All Programs</option>
+                    <option value="BSCS">BS Accountancy</option>
+                    <option value="BSIT">BS Information Technology</option>
+                    <option value="BSBA">BS Hospitality Management</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="filterYear">Year Level</label>
+                  <select id="filterYear">
+                    <option value="">All Years</option>
+                    <option value="1">1st Year</option>
+                    <option value="2">2nd Year</option>
+                    <option value="3">3rd Year</option>
+                    <option value="4">4th Year</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="filterStatus">Status</label>
+                  <select id="filterStatus">
+                    <option value="">All Status</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                    <option value="graduated">Graduated</option>
+                  </select>
+                </div>
+              </div>
+              <button class="btn-save">
+                Apply Filters
+              </button>
+            </div>
+          </div>
+
+          <!-- Student Records Table -->
+          <div class="card">
+            <div class="card-header">Student Records</div>
+            <div class="card-body">
+              <div class="data-table-wrapper">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Student Number</th>
+                      <th>Name</th>
+                      <th>Program</th>
+                      <th>Year Level</th>
+                      <th>Email</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>2024-00199-SM-0</td>
+                      <td>Nami</td>
+                      <td>BS Accountancy</td>
+                      <td>1st Year</td>
+                      <td>nami@pup.edu.ph</td>
+                      <td><span class="status-badge status-present">Active</span></td>
+                      <td>
+                        <button class="btn-save" onclick="openStudentProfileModal(this)">View Profile</button>
+                        <button class="btn-archive" onclick="openArchiveStudentModal(this)" disabled>Archive</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>2024-00222-SM-0</td>
+                      <td>Nico Robin</td>
+                      <td>BS Information Technology</td>
+                      <td>2nd Year</td>
+                      <td>ncrobin@pup.edu.ph</td>
+                      <td><span class="status-badge status-present">Active</span></td>
+                      <td>
+                        <button class="btn-save" onclick="openStudentProfileModal(this)">View Profile</button>
+                        <button class="btn-archive" onclick="openArchiveStudentModal(this)" disabled>Archive</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>2023-00433-SM-0</td>
+                      <td>Monkey D. Luffy</td>
+                      <td>BS Hospitality Management</td>
+                      <td>3rd Year</td>
+                      <td>mnkydluffy@pup.edu.ph</td>
+                      <td><span class="status-badge status-present">Active</span></td>
+                      <td>
+                        <button class="btn-save" onclick="openStudentProfileModal(this)">View Profile</button>
+                        <button class="btn-archive" onclick="openArchiveStudentModal(this)" disabled>Archive</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>2022-00277-SM-0</td>
+                      <td>Monkey D. Dragon</td>
+                      <td>BS Information Technology</td>
+                      <td>4th Year</td>
+                      <td>mnkyddragon@pup.edu.ph</td>
+                      <td><span class="status-badge status-pending">Graduated</span></td>
+                      <td>
+                        <button class="btn-save" onclick="openStudentProfileModal(this)">View Profile</button>
+                        <button class="btn-archive" onclick="openArchiveStudentModal(this)">Archive</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>2024-00925-SM-0</td>
+                      <td>Monkey D. Garp</td>
+                      <td>BS Information Technology</td>
+                      <td>4th Year</td>
+                      <td>mnkydgarp@pup.edu.ph</td>
+                      <td><span class="status-badge status-absent">Inactive</span></td>
+                      <td>
+                        <button class="btn-save" onclick="openStudentProfileModal(this)">View Profile</button>
+                        <button class="btn-archive" onclick="openArchiveStudentModal(this)">Archive</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+          <!-- FOOTER -->
+          <footer class="footer">
+            <div class="footer-top"></div>
+            <div class="footer-container">
+              <div class="footer-about">
+                <h3>Polytechnic University of the Philippines</h3>
+                <p>
+                  PUPSIS - Polytechnic University Student Information System.
+                  Secure and convenient access to your academic records and applications.
+                </p>
+              </div>
+
+              <div class="footer-contact">
+                <h4>Policies & Legal terms</h4>
+                <p>Privacy Policy</p>
+                <p>Terms of Services</p>
+                <p>Data Protection</p>
+                <p>Code of Conduct</p>
+              </div>
+
+              <div class="footer-contact">
+                <h4>Contact Us</h4>
+                <p>Email: support@pup.edu.ph</p>
+                <p>Phone: (63+) 09XX-XXXX-XX</p>
+                <p>Address: Sta. Mesa, Manila, Philippines</p>
+              </div>
+            </div>
+
+            <div class="footer-bottom">
+              <p>&copy; 2026 Polytechnic University of the Philippines. All Rights Reserved.</p>
+            </div>
+          </footer>
+
+
+          <!-- VIEW STUDENT PROFILE MODAL -->
+          <div class="modal-overlay" id="studentProfileModal">
+            <div class="modal-box assess-modal-box">
+              <span class="modal-close" onclick="closeStudentProfileModal()">&times;</span>
+              <h2 class="modal-title">Student Profile</h2>
+              <p class="modal-subtitle" id="profileSubtitle"></p>
+
+              <div class="assess-student-strip">
+                <div class="assess-section-title" style="margin-bottom: 10px;">Personal Information</div>
+                <div class="assess-student-row">
+                  <span class="assess-label">Student Number</span>
+                  <span class="assess-value" id="profileStudentNo"></span>
+                </div>
+                <div class="assess-student-row">
+                  <span class="assess-label">Full Name</span>
+                  <span class="assess-value" id="profileName"></span>
+                </div>
+                <div class="assess-student-row">
+                  <span class="assess-label">Email</span>
+                  <span class="assess-value" id="profileEmail"></span>
+                </div>
+                <div class="assess-student-row">
+                  <span class="assess-label">Status</span>
+                  <span class="assess-value" id="profileStatus"></span>
+                </div>
+              </div>
+
+              <div class="assess-student-strip" style="margin-top: 12px;">
+                <div class="assess-section-title" style="margin-bottom: 10px;">Academic Information</div>
+                <div class="assess-student-row">
+                  <span class="assess-label">Program</span>
+                  <span class="assess-value" id="profileProgram"></span>
+                </div>
+                <div class="assess-student-row">
+                  <span class="assess-label">Year Level</span>
+                  <span class="assess-value" id="profileYear"></span>
+                </div>
+                <div class="assess-student-row">
+                  <span class="assess-label">Contact Number</span>
+                  <span class="assess-value" id="profileContact">+63 912 345 6789</span>
+                </div>
+                <div class="assess-student-row">
+                  <span class="assess-label">Date of Birth</span>
+                  <span class="assess-value" id="profileDob">May 5, 2006</span>
+                </div>
+              </div>
+
+              <div class="assess-actions" style="margin-top: 20px;">
+                <button class="assess-confirm-btn" onclick="openEditProfileModal()">Edit Profile</button>
+                <button class="assess-cancel-btn" onclick="openEnrollmentHistoryModal()">View Enrollment History</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- EDIT STUDENT PROFILE MODAL -->
+          <div class="modal-overlay" id="editProfileModal">
+            <div class="modal-box assess-modal-box">
+              <span class="modal-close" onclick="closeEditProfileModal()">&times;</span>
+              <h2 class="modal-title">Edit Student Profile</h2>
+              <p class="modal-subtitle">Update the student's information below.</p>
+
+              <div class="assess-section-title">Personal Information</div>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="editProfileName">Full Name <span class="required">*</span></label>
+                  <input type="text" id="editProfileName" placeholder="Full name" />
+                </div>
+                <div class="form-group">
+                  <label for="editProfileDob">Date of Birth <span class="required">*</span></label>
+                  <input type="date" id="editProfileDob" class="date-input" />
+                </div>
+                <div class="form-group">
+                  <label for="editProfileContact">Contact Number <span class="required">*</span></label>
+                  <input type="text" id="editProfileContact" placeholder="e.g. 09XX-XXX-XXXX" />
+                </div>
+                <div class="form-group">
+                  <label for="editProfileEmail">PUP Email <span class="required">*</span></label>
+                  <input type="text" id="editProfileEmail" placeholder="e.g. juan@pup.edu.ph" />
+                </div>
+              </div>
+
+              <div class="assess-section-title" style="margin-top: 10px;">Academic Information</div>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="editProfileProgram">Program <span class="required">*</span></label>
+                  <select id="editProfileProgram">
+                    <option value="">-- Select Program --</option>
+                    <option value="BS Accountancy">BS Accountancy</option>
+                    <option value="BS Information Technology">BS Information Technology</option>
+                    <option value="BS Hospitality Management">BS Hospitality Management</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="editProfileYear">Year Level <span class="required">*</span></label>
+                  <select id="editProfileYear">
+                    <option value="">-- Select Year Level --</option>
+                    <option value="1st Year">1st Year</option>
+                    <option value="2nd Year">2nd Year</option>
+                    <option value="3rd Year">3rd Year</option>
+                    <option value="4th Year">4th Year</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="editProfileStatus">Enrollment Status <span class="required">*</span></label>
+                  <select id="editProfileStatus">
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                    <option value="Graduated">Graduated</option>
+                    <option value="Pending">Pending</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="assess-actions" style="margin-top: 20px;">
+                <button class="assess-confirm-btn" onclick="confirmEditProfile()">Save Changes</button>
+                <button class="assess-cancel-btn" onclick="closeEditProfileModal()">Cancel</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ENROLLMENT HISTORY MODAL -->
+          <div class="modal-overlay" id="enrollmentHistoryModal">
+            <div class="modal-box assess-modal-box">
+              <span class="modal-close" onclick="closeEnrollmentHistoryModal()">&times;</span>
+              <h2 class="modal-title">Enrollment History</h2>
+              <p class="modal-subtitle" id="historySubtitle"></p>
+
+              <div class="assess-section-title">2nd Semester, A.Y. 2025–2026</div>
+              <div class="data-table-wrapper" style="margin-bottom: 20px;">
+                <table class="assess-table">
+                  <thead>
+                    <tr>
+                      <th>Subject Code</th>
+                      <th>Description</th>
+                      <th>Units</th>
+                      <th>Grade</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>IT200</td>
+                      <td>Human Computer Interaction</td>
+                      <td>3</td>
+                      <td>1.25</td>
+                      <td><span class="status-badge status-present">Passed</span></td>
+                    </tr>
+                    <tr>
+                      <td>IT103</td>
+                      <td>Data Structures and Algorithms</td>
+                      <td>3</td>
+                      <td>1.50</td>
+                      <td><span class="status-badge status-present">Passed</span></td>
+                    </tr>
+                    <tr>
+                      <td>IT102</td>
+                      <td>Computer Programming 2</td>
+                      <td>3</td>
+                      <td>1.75</td>
+                      <td><span class="status-badge status-present">Passed</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="assess-section-title">1st Semester, A.Y. 2025–2026</div>
+              <div class="data-table-wrapper" style="margin-bottom: 20px;">
+                <table class="assess-table">
+                  <thead>
+                    <tr>
+                      <th>Subject Code</th>
+                      <th>Description</th>
+                      <th>Units</th>
+                      <th>Grade</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>IT101</td>
+                      <td>Introduction to Computing</td>
+                      <td>3</td>
+                      <td>1.50</td>
+                      <td><span class="status-badge status-present">Passed</span></td>
+                    </tr>
+                    <tr>
+                      <td>GEED002</td>
+                      <td>Mathematics in the Modern World</td>
+                      <td>3</td>
+                      <td>2.00</td>
+                      <td><span class="status-badge status-present">Passed</span></td>
+                    </tr>
+                    <tr>
+                      <td>IT100</td>
+                      <td>Programming 1</td>
+                      <td>3</td>
+                      <td>1.75</td>
+                      <td><span class="status-badge status-present">Passed</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="assess-actions">
+                <button class="assess-cancel-btn" onclick="closeEnrollmentHistoryModal()">Close</button>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- ENROLL NEW STUDENT MODAL -->
+          <div class="modal-overlay" id="enrollStudentModal">
+            <div class="modal-box enroll-modal-box">
+              <span class="modal-close" onclick="closeEnrollStudentModal()">&times;</span>
+              <h2 class="modal-title">Enroll New Student</h2>
+              <p class="modal-subtitle">Complete all steps to register a new student.</p>
+
+              <!-- Step Indicators -->
+              <div class="enroll-steps">
+                <div class="enroll-step active" id="stepIndicator1">
+                  <div class="enroll-step-circle">1</div>
+                  <span>Personal</span>
+                </div>
+                <div class="enroll-step-line"></div>
+                <div class="enroll-step" id="stepIndicator2">
+                  <div class="enroll-step-circle">2</div>
+                  <span>Academic</span>
+                </div>
+                <div class="enroll-step-line"></div>
+                <div class="enroll-step" id="stepIndicator3">
+                  <div class="enroll-step-circle">3</div>
+                  <span>Account</span>
+                </div>
+                <div class="enroll-step-line"></div>
+                <div class="enroll-step" id="stepIndicator4">
+                  <div class="enroll-step-circle">4</div>
+                  <span>Confirm</span>
+                </div>
+              </div>
+
+              <!-- STEP 1: Personal Information -->
+              <div class="enroll-step-content" id="enrollStep1">
+                <div class="assess-section-title">Personal Information</div>
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label for="enrLastName">Last Name <span class="required">*</span></label>
+                    <input type="text" id="enrLastName" placeholder="e.g. Santillan" />
+                  </div>
+                  <div class="form-group">
+                    <label for="enrFirstName">First Name <span class="required">*</span></label>
+                    <input type="text" id="enrFirstName" placeholder="e.g. Keith" />
+                  </div>
+                  <div class="form-group">
+                    <label for="enrMiddleName">Middle Name</label>
+                    <input type="text" id="enrMiddleName" placeholder="e.g. Lazaro" />
+                  </div>
+                  <div class="form-group">
+                    <label for="enrSuffix">Suffix</label>
+                    <select id="enrSuffix">
+                      <option value="">-- None --</option>
+                      <option value="Jr.">Jr.</option>
+                      <option value="Sr.">Sr.</option>
+                      <option value="II">II</option>
+                      <option value="III">III</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="enrDob">Date of Birth <span class="required">*</span></label>
+                    <input type="date" id="enrDob" class="date-input" />
+                  </div>
+                  <div class="form-group">
+                    <label for="enrSex">Gender <span class="required">*</span></label>
+                    <select id="enrSex">
+                      <option value="">-- Select --</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="enrCivilStatus">Civil Status <span class="required">*</span></label>
+                    <select id="enrCivilStatus">
+                      <option value="">-- Select --</option>
+                      <option value="Single">Single</option>
+                      <option value="Married">Married</option>
+                      <option value="Widowed">Widowed</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="enrNationality">Nationality <span class="required">*</span></label>
+                    <input type="text" id="enrNationality" placeholder="e.g. Filipino" value="Filipino" />
+                  </div>
+                  <div class="form-group">
+                    <label for="enrContact">Contact Number <span class="required">*</span></label>
+                    <input type="text" id="enrContact" placeholder="e.g. 09XX-XXX-XXXX" />
+                  </div>
+                  <div class="form-group">
+                    <label for="enrReligion">Religion</label>
+                    <input type="text" id="enrReligion" placeholder="e.g. Roman Catholic" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="enrAddress">Permanent Address <span class="required">*</span></label>
+                  <input type="text" id="enrAddress" placeholder="e.g. 123 Bakal St., Brgy. Bato, Manila City" />
+                </div>
+                <div class="form-group">
+                  <label for="enrEmergencyContact">Emergency Contact Person <span class="required">*</span></label>
+                  <input type="text" id="enrEmergencyContact" placeholder="Full name of emergency contact" />
+                </div>
+                <div class="form-group">
+                  <label for="enrEmergencyNumber">Emergency Contact Number <span class="required">*</span></label>
+                  <input type="text" id="enrEmergencyNumber" placeholder="e.g. 09XX-XXX-XXXX" />
+                </div>
+              </div>
+
+              <!-- STEP 2: Academic Information -->
+              <div class="enroll-step-content" id="enrollStep2" style="display:none;">
+                <div class="assess-section-title">Academic Information</div>
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label for="enrProgram">Program <span class="required">*</span></label>
+                    <select id="enrProgram">
+                      <option value="">-- Select Program --</option>
+                      <option value="BS Accountancy">BS Accountancy</option>
+                      <option value="BS Information Technology">BS Information Technology</option>
+                      <option value="BS Hospitality Management">BS Hospitality Management</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="enrYearLevel">Year Level <span class="required">*</span></label>
+                    <select id="enrYearLevel">
+                      <option value="">-- Select Year Level --</option>
+                      <option value="1st Year">1st Year</option>
+                      <option value="2nd Year">2nd Year</option>
+                      <option value="3rd Year">3rd Year</option>
+                      <option value="4th Year">4th Year</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="enrSection">Section <span class="required">*</span></label>
+                    <select id="enrSection">
+                      <option value="">-- Select Section --</option>
+                      <option value="BSIT-1A">BSIT-1A</option>
+                      <option value="BSIT-2B">BSIT-2B</option>
+                      <option value="BSHM-1A">BSHM-1A</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="enrSemester">Semester <span class="required">*</span></label>
+                    <select id="enrSemester">
+                      <option value="">-- Select Semester --</option>
+                      <option value="1st Semester">1st Semester</option>
+                      <option value="2nd Semester" selected>2nd Semester</option>
+                      <option value="Summer">Summer</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="enrAcademicYear">Academic Year <span class="required">*</span></label>
+                    <select id="enrAcademicYear">
+                      <option value="">-- Select Academic Year --</option>
+                      <option value="2024-2025">2024-2025</option>
+                      <option value="2025-2026" selected>2025-2026</option>
+                      <option value="2026-2027">2026-2027</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="enrStudentType">Student Type <span class="required">*</span></label>
+                    <select id="enrStudentType">
+                      <option value="">-- Select Type --</option>
+                      <option value="Freshmen">Freshmen</option>
+                      <option value="Transferee">Transferee</option>
+                      <option value="Returnee">Returnee</option>
+                      <option value="Cross Enrollee">Cross Enrollee</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="enrLastSchool">Last School Attended</label>
+                  <input type="text" id="enrLastSchool" placeholder="e.g. JPI Senior High School" />
+                </div>
+                <div class="form-group">
+                  <label for="enrStrand">Senior High School Strand / Previous Course</label>
+                  <input type="text" id="enrStrand" placeholder="e.g. STEM, HUMSS, ABM" />
+                </div>
+              </div>
+
+              <!-- STEP 3: Account Information -->
+              <div class="enroll-step-content" id="enrollStep3" style="display:none;">
+                <div class="assess-section-title">Account Information</div>
+                <div class="form-group">
+                  <label for="enrStudentNo">Student Number <span class="required">*</span></label>
+                  <input type="text" id="enrStudentNo" placeholder="e.g. 2025-00001-SM-0" />
+                </div>
+                <div class="form-group">
+                  <label for="enrEmail">PUP Email Address <span class="required">*</span></label>
+                  <input type="text" id="enrEmail" placeholder="e.g. ksantillan@iskolarngbayan.pup.edu.ph" />
+                </div>
+                <div class="form-group">
+                  <label for="enrStatus">Enrollment Status <span class="required">*</span></label>
+                  <select id="enrStatus">
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                    <option value="Pending">Pending</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="enrScholarship">Scholarship / Grants</label>
+                  <select id="enrScholarship">
+                    <option value="">-- None --</option>
+                    <option value="Free Higher Education">Free Higher Education Act</option>
+                    <option value="CHED TES">CHED Tertiary Education Subsidy (TES)</option>
+                    <option value="Academic Scholar">Academic Scholar</option>
+                    <option value="Athletic Scholar">Athletic Scholar</option>
+                    <option value="Others">Others</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- STEP 4: Confirmation Summary -->
+              <div class="enroll-step-content" id="enrollStep4" style="display:none;">
+                <div class="assess-section-title">Review & Confirm</div>
+                <p style="font-size: 13px; color: var(--gray-dark); margin-bottom: 15px;">Please review the student details before confirming enrollment.</p>
+
+                <div class="assess-student-strip">
+                  <div class="assess-section-title" style="margin-bottom: 10px;">Personal</div>
+                  <div class="assess-student-row">
+                    <span class="assess-label">Full Name</span>
+                    <span class="assess-value" id="confirmFullName"></span>
+                  </div>
+                  <div class="assess-student-row">
+                    <span class="assess-label">Date of Birth</span>
+                    <span class="assess-value" id="confirmDob"></span>
+                  </div>
+                  <div class="assess-student-row">
+                    <span class="assess-label">Sex</span>
+                    <span class="assess-value" id="confirmSex"></span>
+                  </div>
+                  <div class="assess-student-row">
+                    <span class="assess-label">Contact</span>
+                    <span class="assess-value" id="confirmContact"></span>
+                  </div>
+                  <div class="assess-student-row">
+                    <span class="assess-label">Address</span>
+                    <span class="assess-value" id="confirmAddress"></span>
+                  </div>
+                </div>
+
+                <div class="assess-student-strip" style="margin-top: 12px;">
+                  <div class="assess-section-title" style="margin-bottom: 10px;">Academic</div>
+                  <div class="assess-student-row">
+                    <span class="assess-label">Program</span>
+                    <span class="assess-value" id="confirmProgram"></span>
+                  </div>
+                  <div class="assess-student-row">
+                    <span class="assess-label">Year Level</span>
+                    <span class="assess-value" id="confirmYear"></span>
+                  </div>
+                  <div class="assess-student-row">
+                    <span class="assess-label">Section</span>
+                    <span class="assess-value" id="confirmSection"></span>
+                  </div>
+                  <div class="assess-student-row">
+                    <span class="assess-label">Semester</span>
+                    <span class="assess-value" id="confirmSemester"></span>
+                  </div>
+                  <div class="assess-student-row">
+                    <span class="assess-label">Student Type</span>
+                    <span class="assess-value" id="confirmStudentType"></span>
+                  </div>
+                </div>
+
+                <div class="assess-student-strip" style="margin-top: 12px;">
+                  <div class="assess-section-title" style="margin-bottom: 10px;">Account</div>
+                  <div class="assess-student-row">
+                    <span class="assess-label">Student No.</span>
+                    <span class="assess-value" id="confirmStudentNo"></span>
+                  </div>
+                  <div class="assess-student-row">
+                    <span class="assess-label">Email</span>
+                    <span class="assess-value" id="confirmEmail"></span>
+                  </div>
+                  <div class="assess-student-row">
+                    <span class="assess-label">Status</span>
+                    <span class="assess-value" id="confirmStatus"></span>
+                  </div>
+                  <div class="assess-student-row">
+                    <span class="assess-label">Scholarship</span>
+                    <span class="assess-value" id="confirmScholarship"></span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Navigation Buttons -->
+              <div class="enroll-nav-btns">
+                <button class="assess-cancel-btn" id="enrollBtnBack" onclick="enrollStepBack()" style="display:none;">← Back</button>
+                <button class="assess-confirm-btn" id="enrollBtnNext" onclick="enrollStepNext()">Next →</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ARCHIVE STUDENT MODAL -->
+          <div class="modal-overlay" id="archiveStudentModal">
+            <div class="modal-box">
+              <span class="modal-close" onclick="closeArchiveStudentModal()">&times;</span>
+              <h2 class="modal-title">Archive Student</h2>
+              <p class="modal-subtitle">Are you sure you want to archive this student record?</p>
+
+              <div class="assess-student-strip">
+                <div class="assess-student-row">
+                  <span class="assess-label">Student Number</span>
+                  <span class="assess-value" id="archiveStudentNo"></span>
+                </div>
+                <div class="assess-student-row">
+                  <span class="assess-label">Name</span>
+                  <span class="assess-value" id="archiveStudentName"></span>
+                </div>
+                <div class="assess-student-row">
+                  <span class="assess-label">Program</span>
+                  <span class="assess-value" id="archiveStudentProgram"></span>
+                </div>
+                <div class="assess-student-row">
+                  <span class="assess-label">Status</span>
+                  <span class="assess-value" id="archiveStudentStatus"></span>
+                </div>
+              </div>
+
+              <div class="assess-free-notice warning">
+                ⚠ Archiving this student will move their record to the archive. This can be reversed by an administrator.
+              </div>
+
+              <div class="assess-actions">
+                <button class="btn-reject" onclick="confirmArchiveStudent()">Yes, Archive</button>
+                <button class="assess-cancel-btn" onclick="closeArchiveStudentModal()">Cancel</button>
+              </div>
+            </div>
+          </div>
+
+      </main>
+    </div>
+
+    <script type="module" src="{{ url_for('static', filename='js/script.js') }}"></script>
+  </body>
+</html>

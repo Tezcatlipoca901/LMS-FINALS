@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PUP Portal - Account Info</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/styles.css') }}"
+    />
+  </head>
+
+  <body>
+    <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle Menu">
+      <span class="bar top"></span>
+      <span class="bar middle"></span>
+      <span class="bar bottom"></span>
+    </button>
+    <div class="mobile-overlay" onclick="toggleMobileMenu()"></div>
+
+    <div class="dashboard-container active">
+      <nav class="sidebar" id="sidebar">
+        <div class="sidebar-mobile-header">
+          <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+              <img src="{{ url_for('static', filename='images/logo88x88pup.png') }}" alt="PUP Logo" />
+            </div>
+            <div class="sidebar-logo-text"><strong>PUP</strong> Admin Portal</div>
+          </div>
+        </div>
+
+        <div class="sidebar-profile">
+          <div class="profile-avatar">A</div>
+          <div class="profile-info">
+            <span class="profile-name">ADMIN1</span>
+            <span class="profile-number">001</span>
+          </div>
+        </div>
+
+        <div class="sidebar-header">
+          <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+              <img src="{{ url_for('static', filename='images/logo88x88pup.png') }}" alt="PUP Logo" />
+            </div>
+            <div class="sidebar-logo-text"><strong>PUP</strong> Admin Portal</div>
+          </div>
+        </div>
+
+        <div class="sidebar-user">
+          <div class="user-avatar">A</div>
+          <div class="user-name">ADMIN1</div>
+          <div class="user-number">001</div>
+        </div>
+
+        <div class="sidebar-nav">
+          <a class="nav-item" href="{{ url_for('admin_dashboard') }}">Home</a>
+          <a class="nav-item" href="{{ url_for('admin_master_data') }}">Master Data</a>
+          <a class="nav-item active" href="{{ url_for('admin_acc_info') }}">Account Info</a>
+          <a class="nav-item" href="{{ url_for('admin_audit') }}">Degree Audit</a>
+          <div class="nav-dropdown">
+            <button class="nav-item dropdown-btn" onclick="toggleDropdown('studentMenu', this)">
+              Student Management<span class="arrow">▼</span>
+            </button>
+            <div class="dropdown-container" id="studentMenu">
+              <a class="nav-item sub-item" href="{{ url_for('admin_student_records') }}">Student Records & Management</a>
+              <a class="nav-item sub-item" href="{{ url_for('admin_applications') }}">Application Approvals</a>
+            </div>
+          </div>
+          <div class="nav-dropdown">
+            <button class="nav-item dropdown-btn" onclick="toggleDropdown('instructorMenu', this)">
+              Instructor Management<span class="arrow">▼</span>
+            </button>
+            <div class="dropdown-container" id="instructorMenu">
+              <a class="nav-item sub-item" href="{{ url_for('admin_instructors') }}">Manage Instructors</a>
+              <a class="nav-item sub-item" href="{{ url_for('admin_schedule') }}">Scheduling & Timetable</a>
+            </div>
+          </div>
+          <div class="nav-dropdown">
+            <button class="nav-item dropdown-btn" onclick="toggleDropdown('gradesMenu', this)">
+              Grades & Attendance<span class="arrow">▼</span>
+            </button>
+            <div class="dropdown-container" id="gradesMenu">
+              <a class="nav-item sub-item" href="{{ url_for('admin_grades') }}">Grade Overrides</a>
+              <a class="nav-item sub-item" href="{{ url_for('admin_attendance') }}">Attendance Overrides</a>
+            </div>
+          </div>
+          <div class="nav-dropdown">
+            <button class="nav-item dropdown-btn" onclick="toggleDropdown('communicationMenu', this)">
+              Communication<span class="arrow">▼</span>
+            </button>
+            <div class="dropdown-container" id="communicationMenu">
+              <a class="nav-item sub-item" href="{{ url_for('admin_announcements') }}">Announcements</a>
+              <a class="nav-item sub-item" href="{{ url_for('admin_messaging') }}">Messaging</a>
+            </div>
+          </div>
+
+          <form action="{{ url_for('logout') }}" method="GET">
+            <button type="submit" class="logout-btn">Log Out</button>
+          </form>
+        </div>
+      </nav>
+
+      <!--MAIN CONTENT-->
+      <main class="main-content">
+        <header class="top-header">
+          <h1 class="page-title">Account Information</h1>
+          <span class="header-date" id="currentDate"></span>
+        </header>
+
+        <section class="content-section active">
+
+          <!-- Personal Information -->
+          <div class="card">
+            <div class="card-header">Personal Information</div>
+            <div class="card-body">
+              <div class="info-grid">
+                <div class="info-item">
+                  <div class="info-label">Admin ID</div>
+                  <div class="info-value">001</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Username</div>
+                  <div class="info-value">ADMIN1</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Full Name</div>
+                  <div class="info-value">Buggy D. Clown</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Role</div>
+                  <div class="info-value">System Administrator</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Email Address</div>
+                  <div class="info-value">admin1@pup.edu.ph</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Contact Number</div>
+                  <div class="info-value">+63 912 000 0001</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Department</div>
+                  <div class="info-value">Office of the Registrar</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Date Created</div>
+                  <div class="info-value">January 10, 2024</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Last Login</div>
+                  <div class="info-value">March 30, 2026</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Account Status</div>
+                  <div class="info-value">
+                    <span class="status-badge status-enrolled">Active</span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-actions margin-top">
+                <button class="btn-edit" id="btnOpenEditInfoAdmin">Edit Information</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Change Password -->
+          <div class="card">
+            <div class="card-header">Change Password</div>
+            <div class="card-body">
+              <div id="changePwNotifAdmin" style="display:none; padding:10px 14px; border-radius:6px; font-size:13px; margin-bottom:16px;"></div>
+              <form id="changePasswordFormAdmin">
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label for="currentPasswordAdmin">Current Password <span class="required">*</span></label>
+                    <div class="dashboard-pw-wrapper">
+                      <input type="password" id="currentPasswordAdmin" placeholder="Enter current password" />
+                      <span class="dashboard-pw-toggle" onclick="togglePwVisibility('currentPasswordAdmin', this)">👁</span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="newPasswordAdmin">New Password <span class="required">*</span></label>
+                    <div class="dashboard-pw-wrapper">
+                      <input type="password" id="newPasswordAdmin" placeholder="Enter new password" />
+                      <span class="dashboard-pw-toggle" onclick="togglePwVisibility('newPasswordAdmin', this)">👁</span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="confirmPasswordAdmin">Confirm New Password <span class="required">*</span></label>
+                    <div class="dashboard-pw-wrapper">
+                      <input type="password" id="confirmPasswordAdmin" placeholder="Confirm new password" />
+                      <span class="dashboard-pw-toggle" onclick="togglePwVisibility('confirmPasswordAdmin', this)">👁</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div id="pwStrengthWrapperAdmin" style="display:none; margin-bottom:16px;">
+                  <div style="font-size:12px; color:var(--gray-dark); margin-bottom:6px;">Password Strength</div>
+                  <div style="height:6px; border-radius:4px; background:var(--gray); overflow:hidden;">
+                    <div id="pwStrengthBarAdmin" style="height:100%; width:0%; transition: width 0.3s ease, background 0.3s ease;"></div>
+                  </div>
+                  <div id="pwStrengthLabelAdmin" style="font-size:12px; margin-top:4px;"></div>
+                </div>
+
+                <div class="form-actions">
+                  <button type="button" class="btn-save" id="changePwBtnAdmin">Update Password</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- EDIT ACCOUNT INFO MODAL -->
+        <div class="modal-overlay" id="editAccountModalAdmin">
+          <div class="modal-box">
+            <h2 class="modal-title">Edit Account Information</h2>
+            <p class="modal-subtitle">Only contact details and email can be updated.</p>
+
+            <div id="editAccountNotifAdmin" style="display:none; padding:10px 14px; border-radius:6px; font-size:13px; margin-bottom:12px;"></div>
+
+            <div class="form-group">
+              <label for="editEmailAdmin">Email Address</label>
+              <input type="text" id="editEmailAdmin" value="admin1@pup.edu.ph" />
+            </div>
+            <div class="form-group">
+              <label for="editContactAdmin">Contact Number</label>
+              <input type="text" id="editContactAdmin" value="+63 912 000 0001" />
+            </div>
+            <div class="form-group">
+              <label for="editDeptAdmin">Department</label>
+              <input type="text" id="editDeptAdmin" value="Office of the Registrar" />
+            </div>
+
+            <div class="assess-actions" style="margin-top:20px;">
+              <button class="assess-confirm-btn" id="editAccountSaveBtnAdmin">Save Changes</button>
+              <button class="assess-cancel-btn" onclick="closeEditAccountModalAdmin()">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+          <div class="footer-top"></div>
+          <div class="footer-container">
+            <div class="footer-about">
+              <h3>Polytechnic University of the Philippines</h3>
+              <p>PUPSIS - Polytechnic University Student Information System. Secure and convenient access to your academic records and applications.</p>
+            </div>
+            <div class="footer-contact">
+              <h4>Policies & Legal terms</h4>
+              <p>Privacy Policy</p>
+              <p>Terms of Services</p>
+              <p>Data Protection</p>
+              <p>Code of Conduct</p>
+            </div>
+            <div class="footer-contact">
+              <h4>Contact Us</h4>
+              <p>Email: support@pup.edu.ph</p>
+              <p>Phone: (63+) 09XX-XXXX-XX</p>
+              <p>Address: Sta. Mesa, Manila, Philippines</p>
+            </div>
+          </div>
+          <div class="footer-bottom">
+            <p>&copy; 2026 Polytechnic University of the Philippines. All Rights Reserved.</p>
+          </div>
+        </footer>
+      </main>
+    </div>
+
+    <script type="module" src="{{ url_for('static', filename='js/script.js') }}"></script>
+  </body>
+</html>

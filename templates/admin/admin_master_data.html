@@ -1,0 +1,781 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PUP Portal - Master Data Management</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/styles.css') }}"
+    />
+  </head>
+
+  <body>
+    <button
+      class="mobile-menu-btn"
+      onclick="toggleMobileMenu()"
+      aria-label="Toggle Menu"
+    >
+      <span class="bar top"></span>
+      <span class="bar middle"></span>
+      <span class="bar bottom"></span>
+    </button>
+
+    <div class="mobile-overlay" onclick="toggleMobileMenu()"></div>
+
+    <div class="dashboard-container active">
+      <nav class="sidebar" id="sidebar">
+        <div class="sidebar-mobile-header">
+          <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+              <img
+                src="{{ url_for('static', filename='images/logo88x88pup.png') }}"
+                alt="PUP Logo"
+              />
+            </div>
+            <div class="sidebar-logo-text">
+              <strong>PUP</strong> Admin Portal
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-profile">
+          <div class="profile-avatar">A</div>
+          <div class="profile-info">
+            <span class="profile-name">ADMIN1</span>
+            <span class="profile-number">001</span>
+          </div>
+        </div>
+
+        <div class="sidebar-header">
+          <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+              <img
+                src="{{ url_for('static', filename='images/logo88x88pup.png') }}"
+                alt="PUP Logo"
+              />
+            </div>
+            <div class="sidebar-logo-text">
+              <strong>PUP</strong> Admin Portal
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-user">
+          <div class="user-avatar">A</div>
+          <div class="user-name">ADMIN1</div>
+          <div class="user-number">001</div>
+        </div>
+
+        <div class="sidebar-nav">
+          <a class="nav-item" href="{{ url_for('admin_dashboard') }}">Home</a>
+          <a class="nav-item active" href="{{ url_for('admin_master_data') }}"
+            >Master Data</a
+          >
+          <a class="nav-item" href="{{ url_for('admin_acc_info') }}">Account Info</a>
+          <a class="nav-item" href="{{ url_for('admin_audit') }}">Degree Audit</a>
+
+          <div class="nav-dropdown">
+            <button
+              class="nav-item dropdown-btn"
+              onclick="toggleDropdown('studentMenu', this)"
+            >
+              Student Management
+              <span class="arrow">▼</span>
+            </button>
+            <div class="dropdown-container" id="studentMenu">
+              <a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_student_records') }}"
+                >Student Records & Management</a
+              >
+              <a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_applications') }}"
+                >Application Approvals</a
+              >
+            </div>
+          </div>
+
+          <div class="nav-dropdown">
+            <button
+              class="nav-item dropdown-btn"
+              onclick="toggleDropdown('instructorMenu', this)"
+            >
+              Instructor Management
+              <span class="arrow">▼</span>
+            </button>
+            <div class="dropdown-container" id="instructorMenu">
+              <a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_instructors') }}"
+                >Manage Instructors</a
+              >
+              <a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_schedule') }}"
+                >Scheduling & Timetable</a
+              >
+            </div>
+          </div>
+
+          <div class="nav-dropdown">
+            <button
+              class="nav-item dropdown-btn"
+              onclick="toggleDropdown('gradesMenu', this)"
+            >
+              Grades & Attendance
+              <span class="arrow">▼</span>
+            </button>
+            <div class="dropdown-container" id="gradesMenu">
+              <a class="nav-item sub-item" href="{{ url_for('admin_grades') }}"
+                >Grade Overrides</a
+              >
+              <a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_attendance') }}"
+                >Attendance Overrides</a
+              >
+            </div>
+          </div>
+
+          <div class="nav-dropdown">
+            <button
+              class="nav-item dropdown-btn"
+              onclick="toggleDropdown('communicationMenu', this)"
+            >
+              Communication
+              <span class="arrow">▼</span>
+            </button>
+            <div class="dropdown-container" id="communicationMenu">
+              <a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_announcements') }}"
+                >Announcements</a
+              >
+              <a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_messaging') }}"
+                >Messaging</a
+              >
+            </div>
+          </div>
+
+          <form action="{{ url_for('logout') }}" method="GET">
+            <button type="submit" class="logout-btn">Log Out</button>
+          </form>
+        </div>
+      </nav>
+
+      <!--MAIN CONTENT-->
+      <main class="main-content">
+        <header class="top-header">
+          <h1 class="page-title">Master Data Management</h1>
+          <span class="header-date" id="currentDate"></span>
+        </header>
+
+        <section class="content-section active">
+          <div class="welcome-banner">
+            <div class="welcome-title">Master Data Management</div>
+            <p class="welcome-subtitle">
+              Manage courses, subjects, sections, programs, prerequisites, and
+              academic calendar.
+            </p>
+          </div>
+
+          <!-- Courses Management -->
+          <div class="card">
+            <div class="card-header">Courses</div>
+            <div class="card-body">
+              <button class="btn-save" onclick="openAddCourseModal()">Add Course</button>
+              <div class="data-table-wrapper" style="margin-top: 15px">
+                <table class="data-table" id="coursesTable">
+                  <thead>
+                    <tr>
+                      <th>Course Code</th>
+                      <th>Course Name</th>
+                      <th>Units</th>
+                      <th>Department</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>IT101</td>
+                      <td>Introduction to Computing</td>
+                      <td>3</td>
+                      <td>Bachelor of Science in Information Technology</td>
+                      <td>
+                        <button class="btn-edit" onclick="openEditCourseModal('IT101', 'Introduction to Computing', '3', 'Bachelor of Science in Information Technology')">Edit</button>
+                        <button class="btn-archive" onclick="openDeleteCourseModal('IT101', 'Introduction to Computing')">Delete</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>GEED002</td>
+                      <td>Mathematics in the Modern World</td>
+                      <td>3</td>
+                      <td>Mathematics</td>
+                      <td>
+                        <button class="btn-edit" onclick="openEditCourseModal('GEED002', 'Mathematics in the Modern World', '3', 'Mathematics')">Edit</button>
+                        <button class="btn-archive" onclick="openDeleteCourseModal('GEED002', 'Mathematics in the Modern World')">Delete</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>GEED001</td>
+                      <td>Purposive Communication</td>
+                      <td>3</td>
+                      <td>English</td>
+                      <td>
+                        <button class="btn-edit" onclick="openEditCourseModal('GEED001', 'Purposive Communication', '3', 'English')">Edit</button>
+                        <button class="btn-archive" onclick="openDeleteCourseModal('GEED001', 'Purposive Communication')">Delete</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">Programs</div>
+            <div class="card-body">
+              <button class="btn-save" onclick="openAddProgramModal()">Add Program</button>
+              <div class="data-table-wrapper" style="margin-top: 15px">
+                <table class="data-table" id="programsTable">
+                  <thead>
+                    <tr>
+                      <th>Program Code</th>
+                      <th>Program Name</th>
+                      <th>Department</th>
+                      <th>Duration (Years)</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>BSA</td>
+                      <td>Bachelor of Science in Accountancy</td>
+                      <td>Accountancy</td>
+                      <td>4</td>
+                      <td>
+                        <button class="btn-edit" onclick="openEditProgramModal('BSA', 'Bachelor of Science in Accountancy', 'Accountancy', '4')">Edit</button>
+                        <button class="btn-archive" onclick="openDeleteProgramModal('BSA', 'Bachelor of Science in Accountancy')">Delete</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>BSIT</td>
+                      <td>Bachelor of Science in Information Technology</td>
+                      <td>Information Technology</td>
+                      <td>4</td>
+                      <td>
+                        <button class="btn-edit" onclick="openEditProgramModal('BSIT', 'Bachelor of Science in Information Technology', 'Information Technology', '4')">Edit</button>
+                        <button class="btn-archive" onclick="openDeleteProgramModal('BSIT', 'Bachelor of Science in Information Technology')">Delete</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>BSHM</td>
+                      <td>Bachelor of Science in Hospitality Management</td>
+                      <td>Hospitality Management</td>
+                      <td>4</td>
+                      <td>
+                        <button class="btn-edit" onclick="openEditProgramModal('BSHM', 'Bachelor of Science in Hospitality Management', 'Hospitality Management', '4')">Edit</button>
+                        <button class="btn-archive" onclick="openDeleteProgramModal('BSHM', 'Bachelor of Science in Hospitality Management')">Delete</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Academic Calendar -->
+          <div class="card">
+            <div class="card-header">Academic Calendar</div>
+            <div class="card-body">
+
+              <!-- Active Calendar Status Strip -->
+              <div class="assess-student-strip" style="margin-bottom: 20px;">
+                <div class="assess-student-row">
+                  <span class="assess-label">Currently Active</span>
+                  <span class="assess-value">2nd Semester, A.Y. 2025–2026</span>
+                </div>
+                <div class="assess-student-row">
+                  <span class="assess-label">Start Date</span>
+                  <span class="assess-value">January 13, 2026</span>
+                </div>
+                <div class="assess-student-row">
+                  <span class="assess-label">End Date</span>
+                  <span class="assess-value">May 30, 2026</span>
+                </div>
+                <div class="assess-student-row">
+                  <span class="assess-label">Status</span>
+                  <span class="status-badge status-enrolled">Active</span>
+                </div>
+              </div>
+
+              <!-- Update Form -->
+              <div class="assess-section-title">Update Academic Calendar</div>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="academicYear">Academic Year <span class="required">*</span></label>
+                  <select id="academicYear">
+                    <option value="">-- Select Year --</option>
+                    <option value="2024-2025">2024-2025</option>
+                    <option value="2025-2026" selected>2025-2026</option>
+                    <option value="2026-2027">2026-2027</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="semester">Semester <span class="required">*</span></label>
+                  <select id="semester">
+                    <option value="">-- Select Semester --</option>
+                    <option value="1st">1st Semester</option>
+                    <option value="2nd" selected>2nd Semester</option>
+                    <option value="summer">Summer</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="startDate">Start Date <span class="required">*</span></label>
+                  <input type="date" id="startDate" class="date-input" value="2026-01-13" />
+                </div>
+                <div class="form-group">
+                  <label for="endDate">End Date <span class="required">*</span></label>
+                  <input type="date" id="endDate" class="date-input" value="2026-05-30" />
+                </div>
+              </div>
+              <div class="form-actions">
+                <button type="button" class="btn-save" onclick="openUpdateCalendarModal()">Update Academic Calendar</button>
+              </div>
+
+            </div>
+          </div>
+
+          <!--Section Management-->
+          <div class="card">
+            <div class="card-header">Sections</div>
+            <div class="card-body">
+              <button class="btn-save" onclick="openAddSectionModal()">Add Section</button>
+              <div class="data-table-wrapper" style="margin-top: 15px">
+                <table class="data-table" id="sectionsTable">
+                  <thead>
+                    <tr>
+                      <th>Section Code</th>
+                      <th>Year Level</th>
+                      <th>Program</th>
+                      <th>Capacity</th>
+                      <th>Enrolled</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>BSHM-1A</td>
+                      <td>1st Year</td>
+                      <td>BS Hospitality Management</td>
+                      <td>40</td>
+                      <td>38</td>
+                      <td>
+                        <button class="btn-edit" onclick="openEditSectionModal('BSHM-1A', '1st Year', 'BS Hospitality Management', '40', '38')">Edit</button>
+                        <button class="btn-archive" onclick="openDeleteSectionModal('BSHM-1A', 'BS Hospitality Management')">Delete</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>BSIT-2B</td>
+                      <td>2nd Year</td>
+                      <td>BS Information Technology</td>
+                      <td>40</td>
+                      <td>35</td>
+                      <td>
+                        <button class="btn-edit" onclick="openEditSectionModal('BSIT-2B', '2nd Year', 'BS Information Technology', '40', '35')">Edit</button>
+                        <button class="btn-archive" onclick="openDeleteSectionModal('BSIT-2B', 'BS Information Technology')">Delete</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+          <!-- FOOTER -->
+          <footer class="footer">
+            <div class="footer-top"></div>
+            <div class="footer-container">
+              <div class="footer-about">
+                <h3>Polytechnic University of the Philippines</h3>
+                <p>
+                  PUPSIS - Polytechnic University Student Information System.
+                  Secure and convenient access to your academic records and applications.
+                </p>
+              </div>
+
+              <div class="footer-contact">
+                <h4>Policies & Legal terms</h4>
+                <p>Privacy Policy</p>
+                <p>Terms of Services</p>
+                <p>Data Protection</p>
+                <p>Code of Conduct</p>
+              </div>
+
+              <div class="footer-contact">
+                <h4>Contact Us</h4>
+                <p>Email: support@pup.edu.ph</p>
+                <p>Phone: (63+) 09XX-XXXX-XX</p>
+                <p>Address: Sta. Mesa, Manila, Philippines</p>
+              </div>
+            </div>
+
+            <div class="footer-bottom">
+              <p>&copy; 2026 Polytechnic University of the Philippines. All Rights Reserved.</p>
+            </div>
+          </footer>
+
+
+          <!-- ADD COURSE MODAL -->
+          <div class="modal-overlay" id="addCourseModal">
+            <div class="modal-box">
+              <span class="modal-close" onclick="closeAddCourseModal()">&times;</span>
+              <h2 class="modal-title">Add Course</h2>
+              <p class="modal-subtitle">Fill in the details to add a new course.</p>
+
+              <div class="form-group">
+                <label for="addCourseCode">Course Code <span class="required">*</span></label>
+                <input type="text" id="addCourseCode" placeholder="e.g. IT101" />
+              </div>
+              <div class="form-group">
+                <label for="addCourseName">Course Name <span class="required">*</span></label>
+                <input type="text" id="addCourseName" placeholder="e.g. Introduction to Computing" />
+              </div>
+              <div class="form-group">
+                <label for="addCourseUnits">Units <span class="required">*</span></label>
+                <input type="text" id="addCourseUnits" placeholder="e.g. 3" />
+              </div>
+              <div class="form-group">
+                <label for="addCourseDept">Department <span class="required">*</span></label>
+                <input type="text" id="addCourseDept" placeholder="e.g. Information Technology" />
+              </div>
+
+              <div class="assess-actions">
+                <button class="assess-confirm-btn" onclick="confirmAddCourse()">Add Course</button>
+                <button class="assess-cancel-btn" onclick="closeAddCourseModal()">Cancel</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- EDIT COURSE MODAL -->
+          <div class="modal-overlay" id="editCourseModal">
+            <div class="modal-box">
+              <span class="modal-close" onclick="closeEditCourseModal()">&times;</span>
+              <h2 class="modal-title">Edit Course</h2>
+              <p class="modal-subtitle">Update the details of this course.</p>
+
+              <div class="form-group">
+                <label for="editCourseCode">Course Code <span class="required">*</span></label>
+                <input type="text" id="editCourseCode" />
+              </div>
+              <div class="form-group">
+                <label for="editCourseName">Course Name <span class="required">*</span></label>
+                <input type="text" id="editCourseName" />
+              </div>
+              <div class="form-group">
+                <label for="editCourseUnits">Units <span class="required">*</span></label>
+                <input type="text" id="editCourseUnits" />
+              </div>
+              <div class="form-group">
+                <label for="editCourseDept">Department <span class="required">*</span></label>
+                <input type="text" id="editCourseDept" />
+              </div>
+
+              <div class="assess-actions">
+                <button class="assess-confirm-btn" onclick="confirmEditCourse()">Save Changes</button>
+                <button class="assess-cancel-btn" onclick="closeEditCourseModal()">Cancel</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- DELETE COURSE MODAL -->
+          <div class="modal-overlay" id="deleteCourseModal">
+            <div class="modal-box">
+              <span class="modal-close" onclick="closeDeleteCourseModal()">&times;</span>
+              <h2 class="modal-title">Delete Course</h2>
+              <p class="modal-subtitle">Are you sure you want to delete this course? This action cannot be undone.</p>
+
+              <div class="assess-student-strip">
+                <div class="assess-student-row">
+                  <span class="assess-label">Course Code</span>
+                  <span class="assess-value" id="deleteCourseCode"></span>
+                </div>
+                <div class="assess-student-row">
+                  <span class="assess-label">Course Name</span>
+                  <span class="assess-value" id="deleteCourseName"></span>
+                </div>
+              </div>
+
+              <div class="assess-actions">
+                <button class="btn-reject" onclick="confirmDeleteCourse()">Yes, Delete</button>
+                <button class="assess-cancel-btn" onclick="closeDeleteCourseModal()">Cancel</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ADD PROGRAM MODAL -->
+          <div class="modal-overlay" id="addProgramModal">
+            <div class="modal-box">
+              <span class="modal-close" onclick="closeAddProgramModal()">&times;</span>
+              <h2 class="modal-title">Add Program</h2>
+              <p class="modal-subtitle">Fill in the details to add a new program.</p>
+
+              <div class="form-group">
+                <label for="addProgramCode">Program Code <span class="required">*</span></label>
+                <input type="text" id="addProgramCode" placeholder="e.g. BSIT" />
+              </div>
+              <div class="form-group">
+                <label for="addProgramName">Program Name <span class="required">*</span></label>
+                <input type="text" id="addProgramName" placeholder="e.g. Bachelor of Science in Information Technology" />
+              </div>
+              <div class="form-group">
+                <label for="addProgramDept">Department <span class="required">*</span></label>
+                <input type="text" id="addProgramDept" placeholder="e.g. Information Technology" />
+              </div>
+              <div class="form-group">
+                <label for="addProgramDuration">Duration (Years) <span class="required">*</span></label>
+                <select id="addProgramDuration">
+                  <option value="">-- Select Duration --</option>
+                  <option value="2">2 Years</option>
+                  <option value="3">3 Years</option>
+                  <option value="4">4 Years</option>
+                  <option value="5">5 Years</option>
+                </select>
+              </div>
+
+              <div class="assess-actions">
+                <button class="assess-confirm-btn" onclick="confirmAddProgram()">Add Program</button>
+                <button class="assess-cancel-btn" onclick="closeAddProgramModal()">Cancel</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- EDIT PROGRAM MODAL -->
+          <div class="modal-overlay" id="editProgramModal">
+            <div class="modal-box">
+              <span class="modal-close" onclick="closeEditProgramModal()">&times;</span>
+              <h2 class="modal-title">Edit Program</h2>
+              <p class="modal-subtitle">Update the details of this program.</p>
+
+              <div class="form-group">
+                <label for="editProgramCode">Program Code <span class="required">*</span></label>
+                <input type="text" id="editProgramCode" />
+              </div>
+              <div class="form-group">
+                <label for="editProgramName">Program Name <span class="required">*</span></label>
+                <input type="text" id="editProgramName" />
+              </div>
+              <div class="form-group">
+                <label for="editProgramDept">Department <span class="required">*</span></label>
+                <input type="text" id="editProgramDept" />
+              </div>
+              <div class="form-group">
+                <label for="editProgramDuration">Duration (Years) <span class="required">*</span></label>
+                <select id="editProgramDuration">
+                  <option value="">-- Select Duration --</option>
+                  <option value="2">2 Years</option>
+                  <option value="3">3 Years</option>
+                  <option value="4">4 Years</option>
+                  <option value="5">5 Years</option>
+                </select>
+              </div>
+
+              <div class="assess-actions">
+                <button class="assess-confirm-btn" onclick="confirmEditProgram()">Save Changes</button>
+                <button class="assess-cancel-btn" onclick="closeEditProgramModal()">Cancel</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- DELETE PROGRAM MODAL -->
+          <div class="modal-overlay" id="deleteProgramModal">
+            <div class="modal-box">
+              <span class="modal-close" onclick="closeDeleteProgramModal()">&times;</span>
+              <h2 class="modal-title">Delete Program</h2>
+              <p class="modal-subtitle">Are you sure you want to delete this program? This action cannot be undone.</p>
+
+              <div class="assess-student-strip">
+                <div class="assess-student-row">
+                  <span class="assess-label">Program Code</span>
+                  <span class="assess-value" id="deleteProgramCode"></span>
+                </div>
+                <div class="assess-student-row">
+                  <span class="assess-label">Program Name</span>
+                  <span class="assess-value" id="deleteProgramName"></span>
+                </div>
+              </div>
+
+              <div class="assess-actions">
+                <button class="btn-reject" onclick="confirmDeleteProgram()">Yes, Delete</button>
+                <button class="assess-cancel-btn" onclick="closeDeleteProgramModal()">Cancel</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- UPDATE ACADEMIC CALENDAR MODAL -->
+          <div class="modal-overlay" id="updateCalendarModal">
+            <div class="modal-box">
+              <span class="modal-close" onclick="closeUpdateCalendarModal()">&times;</span>
+              <h2 class="modal-title">Update Academic Calendar</h2>
+              <p class="modal-subtitle">Please confirm the changes before applying. This will affect the entire system.</p>
+
+              <div class="assess-student-strip">
+                <div class="assess-student-row">
+                  <span class="assess-label">Academic Year</span>
+                  <span class="assess-value" id="calSummaryYear"></span>
+                </div>
+                <div class="assess-student-row">
+                  <span class="assess-label">Semester</span>
+                  <span class="assess-value" id="calSummarySem"></span>
+                </div>
+                <div class="assess-student-row">
+                  <span class="assess-label">Start Date</span>
+                  <span class="assess-value" id="calSummaryStart"></span>
+                </div>
+                <div class="assess-student-row">
+                  <span class="assess-label">End Date</span>
+                  <span class="assess-value" id="calSummaryEnd"></span>
+                </div>
+              </div>
+
+              <div class="assess-free-notice warning">
+                ⚠ Updating the academic calendar will affect enrollment periods, grade submission deadlines, and all semester-related records system-wide.
+              </div>
+
+              <div class="assess-actions">
+                <button class="assess-confirm-btn" onclick="confirmUpdateCalendar()">Yes, Update Calendar</button>
+                <button class="assess-cancel-btn" onclick="closeUpdateCalendarModal()">Cancel</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ADD SECTION MODAL -->
+          <div class="modal-overlay" id="addSectionModal">
+            <div class="modal-box">
+              <span class="modal-close" onclick="closeAddSectionModal()">&times;</span>
+              <h2 class="modal-title">Add Section</h2>
+              <p class="modal-subtitle">Fill in the details to add a new section.</p>
+
+              <div class="form-group">
+                <label for="addSectionCode">Section Code <span class="required">*</span></label>
+                <input type="text" id="addSectionCode" placeholder="e.g. BSIT-1A" />
+              </div>
+              <div class="form-group">
+                <label for="addSectionYear">Year Level <span class="required">*</span></label>
+                <select id="addSectionYear">
+                  <option value="">-- Select Year Level --</option>
+                  <option value="1st Year">1st Year</option>
+                  <option value="2nd Year">2nd Year</option>
+                  <option value="3rd Year">3rd Year</option>
+                  <option value="4th Year">4th Year</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="addSectionProgram">Program <span class="required">*</span></label>
+                <select id="addSectionProgram">
+                  <option value="">-- Select Program --</option>
+                  <option value="BS Accountancy">BS Accountancy</option>
+                  <option value="BS Information Technology">BS Information Technology</option>
+                  <option value="BS Hospitality Management">BS Hospitality Management</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="addSectionCapacity">Capacity <span class="required">*</span></label>
+                <input type="text" id="addSectionCapacity" placeholder="e.g. 40" />
+              </div>
+
+              <div class="assess-actions">
+                <button class="assess-confirm-btn" onclick="confirmAddSection()">Add Section</button>
+                <button class="assess-cancel-btn" onclick="closeAddSectionModal()">Cancel</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- EDIT SECTION MODAL -->
+          <div class="modal-overlay" id="editSectionModal">
+            <div class="modal-box">
+              <span class="modal-close" onclick="closeEditSectionModal()">&times;</span>
+              <h2 class="modal-title">Edit Section</h2>
+              <p class="modal-subtitle">Update the details of this section.</p>
+
+              <div class="form-group">
+                <label for="editSectionCode">Section Code <span class="required">*</span></label>
+                <input type="text" id="editSectionCode" />
+              </div>
+              <div class="form-group">
+                <label for="editSectionYear">Year Level <span class="required">*</span></label>
+                <select id="editSectionYear">
+                  <option value="">-- Select Year Level --</option>
+                  <option value="1st Year">1st Year</option>
+                  <option value="2nd Year">2nd Year</option>
+                  <option value="3rd Year">3rd Year</option>
+                  <option value="4th Year">4th Year</option>
+                  <option value="5th Year">5th Year</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="editSectionProgram">Program <span class="required">*</span></label>
+                <select id="editSectionProgram">
+                  <option value="">-- Select Program --</option>
+                  <option value="BS Accountancy">BS Accountancy</option>
+                  <option value="BS Information Technology">BS Information Technology</option>
+                  <option value="BS Hospitality Management">BS Hospitality Management</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="editSectionCapacity">Capacity <span class="required">*</span></label>
+                <input type="text" id="editSectionCapacity" />
+              </div>
+              <div class="form-group">
+                <label for="editSectionEnrolled">Currently Enrolled</label>
+                <input type="text" id="editSectionEnrolled" disabled />
+              </div>
+
+              <div class="assess-actions">
+                <button class="assess-confirm-btn" onclick="confirmEditSection()">Save Changes</button>
+                <button class="assess-cancel-btn" onclick="closeEditSectionModal()">Cancel</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- DELETE SECTION MODAL -->
+          <div class="modal-overlay" id="deleteSectionModal">
+            <div class="modal-box">
+              <span class="modal-close" onclick="closeDeleteSectionModal()">&times;</span>
+              <h2 class="modal-title">Delete Section</h2>
+              <p class="modal-subtitle">Are you sure you want to delete this section? This action cannot be undone.</p>
+
+              <div class="assess-student-strip">
+                <div class="assess-student-row">
+                  <span class="assess-label">Section Code</span>
+                  <span class="assess-value" id="deleteSectionCode"></span>
+                </div>
+                <div class="assess-student-row">
+                  <span class="assess-label">Program</span>
+                  <span class="assess-value" id="deleteSectionProgram"></span>
+                </div>
+              </div>
+
+              <div class="assess-free-notice warning">
+                ⚠ Deleting this section will remove all associated schedules and enrollments linked to it.
+              </div>
+
+              <div class="assess-actions">
+                <button class="btn-reject" onclick="confirmDeleteSection()">Yes, Delete</button>
+                <button class="assess-cancel-btn" onclick="closeDeleteSectionModal()">Cancel</button>
+              </div>
+            </div>
+          </div>
+
+      </main>
+    </div>
+
+    <script type="module" src="{{ url_for('static', filename='js/script.js') }}"></script>
+  </body>
+</html>

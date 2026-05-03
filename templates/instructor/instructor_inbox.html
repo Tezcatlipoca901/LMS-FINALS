@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PUP Portal - Inbox</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+  </head>
+
+  <body>
+    <!-- MOBILE HAMBURGER MENU BUTTON -->
+    <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle Menu">
+      <span class="bar top"></span>
+      <span class="bar middle"></span>
+      <span class="bar bottom"></span>
+    </button>
+
+    <!-- MOBILE OVERLAY -->
+    <div class="mobile-overlay" onclick="toggleMobileMenu()"></div>
+
+    <!-- MAIN DASHBOARD CONTAINER -->
+    <div class="dashboard-container active">
+      
+      <!-- SIDEBAR NAVIGATION -->
+      <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+              <img src="{{ url_for('static', filename='images/logo88x88pup.png') }}" alt="PUP Logo" />
+            </div>
+            <div class="sidebar-logo-text">
+              <strong>PUP</strong> Instructor Portal
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-mobile-header">
+          <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+              <img src="{{ url_for('static', filename='images/logo88x88pup.png') }}" alt="PUP Logo" />
+            </div>
+            <div class="sidebar-logo-text">
+              <strong>PUP</strong> Instructor Portal
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-profile">
+          <div class="profile-avatar">AT</div>
+          <div class="profile-info">
+            <span class="profile-name">Alpha Trion</span>
+            <span class="profile-course">Instructor</span>
+          </div>
+        </div>
+
+        <div class="sidebar-user">
+          <div class="user-avatar">AT</div>
+          <div class="user-name">Alpha Trion</div>
+          <div class="user-number">INST-001</div>
+        </div>
+
+        <div class="sidebar-nav">
+          <a class="nav-item" href="{{ url_for('instructor_dashboard') }}">Home</a>
+          <a class="nav-item" href="{{ url_for('instructor_account') }}">Account Info</a>
+          <a class="nav-item" href="{{ url_for('instructor_classes') }}">My Classes</a>
+          <a class="nav-item" href="{{ url_for('instructor_grades') }}">Manage Grades</a>
+          <a class="nav-item" href="{{ url_for('instructor_students') }}">Students Records</a>
+          <a class="nav-item" href="{{ url_for('instructor_attendance') }}">Attendance</a>
+          <a class="nav-item" href="{{ url_for('instructor_schedule') }}">Schedule</a>
+          <a class="nav-item" href="{{ url_for('instructor_applications') }}">Applications</a> 
+          <a class="nav-item" href="{{ url_for('instructor_messages') }}">Messages</a>
+          <a class="nav-item active" href="{{ url_for('instructor_inbox') }}">Inbox</a>
+        </div>
+
+        <!-- LMS LAUNCH BUTTON -->
+        <div class="lms-launch-wrapper">
+          <button class="lms-launch-btn" onclick="launchLMS()">
+            <span class="lms-btn-icon">⬡</span>
+            <span class="lms-btn-text">Launch LMS</span>
+            <span class="lms-btn-badge">BETA</span>
+          </button>
+        </div>
+
+        <form action="{{ url_for('logout') }}" method="GET">
+          <button type="submit" class="logout-btn">Log Out</button>
+        </form>
+      </nav>
+
+      <!-- MAIN CONTENT AREA -->
+      <main class="main-content">
+        
+        <!-- Page Header -->
+        <header class="top-header">
+          <h1 class="page-title">Inbox</h1>
+          <span class="header-date" id="currentDate"></span>
+        </header>
+
+        <!-- INBOX CONTENT -->
+        <section class="content-section active">
+          
+          <!-- System Notifications -->
+          <div class="card">
+            <div class="card-header">System Notifications</div>
+            <div class="card-body">
+              <ul class="message-list">
+                <li class="message-item message-unread">
+                  <div class="message-header">
+                    <span class="message-sender">PUPSIS System</span>
+                    <span class="message-date">March 26, 2026</span>
+                  </div>
+                  <div class="message-subject">Grade Submission Deadline Reminder</div>
+                  <div class="message-preview">This is a reminder that the deadline for grade submission for 2nd Semester AY 2025-2026 is on April 5, 2026.</div>
+                </li>
+                <li class="message-item">
+                  <div class="message-header">
+                    <span class="message-sender">IT Department</span>
+                    <span class="message-date">March 24, 2026</span>
+                  </div>
+                  <div class="message-subject">Faculty Meeting - March 30, 2026</div>
+                  <div class="message-preview">All faculty members are required to attend the department meeting scheduled on March 30, 2026 at 2:00 PM.</div>
+                </li>
+                <li class="message-item">
+                  <div class="message-header">
+                    <span class="message-sender">HR Department</span>
+                    <span class="message-date">March 20, 2026</span>
+                  </div>
+                  <div class="message-subject">Employee Benefits Update</div>
+                  <div class="message-preview">We are pleased to announce updates to the employee benefits program effective April 1, 2026.</div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Academic Announcements -->
+          <div class="card">
+            <div class="card-header">Academic Announcements</div>
+            <div class="card-body">
+              <div class="announcement-item">
+                <div class="announcement-title">Mid-Year Faculty Development Program</div>
+                <div class="announcement-date">Posted: March 22, 2026</div>
+                <p>Faculty members are invited to participate in the Mid-Year Faculty Development Program scheduled for April 10-12, 2026. Topics include modern teaching methodologies and educational technology integration.</p>
+              </div>
+              <div class="announcement-item">
+                <div class="announcement-title">Research Grant Application Period Open</div>
+                <div class="announcement-date">Posted: March 18, 2026</div>
+                <p>The Office of Research and Development is now accepting applications for the 2026 Research Grant Program. Deadline for submission is April 30, 2026.</p>
+              </div>
+              <div class="announcement-item">
+                <div class="announcement-title">Summer Class Assignments</div>
+                <div class="announcement-date">Posted: March 15, 2026</div>
+                <p>Summer class assignments will be announced on April 1, 2026. Faculty members interested in teaching summer classes should inform the department head by March 31.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Message Inbox -->
+          <div class="card">
+            <div class="card-header">Inbox</div>
+            <div class="card-body">
+              <ul class="message-list">
+                <li class="message-item message-unread">
+                  <div class="message-header">
+                    <span class="message-sender">Optimus Prime (2024-00123-SM-0)</span>
+                    <span class="message-date">March 25, 2026</span>
+                  </div>
+                  <div class="message-subject">Request for Consultation</div>
+                  <div class="message-preview">Good day Professor, I would like to schedule a consultation for...</div>
+                </li>
+                <li class="message-item">
+                  <div class="message-header">
+                    <span class="message-sender">IT Department Head</span>
+                    <span class="message-date">March 24, 2026</span>
+                  </div>
+                  <div class="message-subject">Faculty Meeting Reminder</div>
+                  <div class="message-preview">This is to remind all faculty members about the upcoming...</div>
+                </li>
+                <li class="message-item">
+                  <div class="message-header">
+                    <span class="message-sender">Nico Robin (2020-00125-SM-0)</span>
+                    <span class="message-date">March 23, 2026</span>
+                  </div>
+                  <div class="message-subject">Thesis Consultation Request</div>
+                  <div class="message-preview">Dear Professor Trion, I would like to discuss my thesis proposal...</div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+        </section>
+
+          <!-- FOOTER -->
+          <footer class="footer">
+            <div class="footer-top"></div>
+            <div class="footer-container">
+              <div class="footer-about">
+                <h3>Polytechnic University of the Philippines</h3>
+                <p>
+                  PUPSIS - Polytechnic University Student Information System.
+                  Secure and convenient access to your academic records and applications.
+                </p>
+              </div>
+
+              <div class="footer-contact">
+                <h4>Policies & Legal terms</h4>
+                <p>Privacy Policy</p>
+                <p>Terms of Services</p>
+                <p>Data Protection</p>
+                <p>Code of Conduct</p>
+              </div>
+
+              <div class="footer-contact">
+                <h4>Contact Us</h4>
+                <p>Email: support@pup.edu.ph</p>
+                <p>Phone: (63+) 09XX-XXXX-XX</p>
+                <p>Address: Sta. Mesa, Manila, Philippines</p>
+              </div>
+            </div>
+
+            <div class="footer-bottom">
+              <p>&copy; 2026 Polytechnic University of the Philippines. All Rights Reserved.</p>
+            </div>
+          </footer>
+      </main>
+    </div>
+
+    <!-- LMS LAUNCH OVERLAY -->
+    <div id="lmsOverlay" class="lms-overlay">
+      <div class="lms-overlay-ring lms-ring-1"></div>
+      <div class="lms-overlay-ring lms-ring-2"></div>
+      <div class="lms-overlay-ring lms-ring-3"></div>
+      <div class="lms-overlay-content">
+        <div class="lms-overlay-logo">⬡</div>
+        <div class="lms-overlay-title">PUP Learning Management System</div>
+        <div class="lms-overlay-subtitle" id="lmsOverlaySubtitle">Initializing...</div>
+        <div class="lms-progress-bar-wrapper">
+          <div class="lms-progress-bar" id="lmsProgressBar"></div>
+        </div>
+        <div class="lms-overlay-note">(Demo Only)</div>
+      </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script type="module" src="{{ url_for('static', filename='js/script.js') }}"></script>
+  </body>
+</html>

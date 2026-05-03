@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PUP Portal - Account Information</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+  </head>
+
+  <body>
+    <!-- MOBILE HAMBURGER MENU BUTTON -->
+    <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle Menu">
+      <span class="bar top"></span>
+      <span class="bar middle"></span>
+      <span class="bar bottom"></span>
+    </button>
+
+    <!-- MOBILE OVERLAY -->
+    <div class="mobile-overlay" onclick="toggleMobileMenu()"></div>
+
+    <!-- MAIN DASHBOARD CONTAINER -->
+    <div class="dashboard-container active">
+      
+      <!-- SIDEBAR NAVIGATION -->
+      <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+              <img src="{{ url_for('static', filename='images/logo88x88pup.png') }}" alt="PUP Logo" />
+            </div>
+            <div class="sidebar-logo-text">
+              <strong>PUP</strong> Instructor Portal
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-mobile-header">
+          <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+              <img src="{{ url_for('static', filename='images/logo88x88pup.png') }}" alt="PUP Logo" />
+            </div>
+            <div class="sidebar-logo-text">
+              <strong>PUP</strong> Instructor Portal
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-profile">
+          <div class="profile-avatar">AT</div>
+          <div class="profile-info">
+            <span class="profile-name">Alpha Trion</span>
+            <span class="profile-course">Instructor</span>
+          </div>
+        </div>
+
+        <div class="sidebar-user">
+          <div class="user-avatar">AT</div>
+          <div class="user-name">Alpha Trion</div>
+          <div class="user-number">INST-001</div>
+        </div>
+
+        <div class="sidebar-nav">
+          <a class="nav-item" href="{{ url_for('instructor_dashboard') }}">Home</a>
+          <a class="nav-item active" href="{{ url_for('instructor_account') }}">Account Info</a>
+          <a class="nav-item" href="{{ url_for('instructor_classes') }}">My Classes</a>
+          <a class="nav-item" href="{{ url_for('instructor_grades') }}">Manage Grades</a>
+          <a class="nav-item" href="{{ url_for('instructor_students') }}">Students Records</a>
+          <a class="nav-item" href="{{ url_for('instructor_attendance') }}">Attendance</a>
+          <a class="nav-item" href="{{ url_for('instructor_schedule') }}">Schedule</a>
+          <a class="nav-item" href="{{ url_for('instructor_applications') }}">Applications</a> 
+          <a class="nav-item" href="{{ url_for('instructor_messages') }}">Messages</a>
+          <a class="nav-item" href="{{ url_for('instructor_inbox') }}">Inbox</a>
+        </div>
+
+        <!-- LMS LAUNCH BUTTON -->
+        <div class="lms-launch-wrapper">
+          <button class="lms-launch-btn" onclick="launchLMS()">
+            <span class="lms-btn-icon">⬡</span>
+            <span class="lms-btn-text">Launch LMS</span>
+            <span class="lms-btn-badge">BETA</span>
+          </button>
+        </div>
+
+        <form action="{{ url_for('logout') }}" method="GET">
+          <button type="submit" class="logout-btn">Log Out</button>
+        </form>
+      </nav>
+
+      <!-- MAIN CONTENT AREA -->
+      <main class="main-content">
+        
+        <!-- Page Header -->
+        <header class="top-header">
+          <h1 class="page-title">Account Information</h1>
+          <span class="header-date" id="currentDate"></span>
+        </header>
+
+        <!-- ACCOUNT CONTENT -->
+        <section class="content-section active">
+          
+          <!-- Personal Information -->
+          <div class="card">
+            <div class="card-header">Personal Information</div>
+            <div class="card-body">
+              <div class="info-grid">
+                <div class="info-item">
+                  <div class="info-label">Employee Number</div>
+                  <div class="info-value">INST-001</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Full Name</div>
+                  <div class="info-value">Alpha Trion</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Department</div>
+                  <div class="info-value">Bachelors of Science in Information Technology (BSIT)</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Position</div>
+                  <div class="info-value">Assistant Professor II</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Employment Status</div>
+                  <div class="info-value">Permanent</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Date Hired</div>
+                  <div class="info-value">June 15, 2020</div>
+                </div>
+                <div class="info-item full-width">
+                  <div class="info-label">Email Address</div>
+                  <div class="info-value">atrion@pup.edu.ph</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Contact Number</div>
+                  <div class="info-value">+63 912 345 6789</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Office Location</div>
+                  <div class="info-value">Room 215, Faculty Building</div>
+                </div>
+              </div>
+              <div class="form-actions margin-top">
+                <button class="btn-edit" id="btnOpenEditInfoInstr">Edit Information</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Change Password -->
+          <div class="card">
+            <div class="card-header">Change Password</div>
+            <div class="card-body">
+              <div id="changePwNotifInstr" style="display:none; padding:10px 14px; border-radius:6px; font-size:13px; margin-bottom:16px;"></div>
+              <form id="changePasswordForm">
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label for="currentPassword">Current Password <span class="required">*</span></label>
+                    <div class="dashboard-pw-wrapper">
+                      <input type="password" id="currentPassword" placeholder="Enter current password" />
+                      <span class="dashboard-pw-toggle" onclick="togglePwVisibility('currentPassword', this)">👁</span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="newPassword">New Password <span class="required">*</span></label>
+                    <div class="dashboard-pw-wrapper">
+                      <input type="password" id="newPassword" placeholder="Enter new password" />
+                      <span class="dashboard-pw-toggle" onclick="togglePwVisibility('newPassword', this)">👁</span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="confirmPassword">Confirm New Password <span class="required">*</span></label>
+                    <div class="dashboard-pw-wrapper">
+                      <input type="password" id="confirmPassword" placeholder="Confirm new password" />
+                      <span class="dashboard-pw-toggle" onclick="togglePwVisibility('confirmPassword', this)">👁</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Password strength indicator -->
+                <div id="pwStrengthWrapperInstr" style="display:none; margin-bottom:16px;">
+                  <div style="font-size:12px; color:var(--gray-dark); margin-bottom:6px;">Password Strength</div>
+                  <div style="height:6px; border-radius:4px; background:var(--gray); overflow:hidden;">
+                    <div id="pwStrengthBarInstr" style="height:100%; width:0%; transition: width 0.3s ease, background 0.3s ease;"></div>
+                  </div>
+                  <div id="pwStrengthLabelInstr" style="font-size:12px; margin-top:4px;"></div>
+                </div>
+
+                <div class="form-actions">
+                  <button type="button" class="btn-save" id="changePwBtnInstr">Update Password</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Academic Qualifications -->
+          <div class="card">
+            <div class="card-header">Academic Qualifications</div>
+            <div class="card-body">
+              <div class="qualification-list">
+                <div class="qualification-item">
+                  <strong>Doctor of Philosophy in Informtion Technology</strong>
+                  <div>University of the Philippines Diliman - 2018</div>
+                </div>
+                <div class="qualification-item">
+                  <strong>Master of Science in Information Technology</strong>
+                  <div>Polytechnic University of the Philippines - 2015</div>
+                </div>
+                <div class="qualification-item">
+                  <strong>Bachelor of Science in Information Technology</strong>
+                  <div>Polytechnic University of the Philippines - 2012</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+          <!-- FOOTER -->
+          <footer class="footer">
+            <div class="footer-top"></div>
+            <div class="footer-container">
+              <div class="footer-about">
+                <h3>Polytechnic University of the Philippines</h3>
+                <p>
+                  PUPSIS - Polytechnic University Student Information System.
+                  Secure and convenient access to your academic records and applications.
+                </p>
+              </div>
+
+              <div class="footer-contact">
+                <h4>Policies & Legal terms</h4>
+                <p>Privacy Policy</p>
+                <p>Terms of Services</p>
+                <p>Data Protection</p>
+                <p>Code of Conduct</p>
+              </div>
+
+              <div class="footer-contact">
+                <h4>Contact Us</h4>
+                <p>Email: support@pup.edu.ph</p>
+                <p>Phone: (63+) 09XX-XXXX-XX</p>
+                <p>Address: Sta. Mesa, Manila, Philippines</p>
+              </div>
+            </div>
+
+            <div class="footer-bottom">
+              <p>&copy; 2026 Polytechnic University of the Philippines. All Rights Reserved.</p>
+            </div>
+          </footer>
+
+          <!-- EDIT ACCOUNT INFO MODAL (instructor) -->
+          <div class="modal-overlay" id="editAccountModalInstr">
+            <div class="modal-box">
+              <h2 class="modal-title">Edit Account Information</h2>
+              <p class="modal-subtitle">Only contact details and office location can be updated.</p>
+
+              <div id="editAccountNotifInstr" style="display:none; padding:10px 14px; border-radius:6px; font-size:13px; margin-bottom:12px;"></div>
+
+              <div class="form-group">
+                <label for="editEmailInstr">Email Address</label>
+                <input type="text" id="editEmailInstr" value="atrion@pup.edu.ph" />
+              </div>
+              <div class="form-group">
+                <label for="editContactInstr">Contact Number</label>
+                <input type="text" id="editContactInstr" value="+63 912 345 6789" />
+              </div>
+              <div class="form-group">
+                <label for="editOfficeInstr">Office Location</label>
+                <input type="text" id="editOfficeInstr" value="Room 215, Faculty Building" />
+              </div>
+
+              <div class="assess-actions" style="margin-top:20px;">
+                <button class="assess-confirm-btn" id="editAccountSaveBtnInstr">Save Changes</button>
+                <button class="assess-cancel-btn" onclick="closeEditAccountModalInstr()">Cancel</button>
+              </div>
+            </div>
+          </div>
+
+      </main>
+    </div>
+
+    <!-- LMS LAUNCH OVERLAY -->
+    <div id="lmsOverlay" class="lms-overlay">
+      <div class="lms-overlay-ring lms-ring-1"></div>
+      <div class="lms-overlay-ring lms-ring-2"></div>
+      <div class="lms-overlay-ring lms-ring-3"></div>
+      <div class="lms-overlay-content">
+        <div class="lms-overlay-logo">⬡</div>
+        <div class="lms-overlay-title">PUP Learning Management System</div>
+        <div class="lms-overlay-subtitle" id="lmsOverlaySubtitle">Initializing...</div>
+        <div class="lms-progress-bar-wrapper">
+          <div class="lms-progress-bar" id="lmsProgressBar"></div>
+        </div>
+        <div class="lms-overlay-note">(Demo Only)</div>
+      </div>
+    </div>
+
+
+    <!-- JavaScript -->
+    <script type="module" src="{{ url_for('static', filename='js/script.js') }}"></script>
+  </body>
+</html>

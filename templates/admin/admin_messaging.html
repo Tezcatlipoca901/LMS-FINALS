@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PUP Portal - Messaging</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/styles.css') }}"
+    />
+  </head>
+
+  <body>
+    <button
+      class="mobile-menu-btn"
+      onclick="toggleMobileMenu()"
+      aria-label="Toggle Menu"
+    >
+      <span class="bar top"></span><span class="bar middle"></span
+      ><span class="bar bottom"></span>
+    </button>
+    <div class="mobile-overlay" onclick="toggleMobileMenu()"></div>
+
+    <div class="dashboard-container active">
+      <nav class="sidebar" id="sidebar">
+        <div class="sidebar-mobile-header">
+          <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+              <img
+                src="{{ url_for('static', filename='images/logo88x88pup.png') }}"
+                alt="PUP Logo"
+              />
+            </div>
+            <div class="sidebar-logo-text">
+              <strong>PUP</strong> Admin Portal
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-profile">
+          <div class="profile-avatar">A</div>
+          <div class="profile-info">
+            <span class="profile-name">ADMIN1</span
+            ><span class="profile-number">001</span>
+          </div>
+        </div>
+        <div class="sidebar-header">
+          <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+              <img
+                src="{{ url_for('static', filename='images/logo88x88pup.png') }}"
+                alt="PUP Logo"
+              />
+            </div>
+            <div class="sidebar-logo-text">
+              <strong>PUP</strong> Admin Portal
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-user">
+          <div class="user-avatar">A</div>
+          <div class="user-name">ADMIN1</div>
+          <div class="user-number">001</div>
+        </div>
+        <div class="sidebar-nav">
+          <a class="nav-item" href="{{ url_for('admin_dashboard') }}">Home</a>
+          <a class="nav-item" href="{{ url_for('admin_master_data') }}"
+            >Master Data</a
+          >
+          <a class="nav-item" href="{{ url_for('admin_acc_info') }}">Account Info</a>
+          <a class="nav-item" href="{{ url_for('admin_audit') }}">Degree Audit</a>
+
+          <div class="nav-dropdown">
+            <button
+              class="nav-item dropdown-btn"
+              onclick="toggleDropdown('studentMenu', this)"
+            >
+              Student Management<span class="arrow">▼</span>
+            </button>
+            <div class="dropdown-container" id="studentMenu">
+              <a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_student_records') }}"
+                >Student Records & Management</a
+              ><a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_applications') }}"
+                >Application Approvals</a
+              >
+            </div>
+          </div>
+          <div class="nav-dropdown">
+            <button
+              class="nav-item dropdown-btn"
+              onclick="toggleDropdown('instructorMenu', this)"
+            >
+              Instructor Management<span class="arrow">▼</span>
+            </button>
+            <div class="dropdown-container" id="instructorMenu">
+              <a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_instructors') }}"
+                >Manage Instructors</a
+              ><a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_schedule') }}"
+                >Scheduling & Timetable</a
+              >
+            </div>
+          </div>
+          <div class="nav-dropdown">
+            <button
+              class="nav-item dropdown-btn"
+              onclick="toggleDropdown('gradesMenu', this)"
+            >
+              Grades & Attendance<span class="arrow">▼</span>
+            </button>
+            <div class="dropdown-container" id="gradesMenu">
+              <a class="nav-item sub-item" href="{{ url_for('admin_grades') }}"
+                >Grade Overrides</a
+              ><a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_attendance') }}"
+                >Attendance Overrides</a
+              >
+            </div>
+          </div>
+
+          <div class="nav-dropdown">
+            <button
+              class="nav-item dropdown-btn active"
+              onclick="toggleDropdown('communicationMenu', this)"
+            >
+              Communication<span class="arrow rotate">▼</span>
+            </button>
+            <div class="dropdown-container show" id="communicationMenu">
+              <a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_announcements') }}"
+                >Announcements</a
+              ><a
+                class="nav-item sub-item active"
+                href="{{ url_for('admin_messaging') }}"
+                >Messaging</a
+              >
+            </div>
+          </div>
+
+          <form action="{{ url_for('logout') }}" method="GET">
+            <button type="submit" class="logout-btn">Log Out</button>
+          </form>
+        </div>
+      </nav>
+
+      <!--MAIN CONTENT-->
+      <main class="main-content">
+        <header class="top-header">
+          <h1 class="page-title">Messaging & Notifications</h1>
+          <span class="header-date" id="currentDate"></span>
+        </header>
+
+        <section class="content-section active">
+          <div class="welcome-banner">
+            <div class="welcome-title">Email & SMS Notifications</div>
+            <p class="welcome-subtitle">
+              Send email and SMS notifications to students, instructors, or
+              groups.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">Compose New Message</div>
+            <div class="card-body">
+              <form id="messagingForm">
+                <div class="form-group">
+                  <label for="msgRecipient"
+                    >Recipients <span class="required">*</span></label
+                  >
+                  <select id="msgRecipient" required>
+                    <option value="">-- Select Recipients --</option>
+                    <option value="all-students">All Students</option>
+                    <option value="all-instructors">All Instructors</option>
+                    <option value="specific-program">Specific Program</option>
+                    <option value="specific-year">Specific Year Level</option>
+                    <option value="individual">Individual User</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="msgType"
+                    >Message Type <span class="required">*</span></label
+                  >
+                  <select id="msgType" required>
+                    <option value="">-- Select Type --</option>
+                    <option value="email">Email Only</option>
+                    <option value="sms">SMS Only</option>
+                    <option value="both">Email & SMS</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="msgSubject"
+                    >Subject <span class="required">*</span></label
+                  >
+                  <input
+                    type="text"
+                    id="msgSubject"
+                    placeholder="Enter message subject"
+                    required
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="msgBody"
+                    >Message <span class="required">*</span></label
+                  >
+                  <textarea
+                    id="msgBody"
+                    placeholder="Enter your message here"
+                    required
+                    style="min-height: 150px"
+                  ></textarea>
+                </div>
+
+                  <button type="submit" class="send-btn">Send Message</button>
+              </form>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">Message History</div>
+            <div class="card-body">
+              <div class="data-table-wrapper">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Subject</th>
+                      <th>Recipients</th>
+                      <th>Type</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>March 18, 2026</td>
+                      <td>Enrollment Reminder</td>
+                      <td>All Students</td>
+                      <td>Email & SMS</td>
+                      <td>
+                        <span class="status-badge status-enrolled">Sent</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>March 15, 2026</td>
+                      <td>Schedule Change Notice</td>
+                      <td>BSIT Students</td>
+                      <td>Email</td>
+                      <td>
+                        <span class="status-badge status-enrolled">Sent</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>March 12, 2026</td>
+                      <td>Grade Posting Notification</td>
+                      <td>All Instructors</td>
+                      <td>Email</td>
+                      <td>
+                        <span class="status-badge status-enrolled">Sent</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+          <!-- FOOTER -->
+          <footer class="footer">
+            <div class="footer-top"></div>
+            <div class="footer-container">
+              <div class="footer-about">
+                <h3>Polytechnic University of the Philippines</h3>
+                <p>
+                  PUPSIS - Polytechnic University Student Information System.
+                  Secure and convenient access to your academic records and applications.
+                </p>
+              </div>
+
+              <div class="footer-contact">
+                <h4>Policies & Legal terms</h4>
+                <p>Privacy Policy</p>
+                <p>Terms of Services</p>
+                <p>Data Protection</p>
+                <p>Code of Conduct</p>
+              </div>
+
+              <div class="footer-contact">
+                <h4>Contact Us</h4>
+                <p>Email: support@pup.edu.ph</p>
+                <p>Phone: (63+) 09XX-XXXX-XX</p>
+                <p>Address: Sta. Mesa, Manila, Philippines</p>
+              </div>
+            </div>
+
+            <div class="footer-bottom">
+              <p>&copy; 2026 Polytechnic University of the Philippines. All Rights Reserved.</p>
+            </div>
+          </footer>
+      </main>
+    </div>
+
+    <script type="module" src="{{ url_for('static', filename='js/script.js') }}"></script>
+  </body>
+</html>

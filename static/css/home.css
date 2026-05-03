@@ -1,0 +1,915 @@
+/* BASE STYLES */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* DASHBOARD LAYOUT */
+.dashboard-container {
+  display: none;
+  min-height: 100vh;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.dashboard-container.active {
+  display: flex;
+}
+
+/* SIDEBAR STYLES */
+.sidebar {
+  width: 260px;
+  background: #800000;
+  color: #ffffff;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  overflow-y: auto;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  padding: 20px;
+  background: #5e0b15;
+  border-bottom: 2px solid #b08d57;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sidebar-logo-icon {
+  width: 45px;
+  height: 45px;
+  background: #b08d57;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.sidebar-logo-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sidebar-logo-text strong {
+  display: block;
+  font-size: 14px;
+  color: #b08d57;
+}
+
+.sidebar-user {
+  padding: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+.sidebar-footer {
+  margin-top: auto; 
+  padding-bottom: 20px; 
+}
+.user-avatar {
+  width: 60px;
+  height: 60px;
+  background: #f5f5f5;
+  border-radius: 50%;
+  margin: 0 auto 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #800000;
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.user-number {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 4px;
+}
+
+/* NAVIGATION */
+.sidebar-nav {
+  padding: 15px 0;
+}
+
+.nav-item {
+  display: block;
+  padding: 14px 20px;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.3s;
+  border-left: 4px solid transparent;
+}
+
+.nav-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-left-color: #b08d57;
+}
+
+/* Active Nav State */
+.nav-item.active-nav {
+  background: rgba(255, 255, 255, 0.1);
+  border-left-color: #b08d57;
+}
+
+.logout-btn {
+  margin: 20px;
+  padding: 14px;
+  background: #b08d57;
+  color: #800000;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  width: calc(100% - 40px);
+  transition: background 0.3s;
+}
+
+.logout-btn:hover {
+  background: #daa520;
+}
+
+/* MAIN CONTENT AREA */
+.main-content {
+  margin-left: 260px;
+  flex: 1;
+  min-height: 100vh;
+  padding: 30px;
+}
+
+.content-section {
+  display: none;
+}
+
+.content-section.active {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 60px); 
+}
+
+/* HOME PAGE STYLES */
+.welcome-banner {
+  background: linear-gradient(135deg, #800000 0%, #5e0b15 60%, #3d0009 100%);
+  color: #ffffff;
+  padding: 38px 44px;
+  border-radius: 12px;
+  margin-bottom: 28px;
+  border-left: 6px solid #b08d57;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(128, 0, 0, 0.25);
+}
+
+.welcome-banner::before {
+  content: "";
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: rgba(176, 141, 87, 0.13);
+  pointer-events: none;
+}
+
+.welcome-banner::after {
+  content: "";
+  position: absolute;
+  bottom: -60px;
+  right: 100px;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: rgba(176, 141, 87, 0.07);
+  pointer-events: none;
+}
+
+.welcome-title {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  letter-spacing: -0.3px;
+  line-height: 1.3;
+  position: relative;
+}
+
+.welcome-subtitle {
+  font-size: 14.5px;
+  color: rgba(255, 255, 255, 0.82);
+  line-height: 1.65;
+  max-width: 680px;
+  position: relative;
+}
+
+/* =========================================
+   HORIZONTAL COURSES PREVIEW 
+   ========================================= */
+.courses-preview-wrapper {
+  margin-bottom: 28px;
+  width: 100%;
+}
+
+.courses-preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #e8e4e4;
+  padding-bottom: 10px;
+  margin-bottom: 16px;
+}
+
+.courses-preview-header .preview-title {
+  font-size: 18px;
+  color: #800000;
+  font-weight: 700;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.courses-preview-header .view-all-link {
+  color: #800000;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 5px 14px;
+  border: 1.5px solid #800000;
+  border-radius: 20px;
+  transition: all 0.2s;
+}
+
+.courses-preview-header .view-all-link:hover {
+  background: #800000;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.courses-horizontal-list {
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+  padding: 0 0 15px 0; 
+  width: 100%;        
+  scroll-behavior: smooth;
+}
+
+.courses-horizontal-list::-webkit-scrollbar {
+  height: 8px;
+}
+.courses-horizontal-list::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+  border-radius: 4px;
+}
+.courses-horizontal-list::-webkit-scrollbar-thumb {
+  background: #c4c1c1; 
+  border-radius: 4px;
+}
+.courses-horizontal-list::-webkit-scrollbar-thumb:hover {
+  background: #b08d57; 
+}
+
+.courses-horizontal-list .course-box {
+  min-width: 220px;
+  flex: 1;
+  height: 110px;
+  background: #ffffff;
+  padding: 18px 20px;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07), 0 4px 12px rgba(0, 0, 0, 0.04);
+  border-left: 4px solid #b08d57;
+  border-top: 1px solid #f0eded;
+  cursor: default;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  text-align: left;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.courses-horizontal-list .course-box:hover {
+  box-shadow: 0 4px 16px rgba(128, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.courses-horizontal-list .course-title {
+  font-weight: 700;
+  color: #2a2a2a;
+  font-size: 12.5px;
+  line-height: 1.45;
+  margin-bottom: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+}
+
+.courses-horizontal-list .course-code {
+  font-size: 11px;
+  font-weight: 700;
+  color: #800000;
+  background: #fff5f5;
+  padding: 3px 10px;
+  border-radius: 4px;
+  margin-top: 8px;
+}
+/* =========================================
+   BOTTOM WIDGETS
+   ========================================= */
+.bottom-widgets {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  height: 50vh;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07), 0 4px 16px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 1px solid #f0eded;
+}
+
+.card-header {
+  background: #800000;
+  color: #ffffff;
+  padding: 14px 20px;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  border-bottom: 3px solid #b08d57;
+  flex-shrink: 0;
+}
+
+.card-body {
+  padding: 16px 20px;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+/* Scrollbar for Cards */
+.card-body::-webkit-scrollbar {
+  width: 5px;
+}
+.card-body::-webkit-scrollbar-track {
+  background: #f8f8f8;
+  border-radius: 4px;
+}
+.card-body::-webkit-scrollbar-thumb {
+  background: #ddd;
+  border-radius: 4px;
+}
+.card-body::-webkit-scrollbar-thumb:hover {
+  background: #b08d57;
+}
+
+.card-footer {
+  background: #fafafa;
+  border-top: 1px solid #f0eded;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.view-more-btn {
+  background-color: #800000;
+  color: #ffffff;
+  border: none;
+  padding: 7px 18px;
+  border-radius: 20px;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.view-more-btn:hover {
+  background-color: #5e0b15;
+  transform: translateY(-1px);
+}
+
+/* ANNOUNCEMENTS */
+.announcement-item {
+  padding: 14px 16px;
+  background: #ffffff;
+  border: 1px solid #eeebeb;
+  border-left: 4px solid #800000;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.announcement-item:last-child {
+  margin-bottom: 0;
+}
+
+.announcement-item:hover {
+  transform: translateX(2px);
+  box-shadow: 0 2px 8px rgba(128, 0, 0, 0.08);
+}
+
+.announcement-title {
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.announcement-date {
+  font-size: 12px;
+  color: #888;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* SCHEDULE TABLE */
+.schedule-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.schedule-table th,
+.schedule-table td {
+  padding: 11px 12px;
+  text-align: left;
+  border-bottom: 1px solid #f2f0f0;
+  font-size: 13.5px;
+}
+
+.schedule-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.schedule-table th {
+  color: #800000;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 11.5px;
+  letter-spacing: 0.5px;
+  background: #fdf9f9;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.schedule-table tbody tr {
+  transition: background 0.15s;
+}
+
+.schedule-table tbody tr:hover {
+  background: #fdf9f9;
+}
+
+/* =========================================
+   PROFILE MODAL STYLES
+   ========================================= */
+
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes profilePopIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95); 
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1); 
+  }
+}
+
+.modal-overlay {
+  display: none; 
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-overlay.active {
+  display: flex;
+  animation: overlayFadeIn 0.2s ease-out forwards;
+}
+
+.profile-modal-content {
+  background: #ffffff;
+  width: 850px; 
+  max-width: 95%;
+  display: flex;
+  border-radius: 4px; 
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  position: relative;
+  border: 1px solid #d3d3d3;
+}
+
+.modal-overlay.active .profile-modal-content {
+  animation: profilePopIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; 
+}
+
+.profile-modal-content {
+  background: #ffffff;
+  width: 850px; 
+  max-width: 95%;
+  display: flex;
+  border-radius: 4px; 
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  position: relative;
+  border: 1px solid #d3d3d3;
+}
+
+/* The 'X' to close */
+.close-profile-modal {
+  position: absolute;
+  top: 10px; right: 15px;
+  background: transparent; 
+  border: none;
+  font-size: 24px; 
+  cursor: pointer; 
+  color: #666;
+}
+
+.close-profile-modal:hover {
+  color: #800000;
+}
+
+.profile-left {
+  width: 250px;
+  background:#800000;
+  color: #ffffff;
+  padding: 40px 20px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.profile-icon-large { margin-bottom: 20px; }
+.profile-left h2 { font-size: 20px; margin-bottom: 5px; font-weight: bold; }
+.profile-role { font-size: 13px; margin-bottom: 30px; }
+.profile-id { font-size: 13px; margin-bottom: auto; }
+
+.edit-profile-btn { 
+  margin-top: 40px; 
+  background: transparent; 
+  border: none; 
+  cursor: pointer; 
+  transition: transform 0.2s;
+}
+.edit-profile-btn:hover { transform: scale(1.1); }
+
+.profile-right {
+  flex: 1;
+  padding: 30px 40px;
+}
+
+.profile-info-grid {
+  display: flex;
+  gap: 30px;
+}
+
+.profile-column-1 { flex: 1; }
+.profile-column-2 { flex: 1.2; } 
+
+.form-group { margin-bottom: 12px; }
+
+.form-group label {
+  display: block; 
+  font-size: 14px; 
+  color: #000; 
+  margin-bottom: 5px;
+}
+
+.form-group label span { 
+  font-size: 11px; 
+  color: #888; 
+  font-weight: normal; 
+}
+
+.form-group input, 
+.form-group textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  font-size: 14px;
+  color: #555;
+  font-family: inherit;
+  background-color: #fafafa;
+  outline: none;
+}
+
+.form-group textarea { 
+  height: 90px; 
+  resize: none; 
+}
+
+.sidebar-user {
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.sidebar-user:hover {
+  background: rgba(255,255,255,0.05);
+}
+
+.form-group textarea.editable {
+  background-color: #ffffff;
+  border: 1px solid #b08d57; 
+  box-shadow: 0 0 5px rgba(176, 141, 87, 0.3);
+  color: #000;
+  transition: all 0.2s ease;
+}
+
+/* ============================================================
+   RESPONSIVE OVERRIDES
+   Append this to the END of your existing CSS.
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   MOBILE TOP BAR (Hidden on Desktop)
+   This mimics the PUPSIS header with the maroon border.
+   ---------------------------------------------------------- */
+.mobile-topbar {
+  display: none; /* Hidden by default */
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 60px;
+  background: #ffffff;
+  border-bottom: 3px solid #800000;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 1100;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.mobile-topbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mobile-topbar-logo img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.mobile-topbar-logo span {
+  font-size: 16px;
+  font-weight: 800;
+  color: #800000;
+  letter-spacing: 0.5px;
+}
+
+.mobile-hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: 2px solid #b08d57; /* Gold accent */
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.mobile-hamburger span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: #800000;
+  transition: 0.3s;
+}
+
+/* Hamburger Animation to 'X' */
+.mobile-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.mobile-hamburger.open span:nth-child(2) { opacity: 0; }
+.mobile-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ----------------------------------------------------------
+   MOBILE NAV DROPDOWN
+   ---------------------------------------------------------- */
+.mobile-nav-dropdown {
+  display: none;
+  position: fixed;
+  top: 60px; left: 0; right: 0;
+  background: #ffffff;
+  z-index: 1099;
+  border-bottom: 2px solid #b08d57;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+}
+
+.mobile-nav-dropdown.open {
+  max-height: 500px;
+}
+
+.mobile-nav-dropdown .nav-link {
+  display: block;
+  padding: 15px 25px;
+  color: #333;
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 1px solid #eee;
+}
+
+.mobile-nav-dropdown .nav-link:hover {
+  background: #fff5f5;
+  color: #800000;
+}
+
+.mobile-nav-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  top: 60px;
+  background: rgba(0,0,0,0.4);
+  z-index: 1098;
+}
+
+.mobile-nav-overlay.active { display: block; }
+
+/* ----------------------------------------------------------
+   TABLET & MOBILE BREAKPOINTS
+   ---------------------------------------------------------- */
+
+@media (max-width: 992px) {
+  /* 1. Show the mobile interface */
+  .mobile-topbar { display: flex; }
+  .mobile-nav-dropdown { display: block; }
+
+  /* 2. Hide the fixed sidebar */
+  .sidebar {
+    display: none !important;
+  }
+
+  /* 3. CRITICAL: Kill the sidebar margin so content isn't pushed offscreen */
+  .main-content {
+    margin-left: 0 !important;
+    width: 100% !important;
+    padding: 12px 15px 24px;
+    padding-top: 76px;
+    box-sizing: border-box;
+  }
+
+  /* 4. Dashboard container must not overflow */
+  .dashboard-container.active {
+    display: block;
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* 5. Content section: natural flow, no forced height */
+  .content-section.active {
+    min-height: unset;
+    width: 100%;
+  }
+
+  /* 6. Welcome banner: constrain and prevent text overflow */
+  .welcome-banner {
+    padding: 22px 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .welcome-title {
+    font-size: 20px;
+    word-break: break-word;
+  }
+
+  .welcome-subtitle {
+    font-size: 13.5px;
+    max-width: 100%;
+  }
+
+  /* 7. Courses preview wrapper */
+  .courses-preview-wrapper {
+    margin-bottom: 20px;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .courses-horizontal-list {
+    padding-bottom: 10px;
+    gap: 10px;
+  }
+
+  .courses-horizontal-list .course-box {
+    min-width: 180px;
+    height: auto;
+    min-height: 80px;
+    padding: 14px 16px;
+  }
+
+  /* 8. Bottom widgets: stack vertically with natural height — NO max-height clipping */
+  .bottom-widgets {
+    grid-template-columns: 1fr;
+    height: auto;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  /* Cards take their natural height when stacked */
+  .card {
+    height: auto;
+    max-height: none;
+  }
+
+  .card-body {
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  /* 9. Profile modal */
+  .profile-modal-content {
+    flex-direction: column;
+    width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .profile-left {
+    width: 100%;
+    padding: 20px;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 16px;
+    text-align: left;
+  }
+
+  .profile-icon-large { margin-bottom: 0; }
+
+  .profile-info-grid {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .welcome-title { font-size: 18px; }
+
+  .main-content {
+    padding: 10px 12px 20px;
+    padding-top: 72px;
+  }
+
+  .courses-horizontal-list .course-box {
+    min-width: 155px;
+  }
+
+  .card-body {
+    max-height: 260px;
+  }
+
+  .profile-left {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .profile-right {
+    padding: 16px;
+  }
+
+  .modal-btn, .logout-btn {
+    padding: 14px;
+  }
+}

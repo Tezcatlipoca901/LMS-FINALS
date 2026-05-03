@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PUP Portal - Attendance Management</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+  </head>
+
+  <body>
+    <!-- MOBILE HAMBURGER MENU BUTTON -->
+    <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle Menu">
+      <span class="bar top"></span>
+      <span class="bar middle"></span>
+      <span class="bar bottom"></span>
+    </button>
+
+    <!-- MOBILE OVERLAY -->
+    <div class="mobile-overlay" onclick="toggleMobileMenu()"></div>
+
+    <!-- MAIN DASHBOARD CONTAINER -->
+    <div class="dashboard-container active">
+      
+      <!-- SIDEBAR NAVIGATION -->
+      <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+              <img src="{{ url_for('static', filename='images/logo88x88pup.png') }}" alt="PUP Logo" />
+            </div>
+            <div class="sidebar-logo-text">
+              <strong>PUP</strong> Instructor Portal
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-mobile-header">
+          <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+              <img src="{{ url_for('static', filename='images/logo88x88pup.png') }}" alt="PUP Logo" />
+            </div>
+            <div class="sidebar-logo-text">
+              <strong>PUP</strong> Instructor Portal
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-profile">
+          <div class="profile-avatar">AT</div>
+          <div class="profile-info">
+            <span class="profile-name">Alpha Trion</span>
+            <span class="profile-course">Instructor</span>
+          </div>
+        </div>
+
+        <div class="sidebar-user">
+          <div class="user-avatar">AT</div>
+          <div class="user-name">Alpha Trion</div>
+          <div class="user-number">INST-001</div>
+        </div>
+
+        <div class="sidebar-nav">
+          <a class="nav-item" href="{{ url_for('instructor_dashboard') }}">Home</a>
+          <a class="nav-item" href="{{ url_for('instructor_account') }}">Account Info</a>
+          <a class="nav-item" href="{{ url_for('instructor_classes') }}">My Classes</a>
+          <a class="nav-item" href="{{ url_for('instructor_grades') }}">Manage Grades</a>
+          <a class="nav-item" href="{{ url_for('instructor_students') }}">Students Records</a>
+          <a class="nav-item active" href="{{ url_for('instructor_attendance') }}">Attendance</a>
+          <a class="nav-item" href="{{ url_for('instructor_schedule') }}">Schedule</a>
+          <a class="nav-item" href="{{ url_for('instructor_applications') }}">Applications</a> 
+          <a class="nav-item" href="{{ url_for('instructor_messages') }}">Messages</a>
+          <a class="nav-item" href="{{ url_for('instructor_inbox') }}">Inbox</a>
+        </div>
+
+        <!-- LMS LAUNCH BUTTON -->
+        <div class="lms-launch-wrapper">
+          <button class="lms-launch-btn" onclick="launchLMS()">
+            <span class="lms-btn-icon">⬡</span>
+            <span class="lms-btn-text">Launch LMS</span>
+            <span class="lms-btn-badge">BETA</span>
+          </button>
+        </div>
+
+        <form action="{{ url_for('logout') }}" method="GET">
+          <button type="submit" class="logout-btn">Log Out</button>
+        </form>
+      </nav>
+
+      <!-- MAIN CONTENT AREA -->
+      <main class="main-content">
+ 
+        <!-- Page Header -->
+        <header class="top-header">
+          <h1 class="page-title">Attendance Management</h1>
+          <span class="header-date" id="currentDate"></span>
+        </header>
+ 
+        <!-- ATTENDANCE CONTENT -->
+        <section class="content-section active">
+ 
+          <!-- Session Selection -->
+          <div class="card">
+            <div class="card-header">Select Session</div>
+            <div class="card-body">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="attendanceClass">Class:</label>
+                  <select id="attendanceClass" onchange="instrAttLoadSection()">
+                    <option value="">-- Select Class --</option>
+                    <option value="IT101">IT 101 - Introduction to Computing</option>
+                    <option value="IT102">IT 102 - Computer Programming 1</option>
+                    <option value="IT071">IT 071 - Data Structures and Algorithms</option>
+                    <option value="IT022">IT 022 - Human Computer Interaction</option>
+                    <option value="IT083">IT 083 - Database Systems</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="attendanceSection">Section:</label>
+                  <select id="attendanceSection" disabled>
+                    <option value="">-- Select Section --</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="attendanceDate">Date:</label>
+                  <input type="date" id="attendanceDate" class="date-input" value="2026-03-26" />
+                </div>
+              </div>
+              <div id="attendanceNotif" style="display:none; margin-top: 12px;" class="reset-success-notif"></div>
+              <div class="form-actions" style="margin-top: 15px;">
+                <button class="btn-save" onclick="instrLoadAttendanceSheet()">Load Attendance Sheet</button>
+              </div>
+            </div>
+          </div>
+ 
+          <!-- Attendance Sheet (Initially Hidden) -->
+          <div class="card" id="attendanceSheetCard" style="display: none;">
+            <div class="card-header">
+              <div class="attendance-sheet-header">
+                <span id="attendanceSheetTitle">Attendance Sheet</span>
+                <div class="attendance-actions">
+                  <button class="btn-save" onclick="instrSaveAttendance()">Save Attendance</button>
+                  <button class="btn-finalize" onclick="instrSubmitAttendance()">Submit</button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="data-table-wrapper">
+                <table class="data-table attendance-table">
+                  <thead>
+                    <tr>
+                      <th>Student No.</th>
+                      <th>Name</th>
+                      <th>Status</th>
+                      <th>Remarks</th>
+                    </tr>
+                  </thead>
+                  <tbody id="attendanceTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+ 
+          <!-- Attendance Summary Card (Initially Hidden) -->
+          <div class="card" id="instrAttSummaryCard" style="display: none;">
+            <div class="card-header">Attendance Summary</div>
+            <div class="card-body">
+              <div class="info-grid">
+                <div class="info-item">
+                  <div class="info-label">Total Students</div>
+                  <div class="info-value" id="instrAttSummaryTotal">--</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Present</div>
+                  <div class="info-value" id="instrAttSummaryPresent">--</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Absent</div>
+                  <div class="info-value" id="instrAttSummaryAbsent">--</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Late</div>
+                  <div class="info-value" id="instrAttSummaryLate">--</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Excused</div>
+                  <div class="info-value" id="instrAttSummaryExcused">--</div>
+                </div>
+              </div>
+            </div>
+          </div>
+ 
+          <!-- Attendance History -->
+          <div class="card">
+            <div class="card-header">Attendance History</div>
+            <div class="card-body">
+              <div class="form-group">
+                <label for="historyClass">Select Class:</label>
+                <select id="historyClass" onchange="loadAttendanceHistory(this.value)">
+                  <option value="">-- Select Class --</option>
+                  <option value="IT101">IT 101 - Introduction to Computing (1A)</option>
+                  <option value="IT102">IT 102 - Computer Programming 1 (1C)</option>
+                  <option value="IT071">IT 071 - Data Structures and Algorithms (2B)</option>
+                  <option value="IT022">IT 022 - Human Computer Interaction (3A)</option>
+                  <option value="IT083">IT 083 - Systems Analysis and Design (4A)</option>
+                </select>
+              </div>
+ 
+              <!-- History Table (Initially Hidden) -->
+              <div id="attendanceHistoryWrapper" style="display: none;">
+                <div class="data-table-wrapper" style="margin-top: 15px;">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Date</th>
+                        <th>Day</th>
+                        <th>Time</th>
+                        <th>Present</th>
+                        <th>Absent</th>
+                        <th>Late</th>
+                        <th>Excused</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody id="attendanceHistoryBody"></tbody>
+                  </table>
+                </div>
+              </div>
+ 
+            </div>
+          </div>
+
+        </section>
+
+          <!-- FOOTER -->
+          <footer class="footer">
+            <div class="footer-top"></div>
+            <div class="footer-container">
+              <div class="footer-about">
+                <h3>Polytechnic University of the Philippines</h3>
+                <p>
+                  PUPSIS - Polytechnic University Student Information System.
+                  Secure and convenient access to your academic records and applications.
+                </p>
+              </div>
+
+              <div class="footer-contact">
+                <h4>Policies & Legal terms</h4>
+                <p>Privacy Policy</p>
+                <p>Terms of Services</p>
+                <p>Data Protection</p>
+                <p>Code of Conduct</p>
+              </div>
+
+              <div class="footer-contact">
+                <h4>Contact Us</h4>
+                <p>Email: support@pup.edu.ph</p>
+                <p>Phone: (63+) 09XX-XXXX-XX</p>
+                <p>Address: Sta. Mesa, Manila, Philippines</p>
+              </div>
+            </div>
+
+            <div class="footer-bottom">
+              <p>&copy; 2026 Polytechnic University of the Philippines. All Rights Reserved.</p>
+            </div>
+          </footer>
+          
+        <!-- SUBMIT ATTENDANCE CONFIRMATION MODAL -->
+        <div class="modal-overlay" id="submitAttendanceModal">
+          <div class="modal-box">
+            <span class="modal-close" onclick="closeSubmitAttendanceModal()">&times;</span>
+            <h2 class="modal-title">Submit Attendance</h2>
+            <p class="modal-subtitle">Please review before submitting.</p>
+ 
+            <div class="assess-student-strip">
+              <div class="assess-student-row">
+                <span class="assess-label">Class</span>
+                <span class="assess-value" id="submitAttClassName"></span>
+              </div>
+              <div class="assess-student-row">
+                <span class="assess-label">Section</span>
+                <span class="assess-value" id="submitAttSection"></span>
+              </div>
+              <div class="assess-student-row">
+                <span class="assess-label">Date</span>
+                <span class="assess-value" id="submitAttDate"></span>
+              </div>
+              <div class="assess-student-row">
+                <span class="assess-label">Present</span>
+                <span class="assess-value" id="submitAttPresent"></span>
+              </div>
+              <div class="assess-student-row">
+                <span class="assess-label">Absent</span>
+                <span class="assess-value" id="submitAttAbsent"></span>
+              </div>
+              <div class="assess-student-row">
+                <span class="assess-label">Late</span>
+                <span class="assess-value" id="submitAttLate"></span>
+              </div>
+              <div class="assess-student-row">
+                <span class="assess-label">Excused</span>
+                <span class="assess-value" id="submitAttExcused"></span>
+              </div>
+            </div>
+ 
+            <div class="assess-free-notice warning" style="margin-top: 12px;">
+              ⚠ Once submitted, this attendance record will be locked and can only be changed by an administrator.
+            </div>
+ 
+            <div class="assess-actions" style="margin-top: 16px;">
+              <button class="assess-confirm-btn" onclick="confirmSubmitAttendance()">Confirm &amp; Submit</button>
+              <button class="assess-cancel-btn" onclick="closeSubmitAttendanceModal()">Cancel</button>
+            </div>
+          </div>
+        </div>
+ 
+        <!-- ATTENDANCE HISTORY DETAIL MODAL -->
+        <div class="modal-overlay" id="attendanceHistoryModal">
+          <div class="modal-box assess-modal-box">
+            <span class="modal-close" onclick="closeAttendanceHistoryModal()">&times;</span>
+            <h2 class="modal-title" id="attHistoryModalTitle">Attendance Record</h2>
+            <p class="modal-subtitle" id="attHistoryModalSubtitle"></p>
+ 
+            <div class="assess-student-strip">
+              <div class="assess-student-row">
+                <span class="assess-label">Date</span>
+                <span class="assess-value" id="attHistoryModalDate"></span>
+              </div>
+              <div class="assess-student-row">
+                <span class="assess-label">Day</span>
+                <span class="assess-value" id="attHistoryModalDay"></span>
+              </div>
+              <div class="assess-student-row">
+                <span class="assess-label">Time</span>
+                <span class="assess-value" id="attHistoryModalTime"></span>
+              </div>
+            </div>
+ 
+            <div class="assess-section-title" style="margin-top: 16px;">Summary</div>
+            <div class="assess-student-strip">
+              <div class="assess-student-row">
+                <span class="assess-label">Present</span>
+                <span class="assess-value" id="attHistoryModalPresent"></span>
+              </div>
+              <div class="assess-student-row">
+                <span class="assess-label">Absent</span>
+                <span class="assess-value" id="attHistoryModalAbsent"></span>
+              </div>
+              <div class="assess-student-row">
+                <span class="assess-label">Late</span>
+                <span class="assess-value" id="attHistoryModalLate"></span>
+              </div>
+              <div class="assess-student-row">
+                <span class="assess-label">Excused</span>
+                <span class="assess-value" id="attHistoryModalExcused"></span>
+              </div>
+            </div>
+ 
+            <div class="assess-section-title" style="margin-top: 16px;">Student Breakdown</div>
+            <div class="data-table-wrapper">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Student No.</th>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Remarks</th>
+                  </tr>
+                </thead>
+                <tbody id="attHistoryModalBody"></tbody>
+              </table>
+            </div>
+ 
+            <div class="assess-actions" style="margin-top: 20px;">
+              <button class="assess-cancel-btn" onclick="closeAttendanceHistoryModal()">Close</button>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+
+    <!-- LMS LAUNCH OVERLAY -->
+    <div id="lmsOverlay" class="lms-overlay">
+      <div class="lms-overlay-ring lms-ring-1"></div>
+      <div class="lms-overlay-ring lms-ring-2"></div>
+      <div class="lms-overlay-ring lms-ring-3"></div>
+      <div class="lms-overlay-content">
+        <div class="lms-overlay-logo">⬡</div>
+        <div class="lms-overlay-title">PUP Learning Management System</div>
+        <div class="lms-overlay-subtitle" id="lmsOverlaySubtitle">Initializing...</div>
+        <div class="lms-progress-bar-wrapper">
+          <div class="lms-progress-bar" id="lmsProgressBar"></div>
+        </div>
+        <div class="lms-overlay-note">(Demo Only)</div>
+      </div>
+    </div>
+
+    <!-- JavaScript -->
+     <script type="module" src="{{ url_for('static', filename='js/script.js') }}"></script>
+  </body>
+</html>

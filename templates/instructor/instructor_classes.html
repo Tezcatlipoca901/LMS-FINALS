@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PUP Portal - My Classes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+  </head>
+
+  <body>
+    <!-- MOBILE HAMBURGER MENU BUTTON -->
+    <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle Menu">
+      <span class="bar top"></span>
+      <span class="bar middle"></span>
+      <span class="bar bottom"></span>
+    </button>
+
+    <!-- MOBILE OVERLAY -->
+    <div class="mobile-overlay" onclick="toggleMobileMenu()"></div>
+
+    <!-- MAIN DASHBOARD CONTAINER -->
+    <div class="dashboard-container active">
+      
+      <!-- SIDEBAR NAVIGATION -->
+      <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+              <img src="{{ url_for('static', filename='images/logo88x88pup.png') }}" alt="PUP Logo" />
+            </div>
+            <div class="sidebar-logo-text">
+              <strong>PUP</strong> Instructor Portal
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-mobile-header">
+          <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+              <img src="{{ url_for('static', filename='images/logo88x88pup.png') }}" alt="PUP Logo" />
+            </div>
+            <div class="sidebar-logo-text">
+              <strong>PUP</strong> Instructor Portal
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-profile">
+          <div class="profile-avatar">AT</div>
+          <div class="profile-info">
+            <span class="profile-name">Alpha Trion</span>
+            <span class="profile-course">Instructor</span>
+          </div>
+        </div>
+
+        <div class="sidebar-user">
+          <div class="user-avatar">AT</div>
+          <div class="user-name">Alpha Trion</div>
+          <div class="user-number">INST-001</div>
+        </div>
+
+        <div class="sidebar-nav">
+          <a class="nav-item" href="{{ url_for('instructor_dashboard') }}">Home</a>
+          <a class="nav-item" href="{{ url_for('instructor_account') }}">Account Info</a>
+          <a class="nav-item active" href="{{ url_for('instructor_classes') }}">My Classes</a>
+          <a class="nav-item" href="{{ url_for('instructor_grades') }}">Manage Grades</a>
+          <a class="nav-item" href="{{ url_for('instructor_students') }}">Students Records</a>
+          <a class="nav-item" href="{{ url_for('instructor_attendance') }}">Attendance</a>
+          <a class="nav-item" href="{{ url_for('instructor_schedule') }}">Schedule</a>
+          <a class="nav-item" href="{{ url_for('instructor_applications') }}">Applications</a> 
+          <a class="nav-item" href="{{ url_for('instructor_messages') }}">Messages</a>
+          <a class="nav-item" href="{{ url_for('instructor_inbox') }}">Inbox</a>
+        </div>
+
+        <!-- LMS LAUNCH BUTTON -->
+        <div class="lms-launch-wrapper">
+          <button class="lms-launch-btn" onclick="launchLMS()">
+            <span class="lms-btn-icon">⬡</span>
+            <span class="lms-btn-text">Launch LMS</span>
+            <span class="lms-btn-badge">BETA</span>
+          </button>
+        </div>
+
+        <form action="{{ url_for('logout') }}" method="GET">
+          <button type="submit" class="logout-btn">Log Out</button>
+        </form>
+      </nav>
+
+      <!-- MAIN CONTENT AREA -->
+      <main class="main-content">
+        
+        <!-- Page Header -->
+        <header class="top-header">
+          <h1 class="page-title">My Classes</h1>
+          <span class="header-date" id="currentDate"></span>
+        </header>
+
+        <!-- CLASSES CONTENT -->
+        <section class="content-section active">
+          
+          <!-- Classes List -->
+          <div class="card">
+            <div class="card-header">Assigned Classes - 2nd Semester, AY 2025-2026</div>
+            <div class="card-body">
+              
+              <!-- Class Item 1 -->
+              <div class="class-item">
+                <div class="class-main">
+                  <div class="class-info">
+                    <div class="class-code">IT001</div>
+                    <div class="class-title">Introduction to Computing</div>
+                    <div class="class-details">
+                      <span class="detail-badge">Section: 1A</span>
+                      <span class="detail-badge">Units: 3</span>
+                      <span class="detail-badge">Students: 45</span>
+                    </div>
+                  </div>
+                  <button class="class-action-btn" onclick="toggleClassDetails('class1')">View Details</button>
+                </div>
+                <div class="class-details-panel" id="class1">
+                  <div class="detail-row">
+                    <strong>Schedule:</strong> Monday & Wednesday, 10:00 AM - 11:30 AM
+                  </div>
+                  <div class="detail-row">
+                    <strong>Room:</strong> Room 205
+                  </div>
+                  <div class="detail-row">
+                    <strong>Department:</strong> Department of Information Technology (IT)
+                  </div>
+                  <div class="detail-actions">
+                    <a href="{{ url_for('instructor_students') }}?class=IT101" class="detail-link-btn">View Students</a>
+                    <a href="{{ url_for('instructor_grades') }}?class=IT101" class="detail-link-btn">Grade Management</a>
+                    <a href="{{ url_for('instructor_attendance') }}?class=IT101" class="detail-link-btn">Take Attendance</a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Class Item 2 -->
+              <div class="class-item">
+                <div class="class-main">
+                  <div class="class-info">
+                    <div class="class-code">IT071</div>
+                    <div class="class-title">Data Structures and Algorithms</div>
+                    <div class="class-details">
+                      <span class="detail-badge">Section: 2B</span>
+                      <span class="detail-badge">Units: 3</span>
+                      <span class="detail-badge">Students: 40</span>
+                    </div>
+                  </div>
+                  <button class="class-action-btn" onclick="toggleClassDetails('class2')">View Details</button>
+                </div>
+                <div class="class-details-panel" id="class2">
+                  <div class="detail-row">
+                    <strong>Schedule:</strong> Tuesday & Thursday, 1:00 PM - 2:30 PM
+                  </div>
+                  <div class="detail-row">
+                    <strong>Room:</strong> Computer Lab 1
+                  </div>
+                  <div class="detail-row">
+                    <strong>Department:</strong> Department of Information Technology (IT)
+                  </div>
+                  <div class="detail-actions">
+                    <a href="{{ url_for('instructor_students') }}?class=IT201" class="detail-link-btn">View Students</a>
+                    <a href="{{ url_for('instructor_grades') }}?class=IT201" class="detail-link-btn">Grade Management</a>
+                    <a href="{{ url_for('instructor_attendance') }}?class=IT201" class="detail-link-btn">Take Attendance</a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Class Item 3 -->
+              <div class="class-item">
+                <div class="class-main">
+                  <div class="class-info">
+                    <div class="class-code">IT083</div>
+                    <div class="class-title">Database Systems</div>
+                    <div class="class-details">
+                      <span class="detail-badge">Section: 3A</span>
+                      <span class="detail-badge">Units: 3</span>
+                      <span class="detail-badge">Students: 38</span>
+                    </div>
+                  </div>
+                  <button class="class-action-btn" onclick="toggleClassDetails('class3')">View Details</button>
+                </div>
+                <div class="class-details-panel" id="class3">
+                  <div class="detail-row">
+                    <strong>Schedule:</strong> Wednesday & Friday, 3:00 PM - 4:30 PM
+                  </div>
+                  <div class="detail-row">
+                    <strong>Room:</strong> Computer Lab 2
+                  </div>
+                  <div class="detail-row">
+                    <strong>Department:</strong> Department of Information Technology (IT)
+                  </div>
+                  <div class="detail-actions">
+                    <a href="{{ url_for('instructor_students') }}?class=IT301" class="detail-link-btn">View Students</a>
+                    <a href="{{ url_for('instructor_grades') }}?class=IT301" class="detail-link-btn">Grade Management</a>
+                    <a href="{{ url_for('instructor_attendance') }}?class=IT301" class="detail-link-btn">Take Attendance</a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Class Item 4 -->
+              <div class="class-item">
+                <div class="class-main">
+                  <div class="class-info">
+                    <div class="class-code">IT022</div>
+                    <div class="class-title">Human Computer Interaction</div>
+                    <div class="class-details">
+                      <span class="detail-badge">Section: 1C</span>
+                      <span class="detail-badge">Units: 3</span>
+                      <span class="detail-badge">Students: 42</span>
+                    </div>
+                  </div>
+                  <button class="class-action-btn" onclick="toggleClassDetails('class4')">View Details</button>
+                </div>
+                <div class="class-details-panel" id="class4">
+                  <div class="detail-row">
+                    <strong>Schedule:</strong> Monday & Thursday, 8:00 AM - 9:30 AM
+                  </div>
+                  <div class="detail-row">
+                    <strong>Room:</strong> Computer Lab 1
+                  </div>
+                  <div class="detail-row">
+                    <strong>Department:</strong> Department of Information Technology (IT)
+                  </div>
+                  <div class="detail-actions">
+                    <a href="{{ url_for('instructor_students') }}?class=IT022" class="detail-link-btn">View Students</a>
+                    <a href="{{ url_for('instructor_grades') }}?class=IT022" class="detail-link-btn">Grade Management</a>
+                    <a href="{{ url_for('instructor_attendance') }}?class=IT022" class="detail-link-btn">Take Attendance</a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Class Item 5 -->
+              <div class="class-item">
+                <div class="class-main">
+                  <div class="class-info">
+                    <div class="class-code">IT101</div>
+                    <div class="class-title">Integrative Programming and Technologies</div>
+                    <div class="class-details">
+                      <span class="detail-badge">Section: 4A</span>
+                      <span class="detail-badge">Units: 3</span>
+                      <span class="detail-badge">Students: 35</span>
+                    </div>
+                  </div>
+                  <button class="class-action-btn" onclick="toggleClassDetails('class5')">View Details</button>
+                </div>
+                <div class="class-details-panel" id="class5">
+                  <div class="detail-row">
+                    <strong>Schedule:</strong> Tuesday & Friday, 4:30 PM - 6:00 PM
+                  </div>
+                  <div class="detail-row">
+                    <strong>Room:</strong> Computer Lab 2
+                  </div>
+                  <div class="detail-row">
+                    <strong>Department:</strong> Department of Information Technology (IT)
+                  </div>
+                  <div class="detail-actions">
+                    <a href="{{ url_for('instructor_students') }}?class=IT401" class="detail-link-btn">View Students</a>
+                    <a href="{{ url_for('instructor_grades') }}?class=IT401" class="detail-link-btn">Grade Management</a>
+                    <a href="{{ url_for('instructor_attendance') }}?class=IT401" class="detail-link-btn">Take Attendance</a>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Class Summary Statistics -->
+          <div class="card">
+            <div class="card-header">Class Summary</div>
+            <div class="card-body">
+              <div class="info-grid">
+                <div class="info-item">
+                  <div class="info-label">Total Classes</div>
+                  <div class="info-value">5</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Total Students</div>
+                  <div class="info-value">200</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Total Units</div>
+                  <div class="info-value">15</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Classes This Week</div>
+                  <div class="info-value">10</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+          <!-- FOOTER -->
+          <footer class="footer">
+            <div class="footer-top"></div>
+            <div class="footer-container">
+              <div class="footer-about">
+                <h3>Polytechnic University of the Philippines</h3>
+                <p>
+                  PUPSIS - Polytechnic University Student Information System.
+                  Secure and convenient access to your academic records and applications.
+                </p>
+              </div>
+
+              <div class="footer-contact">
+                <h4>Policies & Legal terms</h4>
+                <p>Privacy Policy</p>
+                <p>Terms of Services</p>
+                <p>Data Protection</p>
+                <p>Code of Conduct</p>
+              </div>
+
+              <div class="footer-contact">
+                <h4>Contact Us</h4>
+                <p>Email: support@pup.edu.ph</p>
+                <p>Phone: (63+) 09XX-XXXX-XX</p>
+                <p>Address: Sta. Mesa, Manila, Philippines</p>
+              </div>
+            </div>
+
+            <div class="footer-bottom">
+              <p>&copy; 2026 Polytechnic University of the Philippines. All Rights Reserved.</p>
+            </div>
+          </footer>
+      </main>
+    </div>
+
+    <!-- LMS LAUNCH OVERLAY -->
+    <div id="lmsOverlay" class="lms-overlay">
+      <div class="lms-overlay-ring lms-ring-1"></div>
+      <div class="lms-overlay-ring lms-ring-2"></div>
+      <div class="lms-overlay-ring lms-ring-3"></div>
+      <div class="lms-overlay-content">
+        <div class="lms-overlay-logo">⬡</div>
+        <div class="lms-overlay-title">PUP Learning Management System</div>
+        <div class="lms-overlay-subtitle" id="lmsOverlaySubtitle">Initializing...</div>
+        <div class="lms-progress-bar-wrapper">
+          <div class="lms-progress-bar" id="lmsProgressBar"></div>
+        </div>
+        <div class="lms-overlay-note">(Demo Only)</div>
+      </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script type="module" src="{{ url_for('static', filename='js/script.js') }}"></script>
+  </body>
+</html>

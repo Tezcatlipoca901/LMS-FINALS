@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PUP Portal - Student Applications</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+  </head>
+
+  <body>
+    <!-- MOBILE HAMBURGER MENU BUTTON -->
+    <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle Menu">
+      <span class="bar top"></span>
+      <span class="bar middle"></span>
+      <span class="bar bottom"></span>
+    </button>
+
+    <!-- MOBILE OVERLAY -->
+    <div class="mobile-overlay" onclick="toggleMobileMenu()"></div>
+
+    <!-- MAIN DASHBOARD CONTAINER -->
+    <div class="dashboard-container active">
+      
+      <!-- SIDEBAR NAVIGATION -->
+      <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+              <img src="{{ url_for('static', filename='images/logo88x88pup.png') }}" alt="PUP Logo" />
+            </div>
+            <div class="sidebar-logo-text">
+              <strong>PUP</strong> Instructor Portal
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-mobile-header">
+          <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+              <img src="{{ url_for('static', filename='images/logo88x88pup.png') }}" alt="PUP Logo" />
+            </div>
+            <div class="sidebar-logo-text">
+              <strong>PUP</strong> Instructor Portal
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-profile">
+          <div class="profile-avatar">AT</div>
+          <div class="profile-info">
+            <span class="profile-name">Alpha Trion</span>
+            <span class="profile-course">Instructor</span>
+          </div>
+        </div>
+
+        <div class="sidebar-user">
+          <div class="user-avatar">AT</div>
+          <div class="user-name">Alpha Trion</div>
+          <div class="user-number">INST-001</div>
+        </div>
+
+        <div class="sidebar-nav">
+          <a class="nav-item" href="{{ url_for('instructor_dashboard') }}">Home</a>
+          <a class="nav-item" href="{{ url_for('instructor_account') }}">Account Info</a>
+          <a class="nav-item" href="{{ url_for('instructor_classes') }}">My Classes</a>
+          <a class="nav-item" href="{{ url_for('instructor_grades') }}">Manage Grades</a>
+          <a class="nav-item" href="{{ url_for('instructor_students') }}">Students Records</a>
+          <a class="nav-item" href="{{ url_for('instructor_attendance') }}">Attendance</a>
+          <a class="nav-item" href="{{ url_for('instructor_schedule') }}">Schedule</a>
+          <a class="nav-item active" href="{{ url_for('instructor_applications') }}">Applications</a> 
+          <a class="nav-item" href="{{ url_for('instructor_messages') }}">Messages</a>
+          <a class="nav-item" href="{{ url_for('instructor_inbox') }}">Inbox</a>
+        </div>
+
+        <!-- LMS LAUNCH BUTTON -->
+        <div class="lms-launch-wrapper">
+          <button class="lms-launch-btn" onclick="launchLMS()">
+            <span class="lms-btn-icon">⬡</span>
+            <span class="lms-btn-text">Launch LMS</span>
+            <span class="lms-btn-badge">BETA</span>
+          </button>
+        </div>
+
+        <form action="{{ url_for('logout') }}" method="GET">
+          <button type="submit" class="logout-btn">Log Out</button>
+        </form>
+      </nav>
+
+      <!-- MAIN CONTENT AREA -->
+      <main class="main-content">
+        
+        <!-- Page Header -->
+        <header class="top-header">
+          <h1 class="page-title">Student Applications</h1>
+          <span class="header-date" id="currentDate"></span>
+        </header>
+
+        <!-- APPLICATIONS CONTENT -->
+        <section class="content-section active">
+          
+          <!-- Filter Applications -->
+          <div class="card">
+            <div class="card-header">Filter Applications</div>
+            <div class="card-body">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="filterType">Application Type:</label>
+                  <select id="filterType" onchange="filterApplications()">
+                    <option value="all">All Types</option>
+                    <option value="grade_change">Grade Change</option>
+                    <option value="withdrawal">Subject Withdrawal</option>
+                    <option value="leave">Leave of Absence</option>
+                    <option value="graduation">Graduation Application</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="filterStatus">Status:</label>
+                  <select id="filterStatus" onchange="filterApplications()">
+                    <option value="all">All Status</option>
+                    <option value="pending">Pending</option>
+                    <option value="approved">Approved</option>
+                    <option value="rejected">Rejected</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Applications List -->
+          <div class="card">
+            <div class="card-header">Pending Applications</div>
+            <div class="card-body">
+              <div class="data-table-wrapper">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Application ID</th>
+                      <th>Student</th>
+                      <th>Type</th>
+                      <th>Subject/Class</th>
+                      <th>Date Submitted</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="applicationsTableBody">
+                    <tr>
+                      <td>APP-2026-001</td>
+                      <td>Steven Universe (2024-00182-SM-0)</td>
+                      <td>Grade Change</td>
+                      <td>IT 071</td>
+                      <td>March 20, 2026</td>
+                      <td><span class="status-pending">Pending</span></td>
+                      <td>
+                        <button class="action-btn" onclick="viewApplicationDetails('APP-2026-001')">Review</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>APP-2026-002</td>
+                      <td>Charlotte Lin Lin (2022-00433-SM-0)</td>
+                      <td>Subject Withdrawal</td>
+                      <td>IT 083</td>
+                      <td>March 22, 2026</td>
+                      <td><span class="status-pending">Pending</span></td>
+                      <td>
+                        <button class="action-btn" onclick="viewApplicationDetails('APP-2026-002')">Review</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>APP-2026-003</td>
+                      <td>Optimus Prime (2024-00123-SM-0)</td>
+                      <td>Leave of Absence</td>
+                      <td>All Classes</td>
+                      <td>March 15, 2026</td>
+                      <td><span class="status-pending">Pending</span></td>
+                      <td>
+                        <button class="action-btn" onclick="viewApplicationDetails('APP-2026-003')">Review</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+          <!-- FOOTER -->
+          <footer class="footer">
+            <div class="footer-top"></div>
+            <div class="footer-container">
+              <div class="footer-about">
+                <h3>Polytechnic University of the Philippines</h3>
+                <p>
+                  PUPSIS - Polytechnic University Student Information System.
+                  Secure and convenient access to your academic records and applications.
+                </p>
+              </div>
+
+              <div class="footer-contact">
+                <h4>Policies & Legal terms</h4>
+                <p>Privacy Policy</p>
+                <p>Terms of Services</p>
+                <p>Data Protection</p>
+                <p>Code of Conduct</p>
+              </div>
+
+              <div class="footer-contact">
+                <h4>Contact Us</h4>
+                <p>Email: support@pup.edu.ph</p>
+                <p>Phone: (63+) 09XX-XXXX-XX</p>
+                <p>Address: Sta. Mesa, Manila, Philippines</p>
+              </div>
+            </div>
+
+            <div class="footer-bottom">
+              <p>&copy; 2026 Polytechnic University of the Philippines. All Rights Reserved.</p>
+            </div>
+          </footer>
+
+          <!-- APPLICATION REVIEW MODAL -->
+          <div class="modal-overlay" id="instrAppReviewModal">
+            <div class="modal-box assess-modal-box">
+              <span class="modal-close" onclick="closeInstrAppReviewModal()">&times;</span>
+              <h2 class="modal-title" id="instrAppModalTitle">Application Review</h2>
+              <p class="modal-subtitle" id="instrAppModalSubtitle"></p>
+
+              <div class="assess-section-title">Application Information</div>
+              <div class="assess-student-strip">
+                <div class="assess-student-row">
+                  <span class="assess-label">Application ID</span>
+                  <span class="assess-value" id="instrAppModalId"></span>
+                </div>
+                <div class="assess-student-row">
+                  <span class="assess-label">Type</span>
+                  <span class="assess-value" id="instrAppModalType"></span>
+                </div>
+                <div class="assess-student-row">
+                  <span class="assess-label">Student</span>
+                  <span class="assess-value" id="instrAppModalStudent"></span>
+                </div>
+                <div class="assess-student-row">
+                  <span class="assess-label">Subject / Class</span>
+                  <span class="assess-value" id="instrAppModalSubject"></span>
+                </div>
+                <div class="assess-student-row">
+                  <span class="assess-label">Date Submitted</span>
+                  <span class="assess-value" id="instrAppModalDate"></span>
+                </div>
+              </div>
+
+              <div class="assess-section-title" style="margin-top: 16px;">Reason</div>
+              <div class="app-reason-box" id="instrAppModalReason"></div>
+
+              <div id="instrAppDecisionSection">
+                <div class="assess-section-title">Your Decision</div>
+                <div class="form-group">
+                  <label for="instrAppRemarks">Remarks <span class="required">*</span></label>
+                  <textarea id="instrAppRemarks" rows="3" placeholder="Enter your remarks before approving or rejecting..."></textarea>
+                </div>
+
+                <div id="instrAppNotif" style="display:none;" class="reset-success-notif"></div>
+
+                <div class="assess-actions" style="margin-top: 12px;">
+                  <button class="btn-approve" onclick="confirmInstrAppDecision('approve')">Approve</button>
+                  <button class="btn-reject" onclick="confirmInstrAppDecision('reject')">Reject</button>
+                </div>
+              </div>
+
+              <div id="instrAppResultBanner" style="display:none;" class="app-notification"></div>
+
+              <div class="assess-actions" style="margin-top: 16px;">
+                <button class="assess-cancel-btn" onclick="closeInstrAppReviewModal()">Close</button>
+              </div>
+            </div>
+          </div>
+
+      </main>
+    </div>
+
+    <!-- LMS LAUNCH OVERLAY -->
+    <div id="lmsOverlay" class="lms-overlay">
+      <div class="lms-overlay-ring lms-ring-1"></div>
+      <div class="lms-overlay-ring lms-ring-2"></div>
+      <div class="lms-overlay-ring lms-ring-3"></div>
+      <div class="lms-overlay-content">
+        <div class="lms-overlay-logo">⬡</div>
+        <div class="lms-overlay-title">PUP Learning Management System</div>
+        <div class="lms-overlay-subtitle" id="lmsOverlaySubtitle">Initializing...</div>
+        <div class="lms-progress-bar-wrapper">
+          <div class="lms-progress-bar" id="lmsProgressBar"></div>
+        </div>
+        <div class="lms-overlay-note">(Demo Only)</div>
+      </div>
+    </div>
+
+    <!-- JavaScript -->
+     <script type="module" src="{{ url_for('static', filename='js/script.js') }}"></script>
+  </body>
+</html>

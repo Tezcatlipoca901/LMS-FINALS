@@ -1,0 +1,742 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PUP Portal - Manage Instructors</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/styles.css') }}"
+    />
+  </head>
+
+  <body>
+    <button
+      class="mobile-menu-btn"
+      onclick="toggleMobileMenu()"
+      aria-label="Toggle Menu"
+    >
+      <span class="bar top"></span><span class="bar middle"></span
+      ><span class="bar bottom"></span>
+    </button>
+    <div class="mobile-overlay" onclick="toggleMobileMenu()"></div>
+
+    <div class="dashboard-container active">
+      <nav class="sidebar" id="sidebar">
+        <div class="sidebar-mobile-header">
+          <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+              <img
+                src="{{ url_for('static', filename='images/logo88x88pup.png') }}"
+                alt="PUP Logo"
+              />
+            </div>
+            <div class="sidebar-logo-text">
+              <strong>PUP</strong> Admin Portal
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-profile">
+          <div class="profile-avatar">A</div>
+          <div class="profile-info">
+            <span class="profile-name">ADMIN1</span
+            ><span class="profile-number">001</span>
+          </div>
+        </div>
+        <div class="sidebar-header">
+          <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+              <img
+                src="{{ url_for('static', filename='images/logo88x88pup.png') }}"
+                alt="PUP Logo"
+              />
+            </div>
+            <div class="sidebar-logo-text">
+              <strong>PUP</strong> Admin Portal
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-user">
+          <div class="user-avatar">A</div>
+          <div class="user-name">ADMIN1</div>
+          <div class="user-number">001</div>
+        </div>
+        <div class="sidebar-nav">
+          <a class="nav-item" href="{{ url_for('admin_dashboard') }}">Home</a>
+          <a class="nav-item" href="{{ url_for('admin_master_data') }}"
+            >Master Data</a
+          >
+          <a class="nav-item" href="{{ url_for('admin_acc_info') }}">Account Info</a>
+          <a class="nav-item" href="{{ url_for('admin_audit') }}">Degree Audit</a>
+
+          <div class="nav-dropdown">
+            <button
+              class="nav-item dropdown-btn"
+              onclick="toggleDropdown('studentMenu', this)"
+            >
+              Student Management<span class="arrow">▼</span>
+            </button>
+            <div class="dropdown-container" id="studentMenu">
+              <a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_student_records') }}"
+                >Student Records & Management</a
+              >
+              <a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_applications') }}"
+                >Application Approvals</a
+              >
+            </div>
+          </div>
+          <div class="nav-dropdown">
+            <button
+              class="nav-item dropdown-btn active"
+              onclick="toggleDropdown('instructorMenu', this)"
+            >
+              Instructor Management<span class="arrow rotate">▼</span>
+            </button>
+            <div class="dropdown-container show" id="instructorMenu">
+              <a
+                class="nav-item sub-item active"
+                href="{{ url_for('admin_instructors') }}"
+                >Manage Instructors</a
+              >
+              <a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_schedule') }}"
+                >Scheduling & Timetable</a
+              >
+            </div>
+          </div>
+          <div class="nav-dropdown">
+            <button
+              class="nav-item dropdown-btn"
+              onclick="toggleDropdown('gradesMenu', this)"
+            >
+              Grades & Attendance<span class="arrow">▼</span>
+            </button>
+            <div class="dropdown-container" id="gradesMenu">
+              <a class="nav-item sub-item" href="{{ url_for('admin_grades') }}"
+                >Grade Overrides</a
+              >
+              <a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_attendance') }}"
+                >Attendance Overrides</a
+              >
+            </div>
+          </div>
+
+          <div class="nav-dropdown">
+            <button
+              class="nav-item dropdown-btn"
+              onclick="toggleDropdown('communicationMenu', this)"
+            >
+              Communication<span class="arrow">▼</span>
+            </button>
+            <div class="dropdown-container" id="communicationMenu">
+              <a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_announcements') }}"
+                >Announcements</a
+              >
+              <a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_messaging') }}"
+                >Messaging</a
+              >
+            </div>
+          </div>
+
+          <form action="{{ url_for('logout') }}" method="GET">
+            <button type="submit" class="logout-btn">Log Out</button>
+          </form>
+        </div>
+      </nav>
+
+      <!--MAIN CONTENT-->
+      <main class="main-content">
+        <header class="top-header">
+          <h1 class="page-title">Manage Instructors</h1>
+          <span class="header-date" id="currentDate"></span>
+        </header>
+
+        <section class="content-section active">
+        <div class="card">
+          <div class="card-header">Actions</div>
+          <div class="card-body">
+            <button class="btn-save" onclick="openAddInstructorModal()">
+              Add New Instructor
+            </button>
+          </div>
+        </div>
+
+          <div class="card">
+            <div class="card-header">Instructor List</div>
+            <div class="card-body">
+              <div class="data-table-wrapper">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Instructor ID</th>
+                      <th>Name</th>
+                      <th>Department</th>
+                      <th>Email</th>
+                      <th>Assigned Courses</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>INST-001</td>
+                      <td>Dr. Hiriluk</td>
+                      <td>Information Technology</td>
+                      <td>hiriluk@pup.edu.ph</td>
+                      <td>3</td>
+                      <td><span class="status-badge status-enrolled">Active</span></td>
+                      <td>
+                        <button class="btn-edit" onclick="openEditInstructorModal('INST-001', 'Dr. Hiriluk', 'Information Technology', 'hiriluk@pup.edu.ph', 'Assistant Professor I', 'Full-Time (Regular)', 'Active', '18')">Edit</button>
+                        <button class="btn-archive" onclick="openArchiveInstructorModal('INST-001', 'Dr. Hiriluk', 'Information Technology')">Archive</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>INST-002</td>
+                      <td>Prof. Ironhide</td>
+                      <td>Mathematics</td>
+                      <td>ironhide@pup.edu.ph</td>
+                      <td>4</td>
+                      <td><span class="status-badge status-enrolled">Active</span></td>
+                      <td>
+                        <button class="btn-edit" onclick="openEditInstructorModal('INST-002', 'Prof. Ironhide', 'Mathematics', 'ironhide@pup.edu.ph', 'Instructor II', 'Full-Time (Regular)', 'Active', '18')">Edit</button>
+                        <button class="btn-archive" onclick="openArchiveInstructorModal('INST-002', 'Prof. Ironhide', 'Mathematics')">Archive</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>INST-003</td>
+                      <td>Prof. Boa Hancock</td>
+                      <td>English</td>
+                      <td>bhancock@pup.edu.ph</td>
+                      <td>2</td>
+                      <td><span class="status-badge status-enrolled">Active</span></td>
+                      <td>
+                        <button class="btn-edit" onclick="openEditInstructorModal('INST-003', 'Prof. Boa Hancock', 'English', 'bhancock@pup.edu.ph', 'Instructor I', 'Part-Time', 'Active', '12')">Edit</button>
+                        <button class="btn-archive" onclick="openArchiveInstructorModal('INST-003', 'Prof. Boa Hancock', 'English')">Archive</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>INST-004</td>
+                      <td>Prof. Edward Newgate</td>
+                      <td>Business Administration</td>
+                      <td>enewgate@pup.edu.ph</td>
+                      <td>3</td>
+                      <td><span class="status-badge status-pending">On Leave</span></td>
+                      <td>
+                        <button class="btn-edit" onclick="openEditInstructorModal('INST-004', 'Prof. Edward Newgate', 'Business Administration', 'enewgate@pup.edu.ph', 'Associate Professor I', 'Full-Time (Regular)', 'On Leave', '21')">Edit</button>
+                        <button class="btn-archive" onclick="openArchiveInstructorModal('INST-004', 'Prof. Edward Newgate', 'Business Administration')">Archive</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">Assign Instructor to Course</div>
+            <div class="card-body">
+            <form id="assignCourseForm">
+              <div class="form-group">
+                <label for="selectInstructor">Select Instructor <span class="required">*</span></label>
+                <select id="selectInstructor" required>
+                  <option value="">-- Select Instructor --</option>
+                  <option value="INST-001">Dr. Hiriluk</option>
+                  <option value="INST-004">Prof. Edward Newgate</option>
+                  <option value="INST-003">Prof. Boa Hancock</option>
+                  <option value="INST-002">Prof. Ironhide</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="selectCourse">Select Course <span class="required">*</span></label>
+                <select id="selectCourse" required>
+                  <option value="">-- Select Course --</option>
+                  <option value="IT102">IT102 - Computer Programming 3</option>
+                  <option value="GEED002">GEED002 - Mathematics in the Modern World</option>
+                  <option value="GEED001">GEED001 - Purposive Communication</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="selectSection">Select Section <span class="required">*</span></label>
+                <select id="selectSection" required>
+                  <option value="">-- Select Section --</option>
+                  <option value="A">Section A</option>
+                  <option value="B">Section B</option>
+                  <option value="C">Section C</option>
+                </select>
+              </div>
+
+              <div id="assignCourseNotif" style="display:none;" class="reset-success-notif"></div>
+
+              <button type="submit" class="btn-save">Assign Course</button>
+            </form>
+            </div>
+          </div>
+
+        </section>
+
+          <!-- FOOTER -->
+          <footer class="footer">
+            <div class="footer-top"></div>
+            <div class="footer-container">
+              <div class="footer-about">
+                <h3>Polytechnic University of the Philippines</h3>
+                <p>
+                  PUPSIS - Polytechnic University Student Information System.
+                  Secure and convenient access to your academic records and applications.
+                </p>
+              </div>
+
+              <div class="footer-contact">
+                <h4>Policies & Legal terms</h4>
+                <p>Privacy Policy</p>
+                <p>Terms of Services</p>
+                <p>Data Protection</p>
+                <p>Code of Conduct</p>
+              </div>
+
+              <div class="footer-contact">
+                <h4>Contact Us</h4>
+                <p>Email: support@pup.edu.ph</p>
+                <p>Phone: (63+) 09XX-XXXX-XX</p>
+                <p>Address: Sta. Mesa, Manila, Philippines</p>
+              </div>
+            </div>
+
+            <div class="footer-bottom">
+              <p>&copy; 2026 Polytechnic University of the Philippines. All Rights Reserved.</p>
+            </div>
+          </footer>
+
+          <!-- ADD INSTRUCTOR MODAL -->
+          <div class="modal-overlay" id="addInstructorModal">
+            <div class="modal-box enroll-modal-box">
+              <span class="modal-close" onclick="closeAddInstructorModal()">&times;</span>
+              <h2 class="modal-title">Add New Instructor</h2>
+              <p class="modal-subtitle">Complete all steps to register a new instructor.</p>
+
+              <!-- Step Indicators -->
+              <div class="enroll-steps">
+                <div class="enroll-step active" id="instrStepIndicator1">
+                  <div class="enroll-step-circle">1</div>
+                  <span>Personal</span>
+                </div>
+                <div class="enroll-step-line"></div>
+                <div class="enroll-step" id="instrStepIndicator2">
+                  <div class="enroll-step-circle">2</div>
+                  <span>Academic</span>
+                </div>
+                <div class="enroll-step-line"></div>
+                <div class="enroll-step" id="instrStepIndicator3">
+                  <div class="enroll-step-circle">3</div>
+                  <span>Employment</span>
+                </div>
+                <div class="enroll-step-line"></div>
+                <div class="enroll-step" id="instrStepIndicator4">
+                  <div class="enroll-step-circle">4</div>
+                  <span>Confirm</span>
+                </div>
+              </div>
+
+              <!-- STEP 1: Personal Information -->
+              <div class="enroll-step-content" id="instrStep1">
+                <div class="assess-section-title">Personal Information</div>
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label for="instrLastName">Last Name <span class="required">*</span></label>
+                    <input type="text" id="instrLastName" placeholder="e.g. Kent" />
+                  </div>
+                  <div class="form-group">
+                    <label for="instrFirstName">First Name <span class="required">*</span></label>
+                    <input type="text" id="instrFirstName" placeholder="e.g. Clark Joseph" />
+                  </div>
+                  <div class="form-group">
+                    <label for="instrMiddleName">Middle Name</label>
+                    <input type="text" id="instrMiddleName" placeholder="e.g. Kalel" />
+                  </div>
+                  <div class="form-group">
+                    <label for="instrSuffix">Suffix</label>
+                    <select id="instrSuffix">
+                      <option value="">-- None --</option>
+                      <option value="Jr.">Jr.</option>
+                      <option value="Sr.">Sr.</option>
+                      <option value="II">II</option>
+                      <option value="III">III</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="instrDob">Date of Birth <span class="required">*</span></label>
+                    <input type="date" id="instrDob" class="date-input" />
+                  </div>
+                  <div class="form-group">
+                    <label for="instrSex">Sex <span class="required">*</span></label>
+                    <select id="instrSex">
+                      <option value="">-- Select --</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="instrCivilStatus">Civil Status <span class="required">*</span></label>
+                    <select id="instrCivilStatus">
+                      <option value="">-- Select --</option>
+                      <option value="Single">Single</option>
+                      <option value="Married">Married</option>
+                      <option value="Widowed">Widowed</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="instrContact">Contact Number <span class="required">*</span></label>
+                    <input type="text" id="instrContact" placeholder="e.g. 09XX-XXX-XXXX" />
+                  </div>
+                  <div class="form-group">
+                    <label for="instrEmail">PUP Email <span class="required">*</span></label>
+                    <input type="text" id="instrEmail" placeholder="e.g. clarkkent@pup.edu.ph" />
+                  </div>
+                  <div class="form-group">
+                    <label for="instrNationality">Nationality <span class="required">*</span></label>
+                    <input type="text" id="instrNationality" value="Filipino" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="instrAddress">Residential Address <span class="required">*</span></label>
+                  <input type="text" id="instrAddress" placeholder="e.g. 123 Timba St., Brgy. Umano, Manila" />
+                </div>
+              </div>
+
+              <!-- STEP 2: Academic Credentials -->
+              <div class="enroll-step-content" id="instrStep2" style="display:none;">
+                <div class="assess-section-title">Academic Credentials</div>
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label for="instrDegree">Highest Educational Attainment <span class="required">*</span></label>
+                    <select id="instrDegree">
+                      <option value="">-- Select --</option>
+                      <option value="Bachelor's Degree">Bachelor's Degree</option>
+                      <option value="Master's Degree">Master's Degree</option>
+                      <option value="Doctorate (PhD/EdD)">Doctorate (PhD/EdD)</option>
+                      <option value="Professional Degree">Professional Degree</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="instrSpecialization">Field of Specialization <span class="required">*</span></label>
+                    <input type="text" id="instrSpecialization" placeholder="e.g. Information Technology" />
+                  </div>
+                  <div class="form-group">
+                    <label for="instrGraduateSchool">Graduate School / University <span class="required">*</span></label>
+                    <input type="text" id="instrGraduateSchool" placeholder="e.g. Polytechnic University of the Philippines" />
+                  </div>
+                  <div class="form-group">
+                    <label for="instrYearGraduated">Year Graduated <span class="required">*</span></label>
+                    <input type="text" id="instrYearGraduated" placeholder="e.g. 2018" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="instrProfLicense">Professional License / Board Passer</label>
+                  <input type="text" id="instrProfLicense" placeholder="e.g. PRC License No. 0012345 — Electronics Engineer" />
+                </div>
+                <div class="form-group">
+                  <label for="instrOtherCredentials">Other Credentials / Certifications</label>
+                  <input type="text" id="instrOtherCredentials" placeholder="e.g. TESDA NC II, AWS Certified Developer" />
+                </div>
+              </div>
+
+              <!-- STEP 3: Employment Information -->
+              <div class="enroll-step-content" id="instrStep3" style="display:none;">
+                <div class="assess-section-title">Employment Information</div>
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label for="instrId">Instructor ID <span class="required">*</span></label>
+                    <input type="text" id="instrId" placeholder="e.g. INST-005" />
+                  </div>
+                  <div class="form-group">
+                    <label for="instrDepartment">Department <span class="required">*</span></label>
+                    <select id="instrDepartment">
+                      <option value="">-- Select Department --</option>
+                      <option value="Information Technology">Information Technology</option>
+                      <option value="Mathematics">Mathematics</option>
+                      <option value="English">English</option>
+                      <option value="Business Administration">Business Administration</option>
+                      <option value="Hospitality Management">Hospitality Management</option>
+                      <option value="Accountancy">Accountancy</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="instrRank">Academic Rank <span class="required">*</span></label>
+                    <select id="instrRank">
+                      <option value="">-- Select Rank --</option>
+                      <option value="Instructor I">Instructor I</option>
+                      <option value="Instructor II">Instructor II</option>
+                      <option value="Instructor III">Instructor III</option>
+                      <option value="Assistant Professor I">Assistant Professor I</option>
+                      <option value="Assistant Professor II">Assistant Professor II</option>
+                      <option value="Assistant Professor III">Assistant Professor III</option>
+                      <option value="Associate Professor I">Associate Professor I</option>
+                      <option value="Associate Professor II">Associate Professor II</option>
+                      <option value="Professor I">Professor I</option>
+                      <option value="Professor II">Professor II</option>
+                      <option value="University Professor">University Professor</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="instrEmploymentType">Employment Type <span class="required">*</span></label>
+                    <select id="instrEmploymentType">
+                      <option value="">-- Select Type --</option>
+                      <option value="Full-Time (Regular)">Full-Time (Regular)</option>
+                      <option value="Full-Time (Temporary)">Full-Time (Temporary)</option>
+                      <option value="Part-Time">Part-Time</option>
+                      <option value="Lecturer">Lecturer</option>
+                      <option value="Visiting Faculty">Visiting Faculty</option>
+                      <option value="Adjunct Faculty">Adjunct Faculty</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="instrDateHired">Date Hired <span class="required">*</span></label>
+                    <input type="date" id="instrDateHired" class="date-input" />
+                  </div>
+                  <div class="form-group">
+                    <label for="instrStatus">Status <span class="required">*</span></label>
+                    <select id="instrStatus">
+                      <option value="Active">Active</option>
+                      <option value="On Leave">On Leave</option>
+                      <option value="Inactive">Inactive</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="instrMaxLoad">Maximum Teaching Load (Units) <span class="required">*</span></label>
+                    <select id="instrMaxLoad">
+                      <option value="">-- Select --</option>
+                      <option value="12">12 Units</option>
+                      <option value="15">15 Units</option>
+                      <option value="18">18 Units</option>
+                      <option value="21">21 Units</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- STEP 4: Confirmation Summary -->
+              <div class="enroll-step-content" id="instrStep4" style="display:none;">
+                <div class="assess-section-title">Review & Confirm</div>
+                <p style="font-size: 13px; color: var(--gray-dark); margin-bottom: 15px;">Please review the instructor details before confirming.</p>
+
+                <div class="assess-student-strip">
+                  <div class="assess-section-title" style="margin-bottom: 10px;">Personal</div>
+                  <div class="assess-student-row">
+                    <span class="assess-label">Full Name</span>
+                    <span class="assess-value" id="instrConfirmName"></span>
+                  </div>
+                  <div class="assess-student-row">
+                    <span class="assess-label">Date of Birth</span>
+                    <span class="assess-value" id="instrConfirmDob"></span>
+                  </div>
+                  <div class="assess-student-row">
+                    <span class="assess-label">Sex</span>
+                    <span class="assess-value" id="instrConfirmSex"></span>
+                  </div>
+                  <div class="assess-student-row">
+                    <span class="assess-label">Contact</span>
+                    <span class="assess-value" id="instrConfirmContact"></span>
+                  </div>
+                  <div class="assess-student-row">
+                    <span class="assess-label">Email</span>
+                    <span class="assess-value" id="instrConfirmEmail"></span>
+                  </div>
+                </div>
+
+                <div class="assess-student-strip" style="margin-top: 12px;">
+                  <div class="assess-section-title" style="margin-bottom: 10px;">Academic</div>
+                  <div class="assess-student-row">
+                    <span class="assess-label">Highest Degree</span>
+                    <span class="assess-value" id="instrConfirmDegree"></span>
+                  </div>
+                  <div class="assess-student-row">
+                    <span class="assess-label">Specialization</span>
+                    <span class="assess-value" id="instrConfirmSpecialization"></span>
+                  </div>
+                  <div class="assess-student-row">
+                    <span class="assess-label">Graduate School</span>
+                    <span class="assess-value" id="instrConfirmSchool"></span>
+                  </div>
+                  <div class="assess-student-row">
+                    <span class="assess-label">Year Graduated</span>
+                    <span class="assess-value" id="instrConfirmYearGrad"></span>
+                  </div>
+                </div>
+
+                <div class="assess-student-strip" style="margin-top: 12px;">
+                  <div class="assess-section-title" style="margin-bottom: 10px;">Employment</div>
+                  <div class="assess-student-row">
+                    <span class="assess-label">Instructor ID</span>
+                    <span class="assess-value" id="instrConfirmId"></span>
+                  </div>
+                  <div class="assess-student-row">
+                    <span class="assess-label">Department</span>
+                    <span class="assess-value" id="instrConfirmDept"></span>
+                  </div>
+                  <div class="assess-student-row">
+                    <span class="assess-label">Academic Rank</span>
+                    <span class="assess-value" id="instrConfirmRank"></span>
+                  </div>
+                  <div class="assess-student-row">
+                    <span class="assess-label">Employment Type</span>
+                    <span class="assess-value" id="instrConfirmType"></span>
+                  </div>
+                  <div class="assess-student-row">
+                    <span class="assess-label">Date Hired</span>
+                    <span class="assess-value" id="instrConfirmDateHired"></span>
+                  </div>
+                  <div class="assess-student-row">
+                    <span class="assess-label">Max Teaching Load</span>
+                    <span class="assess-value" id="instrConfirmLoad"></span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Navigation Buttons -->
+              <div class="enroll-nav-btns">
+                <button class="assess-cancel-btn" id="instrBtnBack" onclick="instrStepBack()" style="display:none;">← Back</button>
+                <button class="assess-confirm-btn" id="instrBtnNext" onclick="instrStepNext()">Next →</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- EDIT INSTRUCTOR MODAL -->
+          <div class="modal-overlay" id="editInstructorModal">
+            <div class="modal-box assess-modal-box">
+              <span class="modal-close" onclick="closeEditInstructorModal()">&times;</span>
+              <h2 class="modal-title">Edit Instructor</h2>
+              <p class="modal-subtitle">Update the instructor's information below.</p>
+
+              <div class="assess-section-title">Basic Information</div>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="editInstrId">Instructor ID</label>
+                  <input type="text" id="editInstrId" disabled />
+                </div>
+                <div class="form-group">
+                  <label for="editInstrName">Full Name <span class="required">*</span></label>
+                  <input type="text" id="editInstrName" placeholder="Full name" />
+                </div>
+                <div class="form-group">
+                  <label for="editInstrEmail">PUP Email <span class="required">*</span></label>
+                  <input type="text" id="editInstrEmail" placeholder="e.g. jdelacruz@pup.edu.ph" />
+                </div>
+                <div class="form-group">
+                  <label for="editInstrDept">Department <span class="required">*</span></label>
+                  <select id="editInstrDept">
+                    <option value="">-- Select Department --</option>
+                    <option value="Information Technology">Information Technology</option>
+                    <option value="Mathematics">Mathematics</option>
+                    <option value="English">English</option>
+                    <option value="Business Administration">Business Administration</option>
+                    <option value="Hospitality Management">Hospitality Management</option>
+                    <option value="Accountancy">Accountancy</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="editInstrRank">Academic Rank <span class="required">*</span></label>
+                  <select id="editInstrRank">
+                    <option value="">-- Select Rank --</option>
+                    <option value="Instructor I">Instructor I</option>
+                    <option value="Instructor II">Instructor II</option>
+                    <option value="Instructor III">Instructor III</option>
+                    <option value="Assistant Professor I">Assistant Professor I</option>
+                    <option value="Assistant Professor II">Assistant Professor II</option>
+                    <option value="Assistant Professor III">Assistant Professor III</option>
+                    <option value="Associate Professor I">Associate Professor I</option>
+                    <option value="Associate Professor II">Associate Professor II</option>
+                    <option value="Professor I">Professor I</option>
+                    <option value="Professor II">Professor II</option>
+                    <option value="University Professor">University Professor</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="editInstrType">Employment Type <span class="required">*</span></label>
+                  <select id="editInstrType">
+                    <option value="">-- Select Type --</option>
+                    <option value="Full-Time (Regular)">Full-Time (Regular)</option>
+                    <option value="Full-Time (Temporary)">Full-Time (Temporary)</option>
+                    <option value="Part-Time">Part-Time</option>
+                    <option value="Lecturer">Lecturer</option>
+                    <option value="Visiting Faculty">Visiting Faculty</option>
+                    <option value="Adjunct Faculty">Adjunct Faculty</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="editInstrStatus">Status <span class="required">*</span></label>
+                  <select id="editInstrStatus">
+                    <option value="Active">Active</option>
+                    <option value="On Leave">On Leave</option>
+                    <option value="Inactive">Inactive</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="editInstrLoad">Max Teaching Load <span class="required">*</span></label>
+                  <select id="editInstrLoad">
+                    <option value="12">12 Units</option>
+                    <option value="15">15 Units</option>
+                    <option value="18">18 Units</option>
+                    <option value="21">21 Units</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="assess-actions" style="margin-top: 20px;">
+                <button class="assess-confirm-btn" onclick="confirmEditInstructor()">Save Changes</button>
+                <button class="assess-cancel-btn" onclick="closeEditInstructorModal()">Cancel</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ARCHIVE INSTRUCTOR MODAL -->
+          <div class="modal-overlay" id="archiveInstructorModal">
+            <div class="modal-box">
+              <span class="modal-close" onclick="closeArchiveInstructorModal()">&times;</span>
+              <h2 class="modal-title">Archive Instructor</h2>
+              <p class="modal-subtitle">Are you sure you want to archive this instructor?</p>
+
+              <div class="assess-student-strip">
+                <div class="assess-student-row">
+                  <span class="assess-label">Instructor ID</span>
+                  <span class="assess-value" id="archiveInstrId"></span>
+                </div>
+                <div class="assess-student-row">
+                  <span class="assess-label">Name</span>
+                  <span class="assess-value" id="archiveInstrName"></span>
+                </div>
+                <div class="assess-student-row">
+                  <span class="assess-label">Department</span>
+                  <span class="assess-value" id="archiveInstrDept"></span>
+                </div>
+              </div>
+
+              <div class="assess-free-notice warning">
+                ⚠ Archiving this instructor will unassign them from all active courses and revoke their system access.
+              </div>
+
+              <div class="assess-actions">
+                <button class="btn-reject" onclick="confirmArchiveInstructor()">Yes, Archive</button>
+                <button class="assess-cancel-btn" onclick="closeArchiveInstructorModal()">Cancel</button>
+              </div>
+            </div>
+          </div>
+
+      </main>
+    </div>
+
+    <script type="module" src="{{ url_for('static', filename='js/script.js') }}"></script>
+  </body>
+</html>

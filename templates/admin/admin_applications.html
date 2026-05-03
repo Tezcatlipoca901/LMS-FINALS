@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PUP Portal - Application Approvals</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/styles.css') }}"
+    />
+  </head>
+
+  <body>
+    <button
+      class="mobile-menu-btn"
+      onclick="toggleMobileMenu()"
+      aria-label="Toggle Menu"
+    >
+      <span class="bar top"></span><span class="bar middle"></span
+      ><span class="bar bottom"></span>
+    </button>
+    <div class="mobile-overlay" onclick="toggleMobileMenu()"></div>
+
+    <div class="dashboard-container active">
+      <nav class="sidebar" id="sidebar">
+        <div class="sidebar-mobile-header">
+          <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+              <img
+                src="{{ url_for('static', filename='images/logo88x88pup.png') }}"
+                alt="PUP Logo"
+              />
+            </div>
+            <div class="sidebar-logo-text">
+              <strong>PUP</strong> Admin Portal
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-profile">
+          <div class="profile-avatar">A</div>
+          <div class="profile-info">
+            <span class="profile-name">ADMIN1</span
+            ><span class="profile-number">001</span>
+          </div>
+        </div>
+        <div class="sidebar-header">
+          <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+              <img
+                src="{{ url_for('static', filename='images/logo88x88pup.png') }}"
+                alt="PUP Logo"
+              />
+            </div>
+            <div class="sidebar-logo-text">
+              <strong>PUP</strong> Admin Portal
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-user">
+          <div class="user-avatar">A</div>
+          <div class="user-name">ADMIN1</div>
+          <div class="user-number">001</div>
+        </div>
+        <div class="sidebar-nav">
+          <a class="nav-item" href="{{ url_for('admin_dashboard') }}">Home</a>
+          <a class="nav-item" href="{{ url_for('admin_master_data') }}">Master Data</a>
+          <a class="nav-item" href="{{ url_for('admin_acc_info') }}">Account Info</a>
+          <a class="nav-item" href="{{ url_for('admin_audit') }}">Degree Audit</a>
+          <div class="nav-dropdown">
+            <button
+              class="nav-item dropdown-btn active"
+              onclick="toggleDropdown('studentMenu', this)"
+            >
+              Student Management<span class="arrow rotate">▼</span>
+            </button>
+            <div class="dropdown-container show" id="studentMenu">
+              <a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_student_records') }}"
+                >Student Records & Management</a
+              >
+              <a
+                class="nav-item sub-item active"
+                href="{{ url_for('admin_applications') }}"
+                >Application Approvals</a
+              >
+            </div>
+          </div>
+          <div class="nav-dropdown">
+            <button
+              class="nav-item dropdown-btn"
+              onclick="toggleDropdown('instructorMenu', this)"
+            >
+              Instructor Management<span class="arrow">▼</span>
+            </button>
+            <div class="dropdown-container" id="instructorMenu">
+              <a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_instructors') }}"
+                >Manage Instructors</a
+              >
+              <a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_schedule') }}"
+                >Scheduling & Timetable</a
+              >
+            </div>
+          </div>
+          <div class="nav-dropdown">
+            <button
+              class="nav-item dropdown-btn"
+              onclick="toggleDropdown('gradesMenu', this)"
+            >
+              Grades & Attendance<span class="arrow">▼</span>
+            </button>
+            <div class="dropdown-container" id="gradesMenu">
+              <a class="nav-item sub-item" href="{{ url_for('admin_grades') }}"
+                >Grade Overrides</a
+              >
+              <a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_attendance') }}"
+                >Attendance Overrides</a
+              >
+            </div>
+          </div>
+
+          <div class="nav-dropdown">
+            <button
+              class="nav-item dropdown-btn"
+              onclick="toggleDropdown('communicationMenu', this)"
+            >
+              Communication<span class="arrow">▼</span>
+            </button>
+            <div class="dropdown-container" id="communicationMenu">
+              <a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_announcements') }}"
+                >Announcements</a
+              >
+              <a
+                class="nav-item sub-item"
+                href="{{ url_for('admin_messaging') }}"
+                >Messaging</a
+              >
+            </div>
+          </div>
+
+          <form action="{{ url_for('logout') }}" method="GET">
+            <button type="submit" class="logout-btn">Log Out</button>
+          </form>
+        </div>
+      </nav>
+
+      <!--MAIN CONTENT-->
+      <main class="main-content">
+        <header class="top-header">
+          <h1 class="page-title">Application Approvals</h1>
+          <span class="header-date" id="currentDate"></span>
+        </header>
+
+        <section class="content-section active">
+          <div class="welcome-banner">
+            <div class="welcome-title">Student Application Requests</div>
+            <p class="welcome-subtitle">
+              Review and approve student applications for withdrawal, leave of
+              absence, graduation, and more.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-header">Pending Applications</div>
+            <div class="card-body">
+              <div class="data-table-wrapper">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Application ID</th>
+                      <th>Student Number</th>
+                      <th>Student Name</th>
+                      <th>Type</th>
+                      <th>Date Submitted</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>APP-2024-001</td>
+                      <td>2024-00134-SM-0</td>
+                      <td>Arcee</td>
+                      <td>Leave of Absence</td>
+                      <td>March 10, 2026</td>
+                      <td><span class="status-badge status-pending">Pending</span></td>
+                      <td>
+                        <button class="btn-save" onclick="openApplicationModal('APP-2024-001', '2024-00134-SM-0', 'Arcee', 'Leave of Absence', 'March 10, 2026', 'BS Information Technology', 'Medical reasons - need to undergo surgery and recovery for approximately 6 months.')">Review</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>APP-2024-002</td>
+                      <td>2023-00234-SM-0</td>
+                      <td>Diamond Jozu</td>
+                      <td>Withdrawal</td>
+                      <td>March 12, 2026</td>
+                      <td><span class="status-badge status-pending">Pending</span></td>
+                      <td>
+                        <button class="btn-save" onclick="openApplicationModal('APP-2024-002', '2023-00234-SM-0', 'Diamond Jozu', 'Withdrawal', 'March 12, 2026', 'BS Hospitality Management', 'Personal financial difficulties requiring withdrawal from current semester.')">Review</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>APP-2024-003</td>
+                      <td>2022-00456-SM-0</td>
+                      <td>Marco The Phoenix</td>
+                      <td>Graduation Application</td>
+                      <td>March 14, 2026</td>
+                      <td><span class="status-badge status-pending">Pending</span></td>
+                      <td>
+                        <button class="btn-save" onclick="openApplicationModal('APP-2024-003', '2022-00456-SM-0', 'Marco The Phoenix', 'Graduation Application', 'March 14, 2026', 'BS Information Technology', 'Completed all required units and subjects for graduation this semester.')">Review</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>APP-2024-004</td>
+                      <td>2024-00078-SM-0</td>
+                      <td>Portgas D. Ace</td>
+                      <td>Subject Overload</td>
+                      <td>March 15, 2026</td>
+                      <td><span class="status-badge status-pending">Pending</span></td>
+                      <td>
+                        <button class="btn-save" onclick="openApplicationModal('APP-2024-004', '2024-00078-SM-0', 'Portgas D. Ace', 'Subject Overload', 'March 15, 2026', 'BS Accountancy', 'Requesting subject overload to complete remaining units before graduation.')">Review</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">Approved/Rejected Applications</div>
+            <div class="card-body">
+              <div class="data-table-wrapper">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Application ID</th>
+                      <th>Student Name</th>
+                      <th>Type</th>
+                      <th>Status</th>
+                      <th>Decision Date</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>APP-2024-000</td>
+                      <td>Roronoa Zoro</td>
+                      <td>Late Enrollment</td>
+                      <td><span class="status-badge status-enrolled">Approved</span></td>
+                      <td>March 8, 2026</td>
+                      <td>
+                        <button class="btn-save" onclick="openViewApplicationModal('APP-2024-000', 'Roronoa Zoro', 'Late Enrollment', 'Approved', 'March 8, 2026', 'Requesting late enrollment due to delayed submission of requirements from the registrar office.', 'Application verified and approved. Student may proceed with enrollment.')">View</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+          <!-- FOOTER -->
+          <footer class="footer">
+            <div class="footer-top"></div>
+            <div class="footer-container">
+              <div class="footer-about">
+                <h3>Polytechnic University of the Philippines</h3>
+                <p>
+                  PUPSIS - Polytechnic University Student Information System.
+                  Secure and convenient access to your academic records and applications.
+                </p>
+              </div>
+
+              <div class="footer-contact">
+                <h4>Policies & Legal terms</h4>
+                <p>Privacy Policy</p>
+                <p>Terms of Services</p>
+                <p>Data Protection</p>
+                <p>Code of Conduct</p>
+              </div>
+
+              <div class="footer-contact">
+                <h4>Contact Us</h4>
+                <p>Email: support@pup.edu.ph</p>
+                <p>Phone: (63+) 09XX-XXXX-XX</p>
+                <p>Address: Sta. Mesa, Manila, Philippines</p>
+              </div>
+            </div>
+
+            <div class="footer-bottom">
+              <p>&copy; 2026 Polytechnic University of the Philippines. All Rights Reserved.</p>
+            </div>
+          </footer>
+
+          <!-- APPLICATION REVIEW MODAL -->
+          <div class="modal-overlay" id="applicationReviewModal">
+            <div class="modal-box assess-modal-box">
+              <span class="modal-close" onclick="closeApplicationModal()">&times;</span>
+              <h2 class="modal-title">Application Details</h2>
+              <p class="modal-subtitle" id="appModalSubtitle"></p>
+
+              <!-- Application notification (approve/reject feedback) -->
+              <div id="appNotification" class="app-notification" style="display: none;"></div>
+
+              <!-- Details Strip -->
+              <div class="assess-student-strip">
+                <div class="assess-student-row">
+                  <span class="assess-label">Application ID</span>
+                  <span class="assess-value" id="appModalId"></span>
+                </div>
+                <div class="assess-student-row">
+                  <span class="assess-label">Student Number</span>
+                  <span class="assess-value" id="appModalStudentNo"></span>
+                </div>
+                <div class="assess-student-row">
+                  <span class="assess-label">Student Name</span>
+                  <span class="assess-value" id="appModalStudentName"></span>
+                </div>
+                <div class="assess-student-row">
+                  <span class="assess-label">Application Type</span>
+                  <span class="assess-value" id="appModalType"></span>
+                </div>
+                <div class="assess-student-row">
+                  <span class="assess-label">Date Submitted</span>
+                  <span class="assess-value" id="appModalDate"></span>
+                </div>
+                <div class="assess-student-row">
+                  <span class="assess-label">Program</span>
+                  <span class="assess-value" id="appModalProgram"></span>
+                </div>
+              </div>
+
+              <!-- Reason -->
+              <div class="assess-section-title" style="margin-top: 16px;">Reason for Application</div>
+              <div class="app-reason-box" id="appModalReason"></div>
+
+              <!-- Admin Notes -->
+              <div class="assess-section-title" style="margin-top: 16px;">Admin Notes / Remarks</div>
+              <div class="form-group">
+                <textarea id="appModalNotes" placeholder="Enter your remarks before approving or rejecting..." rows="3"></textarea>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="assess-actions" id="appModalActions">
+                <button class="btn-approve" onclick="approveApplicationModal()">Approve</button>
+                <button class="btn-reject" onclick="rejectApplicationModal()">Reject</button>
+                <button class="assess-cancel-btn" onclick="closeApplicationModal()">Cancel</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- VIEW DECIDED APPLICATION MODAL -->
+          <div class="modal-overlay" id="viewApplicationModal">
+            <div class="modal-box assess-modal-box">
+              <span class="modal-close" onclick="closeViewApplicationModal()">&times;</span>
+              <h2 class="modal-title">Application Record</h2>
+              <p class="modal-subtitle" id="viewAppSubtitle"></p>
+
+              <!-- Status Banner -->
+              <div id="viewAppStatusBanner" class="app-notification" style="margin-bottom: 16px;"></div>
+
+              <!-- Details Strip -->
+              <div class="assess-student-strip">
+                <div class="assess-student-row">
+                  <span class="assess-label">Application ID</span>
+                  <span class="assess-value" id="viewAppId"></span>
+                </div>
+                <div class="assess-student-row">
+                  <span class="assess-label">Student Name</span>
+                  <span class="assess-value" id="viewAppName"></span>
+                </div>
+                <div class="assess-student-row">
+                  <span class="assess-label">Application Type</span>
+                  <span class="assess-value" id="viewAppType"></span>
+                </div>
+                <div class="assess-student-row">
+                  <span class="assess-label">Decision Date</span>
+                  <span class="assess-value" id="viewAppDate"></span>
+                </div>
+              </div>
+
+              <!-- Reason -->
+              <div class="assess-section-title" style="margin-top: 16px;">Reason for Application</div>
+              <div class="app-reason-box" id="viewAppReason"></div>
+
+              <!-- Admin Remarks -->
+              <div class="assess-section-title">Admin Remarks</div>
+              <div class="app-reason-box" id="viewAppRemarks"></div>
+
+              <div class="assess-actions">
+                <button class="assess-cancel-btn" style="flex: 1;" onclick="closeViewApplicationModal()">Close</button>
+              </div>
+            </div>
+          </div>
+
+      </main>
+    </div>
+
+    <script type="module" src="{{ url_for('static', filename='js/script.js') }}"></script>
+  </body>
+</html>
