@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PUPLMS: Profile</title>
+    <link rel="icon" href="{{ url_for('static', filename='images/logo88x88pup.png') }}" type="image/png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}" />
+  </head>
+ 
+  <body>
+    <div class="mobile-topbar">
+      <div class="mobile-topbar-logo">
+        <img src="{{ url_for('static', filename='images/logo88x88pup.png') }}" alt="Logo">
+        <span>PUPLMS</span>
+      </div>
+      <button class="mobile-hamburger" id="mobile-hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+
+    <div class="mobile-nav-dropdown" id="mobile-nav-dropdown">
+      <a href="profile.html" class="nav-link active-nav">Profile (AltF26)</a>
+      <a href="home.html" class="nav-link">Home</a>
+      <a href="courses.html" class="nav-link">Course</a>
+      <a href="inbox.html" class="nav-link">Inbox</a>
+      <a href="calendar.html" class="nav-link">Calendar</a>
+      <a href="{{ url_for('logout') }}" class="nav-link nav-logout">Return to SIS</a>
+    </div>
+
+    <div class="mobile-nav-overlay" id="mobile-nav-overlay"></div>
+
+    <div class="dashboard-container">
+ 
+      <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+              <img src="{{ url_for('static', filename='images/logo88x88pup.png') }}" alt="Logo">
+            </div>
+            <div class="sidebar-logo-text">
+              <strong>PUPLMS: Student Portal</strong>
+            </div>
+          </div>
+        </div>
+ 
+        <a href="/student/profile" class="sidebar-user" style="text-decoration: none; color: inherit; display: block; background: rgba(255, 255, 255, 0.05);">
+          <div class="user-avatar">AF</div>
+            <div class="user-name">AltF26</div>
+          <div class="user-number">2024-00123-SM-0</div>
+        </a>
+ 
+        <div class="sidebar-nav">
+          <a class="nav-item" href="/student/home">Home</a>
+          <a class="nav-item" href="/student/lmscourses">Courses</a>
+          <a class="nav-item" href="/student/lmsinbox">Inbox</a>
+          <a class="nav-item" href="/student/calendar">Calendar</a>
+        </div>
+ 
+        <div class="sidebar-footer">
+          <form action="{{ url_for('logout') }}" method="GET">
+            <button type="submit" class="logout-btn">Return to SIS</button>
+          </form>
+        </div>
+      </nav>
+ 
+      <main class="main-content">
+        <div class="profile-page">
+ 
+          <div class="profile-left-col">
+ 
+            <div class="profile-card">
+              <div class="profile-card-banner"></div>
+              <div class="profile-card-body">
+                <div class="profile-avatar-wrap">
+                  <div class="profile-avatar">AF</div>
+                  <div class="profile-edit-icon">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                    </svg>
+                  </div>
+                </div>
+                <div class="profile-card-name">AltF26</div>
+                <div class="profile-card-id">2024-00067-SM-0</div>
+              </div>
+            </div>
+ 
+            <div class="info-section">
+              <div class="info-section-title">Date of Birth</div>
+              <div class="info-field">
+                <span class="info-field-icon">
+                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/>
+                  </svg>
+                </span>
+                <span class="info-field-text">July 10, 2005</span>
+              </div>
+            </div>
+ 
+            <div class="info-section">
+              <div class="info-section-title">Place of Birth</div>
+              <div class="info-field">
+                <span class="info-field-icon">
+                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/>
+                  </svg>
+                </span>
+                <span class="info-field-text">Navotas</span>
+              </div>
+            </div>
+ 
+          </div>
+ 
+          <div class="profile-right-col">
+ 
+            <div class="contact-section">
+              <div class="contact-section-title">Email</div>
+              <div class="contact-card">
+                <div class="contact-item">
+                  <div class="contact-item-header">
+                    <div class="contact-item-label">
+                      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/>
+                      </svg>
+                      Personal Email
+                    </div>
+                    <button class="edit-link">Edit</button>
+                  </div>
+                  <div class="contact-item-value">juandelacruz@gmail.com</div>
+                </div>
+                <div class="contact-item">
+                  <div class="contact-item-header">
+                    <div class="contact-item-label">
+                      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/>
+                      </svg>
+                      School Email
+                    </div>
+                  </div>
+                  <div class="contact-item-value">juancdelacruz@iskolarngbayan.pup.edu.ph</div>
+                </div>
+              </div>
+            </div>
+ 
+            <div class="contact-section">
+              <div class="contact-section-title">Phone Numbers</div>
+              <div class="contact-card">
+                <div class="contact-item">
+                  <div class="contact-item-header">
+                    <div class="contact-item-label">
+                      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                      </svg>
+                      Primary
+                    </div>
+                    <button class="edit-link">Edit</button>
+                  </div>
+                  <div class="contact-item-value">09999999999</div>
+                </div>
+              </div>
+            </div>
+ 
+            <div class="contact-section">
+              <div class="contact-section-title">Addresses</div>
+              <div class="contact-card">
+                <div class="contact-item">
+                  <div class="contact-item-header">
+                    <div class="contact-item-label">
+                      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                      </svg>
+                      Residential Address
+                    </div>
+                    <button class="edit-link">Edit</button>
+                  </div>
+                  <div class="contact-item-value">123 Maayos St. Pulong Buhangin Santa Maria, Bulacan</div>
+                </div>
+                <div class="contact-item">
+                  <div class="contact-item-header">
+                    <div class="contact-item-label">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                        </svg>
+                        Permanent Address
+                    </div>
+                    <button class="edit-link">Edit</button>
+                    </div>
+                  <div class="contact-item-value">123 Maayos St. Pulong Buhangin Santa Maria, Bulacan</div>
+                </div>
+              </div>
+            </div>
+ 
+          </div>
+        </div>
+      </main>
+    </div>
+    <script src ="{{ url_for('static', filename='js/modules/lms-student/profile.js') }}"></script>
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const hamburger = document.getElementById("mobile-hamburger");
+    const dropdown = document.getElementById("mobile-nav-dropdown");
+    if (hamburger && dropdown) {
+        hamburger.addEventListener("click", function () {
+            hamburger.classList.toggle("open");
+            dropdown.classList.toggle("open");
+        });
+    }
+});
+    </script>   
+  </body>
+</html>

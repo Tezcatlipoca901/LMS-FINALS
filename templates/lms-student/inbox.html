@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PUPLMS: Inbox</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/inbox.css') }}" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static', filename='images/logo88x88pup.png') }}" type="image/png">
+  </head>
+
+  <body>
+
+    <div class="mobile-topbar">
+      <div class="mobile-topbar-logo">
+        <img src="{{ url_for('static', filename='images/logo88x88pup.png') }}" alt="Logo">
+        <span>PUPLMS</span>
+      </div>
+      <button class="mobile-hamburger" id="mobile-hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+
+    <div class="mobile-nav-dropdown" id="mobile-nav-dropdown">
+      <a href="/student/profile" class="nav-link">Profile (AltF26)</a>
+      <a href="/student/home" class="nav-link active-nav">Home</a>
+      <a href="/student/lmscourses" class="nav-link">Courses</a>
+      <a href="/student/lmsinbox" class="nav-link">Inbox</a>
+      <a href="/student/calendar" class="nav-link">Calendar</a>
+      <a href="/sis" class="nav-link nav-logout">Return to SIS</a>
+    </div>
+
+    <div class="mobile-nav-overlay" id="mobile-nav-overlay"></div>
+
+    <div class="dashboard-container active">
+      <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+              <img src="{{ url_for('static', filename='images/logo88x88pup.png') }}" alt="Logo">
+            </div>
+            <div class="sidebar-logo-text">
+              <strong>PUPLMS: Student Portal</strong>
+            </div>
+          </div>
+        </div>
+
+        <a href="/student/profile" class="sidebar-user" style="text-decoration: none; color: inherit; display: block;">
+            <div class="user-avatar">AF</div>
+              <div class="user-name">AltF26</div>
+            <div class="user-number">2024-00123-SM-0</div>
+          </a>
+        
+        <div class="sidebar-nav">
+          <a class="nav-item" href="/student/home">Home</a>
+          <a class="nav-item" href="/student/lmscourses">Courses</a>
+          <a class="nav-item active-nav" href="/student/lmsinbox">Inbox</a>
+          <a class="nav-item" href="/student/calendar">Calendar</a>
+        </div> 
+        <div class="sidebar-footer">
+          <form action="/sis" method="GET">
+            <button type="submit" class="logout-btn">Return to SIS</button>
+          </form>
+        </div>
+      </nav>
+
+      <main class="main-content">
+        <section class="content-section active">
+          <div class="welcome-banner">
+            <h2 class="welcome-title">Inbox</h2>
+            <p class="welcome-subtitle">
+             Your hub for messages, announcements, and academic updates.
+            </p>
+          </div>
+
+          <div class="inbox-container">
+              <div class="inbox-toolbar">
+                  <div class="action-buttons">
+                      <button class="pup-btn" onclick="openCompose()"><span class="material-icons">edit</span> Compose</button>
+                      <button class="pup-btn tab-btn" id="tab-sent" onclick="switchTab('sent')"><span class="material-icons">send</span> Sent</button>
+                      <button class="pup-btn tab-btn active-tab" id="tab-all" onclick="switchTab('all')"><span class="material-icons">mail</span> All</button>
+                      <button class="pup-btn tab-btn" id="tab-starred" onclick="switchTab('starred')"><span class="material-icons">star</span> Starred</button>
+                      <button class="pup-btn tab-btn" id="tab-archived" onclick="switchTab('archived')"><span class="material-icons">archive</span> Archived</button>
+                      <button class="pup-btn tab-btn" id="tab-trash" onclick="switchTab('trash')"><span class="material-icons">delete</span> Trash</button>
+                      <button class="pup-btn" id="emptyTrashBtn" onclick="emptyTrash()" style="display: none;"><span class="material-icons">delete_sweep</span> Empty Trash</button>
+                  </div>
+                  
+                  <div class="search-section">
+                      <div class="search-box">
+                          <span class="material-icons search-icon">search</span>
+                          <input type="text" id="searchInput" placeholder="Search messages..." oninput="searchMessages()">
+                          <span class="material-icons clear-icon" id="clearSearch" onclick="clearSearch()" style="display: none;">close</span>
+                      </div>
+                      <button class="search-go-btn" onclick="searchMessages()">Search</button>
+                  </div>
+              </div>
+              
+              <div class="inbox-layout">
+                  <div class="message-list" id="messageList">
+                      <div class="msg-card" id="msg-1" onclick="previewMessage(this)" 
+                          data-folder="inbox" data-starred="false"
+                          data-sender="Game Master" 
+                          data-subject="Quest Completion Reward" 
+                          data-date="Mar 19, 2026 | 9:15 PM"
+                          data-fullmsg="Greetings, Hero! <br><br>You have completed the quest <b>'Shadow of the Forgotten Realm'</b>. Rewards: <br>• 500 Gold <br>• Epic Sword <br>• +200 XP <br><br>More adventures await!">
+                          <span class="material-icons star-indicator">star</span>
+                          <strong>Game Master</strong>
+                          <p class="subject">Quest Completion Reward</p>
+                          <p class="snippet">You have completed a quest and earned rewards...</p>
+                      </div>
+
+                      <div class="msg-card" id="msg-2" onclick="previewMessage(this)" 
+                          data-folder="inbox" data-starred="false"
+                          data-sender="Battle Arena" 
+                          data-subject="Victory Achieved!" 
+                          data-date="Mar 19, 2026 | 8:40 PM"
+                          data-fullmsg="Champion! <br><br>You defeated <b>Dark Knight Xaros</b> in the arena. <br><br>Battle Stats: <br>• Damage Dealt: 3,450 <br>• Rank Points Earned: +25 <br><br>Keep climbing the ranks!">
+                          <span class="material-icons star-indicator">star</span>
+                          <strong>Battle Arena</strong>
+                          <p class="subject">Victory Achieved!</p>
+                          <p class="snippet">You won a battle in the arena...</p>
+                      </div>
+
+                      <div class="msg-card" id="msg-3" onclick="previewMessage(this)" 
+                          data-folder="inbox" data-starred="false"
+                          data-sender="Leaderboard System" 
+                          data-subject="Rank Up Notification" 
+                          data-date="Mar 19, 2026 | 7:30 PM"
+                          data-fullmsg="Well done! <br><br>You have advanced to <b>Diamond Rank</b>. <br><br>Your current position: #12 globally. <br><br>Keep pushing to reach the top!">
+                          <span class="material-icons star-indicator">star</span>
+                          <strong>Leaderboard System</strong>
+                          <p class="subject">Rank Up Notification</p>
+                          <p class="snippet">You moved up in the rankings...</p>
+                      </div>
+
+                      <div class="msg-card" id="msg-4" onclick="previewMessage(this)" 
+                          data-folder="inbox" data-starred="false"
+                          data-sender="Reward Center" 
+                          data-subject="Daily Login Bonus" 
+                          data-date="Mar 19, 2026 | 6:00 PM"
+                          data-fullmsg="Welcome back! <br><br>You received your daily login rewards: <br>• 100 Gems <br>• Energy Potion x2 <br><br>Log in tomorrow for even better rewards!">
+                          <span class="material-icons star-indicator">star</span>
+                          <strong>Reward Center</strong>
+                          <p class="subject">Daily Login Bonus</p>
+                          <p class="snippet">Your daily rewards are ready to claim...</p>
+                      </div>
+
+                      <div class="msg-card" id="msg-5" onclick="previewMessage(this)" 
+                          data-folder="inbox" data-starred="false"
+                          data-sender="Social Hub" 
+                          data-subject="New Friend Request" 
+                          data-date="Mar 19, 2026 | 5:20 PM"
+                          data-fullmsg="Player <b>ShadowHunter99</b> has sent you a friend request. <br><br>Accept to team up and conquer dungeons together!">
+                          <span class="material-icons star-indicator">star</span>
+                          <strong>Social Hub</strong>
+                          <p class="subject">New Friend Request</p>
+                          <p class="snippet">You received a new friend request...</p>
+                      </div>
+
+                      <div class="msg-card" id="msg-6" onclick="previewMessage(this)" 
+                          data-folder="inbox" data-starred="false"
+                          data-sender="Event Manager" 
+                          data-subject="Limited-Time Event: Dragon Hunt" 
+                          data-date="Mar 19, 2026 | 4:00 PM"
+                          data-fullmsg="Attention, Adventurer! <br><br>The <b>Dragon Hunt Event</b> has begun. <br><br>Defeat dragons to earn exclusive rewards and rare loot. <br><br>Event ends in 3 days!">
+                          <span class="material-icons star-indicator">star</span>
+                          <strong>Event Manager</strong>
+                          <p class="subject">Limited-Time Event: Dragon Hunt</p>
+                          <p class="snippet">A new limited-time event is now live...</p>
+                      </div>
+
+                      <div id="noMessageList" class="no-message-list" style="display: none;">
+                          <span class="material-icons">inbox</span>
+                          <p id="noMessageText">No messages found.</p>
+                      </div>
+                  </div>
+                  
+                  <div class="message-preview-pane">
+                      <div class="preview-empty" id="emptyState">
+                          <span class="material-icons">email</span>
+                          <p>Select a message to view the content</p>
+                      </div>
+                      
+                      <div id="activePreview" class="active-preview-container" style="display: none; position: relative;">
+                          <div class="message-options">
+                              <button class="dots-btn" onclick="toggleDropdown(event)">
+                                  <span class="material-icons">more_vert</span>
+                              </button>
+                              <div id="messageDropdown" class="dropdown-content">
+                                  <a href="#" id="actionStar" onclick="handleAction('star')"><span class="material-icons">star_border</span> Star</a>
+                                  <a href="#" id="actionArchive" onclick="handleAction('archive')"><span class="material-icons">archive</span> Archive</a>
+                                  <a href="#" id="actionTrash" onclick="handleAction('delete')"><span class="material-icons">delete_outline</span> Trash</a>
+                              </div>
+                          </div>
+
+                          <div id="trashWarning" class="trash-warning" style="display: none;">
+                              <span class="material-icons">warning</span> 
+                              <span>This message is in the Trash. It will be permanently deleted on <strong id="eraseDateSpan"></strong>.</span>
+                          </div>
+
+                          <div class="preview-header">
+                              <h2 id="viewSubject"></h2>
+                              <div class="meta-info">
+                                  <p>From: <strong id="viewSender"></strong></p>
+                                  <span id="viewDate"></span>
+                              </div>
+                          </div>
+                          <div class="preview-body" id="viewBody"></div>
+                          
+                          <div class="view-attachments" id="viewAttachments" style="display: none;"></div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="composeModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><span class="material-icons">edit</span> New Message</h3>
+                <button class="close-btn" type="button" onclick="closeCompose()">&times;</button>
+            </div>
+            <form id="composeForm" onsubmit="sendEmail(event)">
+                <div class="modal-body">
+                    <div class="form-field">
+                        <label>To:</label>
+                        <input type="text" id="composeTo" placeholder="Recipient (e.g., Professor name or Student ID)" required>
+                    </div>
+                    <div class="form-field">
+                        <label>Subject:</label>
+                        <input type="text" id="composeSubject" placeholder="Enter subject" required>
+                    </div>
+                    <div class="form-field">
+                        <label>Message:</label>
+                        <textarea id="composeMessage" rows="6" placeholder="Type your message here..." required></textarea>
+                    </div>
+                    
+                    <div class="form-field attachment-field">
+                        <label class="attach-btn" for="composeAttachment">
+                            <span class="material-icons">attach_file</span> Attach Files
+                        </label>
+                        <input type="file" id="composeAttachment" multiple style="display: none;" onchange="handleFileSelect(event)">
+                        <div id="composeFileList" class="file-list"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="cancel-btn" onclick="closeCompose()">Cancel</button>
+                    <button type="submit" class="send-btn">
+                        <span class="material-icons">send</span> Send Message
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="confirmModal" class="modal-overlay">
+        <div class="modal-card" style="width: 500px; margin-top: 150px;">
+            <div class="modal-header">
+                <h3 id="confirmTitle">Confirm Action</h3>
+                <button class="close-btn" type="button" onclick="closeConfirmModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmMessage" style="font-size: 16px; margin: 10px 0; color: #333;">Are you sure?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="cancel-btn" id="confirmCancelBtn" onclick="closeConfirmModal()">Cancel</button>
+                <button type="button" class="send-btn" id="confirmSubmitBtn" onclick="executeConfirm()">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="attachmentModal" class="modal-overlay" style="z-index: 3000;">
+        <div class="modal-card" style="width: 80%; max-width: 900px; height: 80vh; max-height: 800px; display: flex; flex-direction: column; margin-top: 5vh;">
+            <div class="modal-header">
+                <h3 id="attPreviewTitle" style="display: flex; align-items: center; gap: 8px;"><span class="material-icons">attachment</span> File Preview</h3>
+                <button class="close-btn" type="button" onclick="closeAttachmentPreview()">&times;</button>
+            </div>
+            <div class="modal-body" id="attPreviewBody" style="flex: 1; overflow: auto; text-align: center; background: #e9ecef; padding: 20px; display: flex; align-items: center; justify-content: center;">
+                </div>
+            <div class="modal-footer" style="justify-content: flex-end;">
+                <button type="button" class="send-btn" id="attDownloadBtn" style="display: flex; align-items: center; gap: 5px;">
+                    <span class="material-icons">download</span> Download
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="toast-container"></div>
+    <script src ="{{ url_for('static', filename='js/modules/lms-student/profile.js') }}"></script>
+    <script src ="{{ url_for('static', filename='js/modules/lms-student/inbox.js') }}"></script>
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const hamburger = document.getElementById("mobile-hamburger");
+    const dropdown = document.getElementById("mobile-nav-dropdown");
+    if (hamburger && dropdown) {
+        hamburger.addEventListener("click", function () {
+            hamburger.classList.toggle("open");
+            dropdown.classList.toggle("open");
+        });
+    }
+});
+    </script>
+  </body>
+</html>

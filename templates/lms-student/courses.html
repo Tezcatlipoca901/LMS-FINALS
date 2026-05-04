@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PUPLMS: Courses</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/courses.css') }}" />
+    <link rel="icon" href="{{ url_for('static', filename='images/logo88x88pup.png') }}" type="image/png">
+  </head>
+
+  <body>
+  <div class="mobile-topbar">
+    <div class="mobile-topbar-logo">
+      <img src="{{ url_for('static', filename='images/logo88x88pup.png') }}" alt="Logo">
+      <span>PUPLMS</span>
+    </div>
+    <button class="mobile-hamburger" id="mobile-hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+
+  <div class="mobile-nav-dropdown" id="mobile-nav-dropdown">
+      <a href="/student/profile" class="nav-link">Profile (AltF26)</a>
+      <a href="/student/home" class="nav-link active-nav">Home</a>
+      <a href="/student/lmscourses" class="nav-link">Courses</a>
+      <a href="/student/lmsinbox" class="nav-link">Inbox</a>
+      <a href="/student/calendar" class="nav-link">Calendar</a>
+      <a href="/sis" class="nav-link nav-logout">Return to SIS</a>
+  </div>
+
+  <div class="mobile-nav-overlay" id="mobile-nav-overlay"></div>    
+    <nav class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">
+            <img src="{{ url_for('static', filename='images/logo88x88pup.png') }}" alt="Logo">
+          </div>
+          <div class="sidebar-logo-text">
+            <strong>PUPLMS: Student Portal</strong>
+          </div>
+        </div>
+      </div>
+      
+      <!--User Profile-->
+      <a href="/student/profile" class="sidebar-user" style="text-decoration: none; color: inherit; display: block;">
+          <div class="user-avatar">AF</div>
+            <div class="user-name">AltF26</div>
+          <div class="user-number">2024-00123-SM-0</div>
+        </a>
+
+      <!--System Navigation-->
+      <div class="sidebar-nav">
+          <a class="nav-item" href="/student/home">Home</a>
+          <a class="nav-item active-nav" href="/student/lmscourses">Courses</a>
+          <a class="nav-item" href="/student/lmsinbox">Inbox</a>
+          <a class="nav-item" href="/student/calendar">Calendar</a>
+      </div> 
+      
+      <div class="sidebar-footer">
+        <form action="/sis" method="GET">
+          <button type="submit" class="logout-btn">Return to SIS</button>
+        </form>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <section class="content-section active">
+        
+        <!--Header-->
+        <div class="welcome-banner">
+          <h2 class="welcome-title">Courses</h2>
+          <p class="welcome-subtitle">
+            Explore your enrolled courses at PUP, manage lessons, view assignments, quizzes, and track your academic progress.
+          </p>
+        </div>
+
+
+        <div class="dashboard-layout">
+
+          <!--Courses-->
+          <div class="left-column">
+            
+            <!-- 1. QUANTITATIVE METHODS -->
+            <div class="course-box preview-trigger" 
+                 data-title="QUANTITATIVE METHODS WITH MODELING & SIMULATION" 
+                 data-code="COMP 014" 
+                 data-instructor="Prof. John Simon Mendoza"
+                 data-email="jsmendoza@pup.edu.ph"
+                 data-schedule="MON 10:30 AM - 1:30 PM (Room 201)"
+                 data-task="Assignment 1 (Due: Mar 20, 2026)">
+              <div class="course-title">QUANTITATIVE METHODS WITH MODELING & SIMULATION</div>
+              <div class="course-code">COURSE CODE: COMP 014</div>
+            </div>
+            
+            <!-- 2. OBJECT ORIENTED PROGRAMMING -->
+            <div class="course-box preview-trigger"
+                 data-title="OBJECT ORIENTED PROGRAMMING" 
+                 data-code="COMP 009" 
+                 data-instructor="Prof. Jayson Hermogenes"
+                 data-email="jhermogenes@pup.edu.ph"
+                 data-schedule="MON 5:00 PM - 8:00 PM (Rm 201) | FRI 10:30 AM - 12:30 PM (CPL1)"
+                 data-task="Quiz: OOP Basics (Due: Mar 22, 2026)">
+              <div class="course-title">OBJECT ORIENTED PROGRAMMING</div>
+              <div class="course-code">COURSE CODE: COMP 009</div>
+            </div>
+            
+            <!-- 3. NETWORK ADMINISTRATION -->
+            <div class="course-box preview-trigger"
+                 data-title="NETWORK ADMINISTRATION" 
+                 data-code="COMP 012" 
+                 data-instructor="Prof. John Simon Mendoza"
+                 data-email="jsmendoza@pup.edu.ph"
+                 data-schedule="TUE 8:00 AM - 1:30 PM (Rooms 205 & CPL2)"
+                 data-task="Lab 1: Routing Setup (Due: Mar 24, 2026)">
+              <div class="course-title">NETWORK ADMINISTRATION</div>
+              <div class="course-code">COURSE CODE: COMP 012</div>
+            </div>
+            
+            <!-- 4. FREE ELECTIVE 2 -->
+            <div class="course-box preview-trigger" 
+                 data-title="FREE ELECTIVE 2" 
+                 data-code="ELEC IT-FE2" 
+                 data-instructor="Prof. Mark Jonathan Pascual"
+                 data-email="mjpascual@pup.edu.ph"
+                 data-schedule="WED 7:30 AM - 10:30 AM (Room 205)"
+                 data-task="No pending tasks">
+              <div class="course-title">FREE ELECTIVE 2</div>
+              <div class="course-code">COURSE CODE: ELEC IT-FE2</div>
+            </div>
+            
+            <!-- 5. INTEGRATIVE PROGRAMMING & TECHNOLOGIES 1 -->
+            <div class="course-box preview-trigger" 
+                 data-title="INTEGRATIVE PROGRAMMING & TECHNOLOGIES 1" 
+                 data-code="INTE 202" 
+                 data-instructor="Prof. Philip Lorenz Sarmiento"
+                 data-email="plsarmiento@pup.edu.ph"
+                 data-schedule="WED 10:30 AM - 12:30 PM (Rm 201) | 2:00 PM - 5:00 PM (CPL2)"
+                 data-task="Project Proposal (Due: Mar 27, 2026)">
+              <div class="course-title">INTEGRATIVE PROGRAMMING & TECHNOLOGIES 1</div>
+              <div class="course-code">COURSE CODE: INTE 202</div>
+            </div>
+
+            <!-- 6. PATHFIT 4 -->
+            <div class="course-box preview-trigger" 
+                 data-title="PATHFIT 4" 
+                 data-code="PE-004" 
+                 data-instructor="Prof. Manuel Miranda"
+                 data-email="mmiranda@pup.edu.ph"
+                 data-schedule="FRI 8:00 AM - 10:00 AM (Room GYM1)"
+                 data-task="Video Submission: Forms (Due: Mar 30, 2026)">
+              <div class="course-title">PATHFIT 4</div>
+              <div class="course-code">COURSE CODE: PE-004</div>
+            </div>
+
+            <!-- 7. INFORMATION MANAGEMENT -->
+            <div class="course-box preview-trigger" 
+                 data-title="INFORMATION MANAGEMENT" 
+                 data-code="COMP 010" 
+                 data-instructor="Prof. Jarev Bantog"
+                 data-email="jbantog@pup.edu.ph"
+                 data-schedule="SAT 8:00 AM - 1:30 PM (Rooms 201 & CPL2)"
+                 data-task="Database Setup (Due: Apr 2, 2026)">
+              <div class="course-title">INFORMATION MANAGEMENT</div>
+              <div class="course-code">COURSE CODE: COMP 010</div>
+            </div>
+
+            <!-- 8. HUMAN COMPUTER INTERACTION -->
+            <div class="course-box preview-trigger" 
+                 data-title="HUMAN COMPUTER INTERACTION" 
+                 data-code="COMP 013" 
+                 data-instructor="Prof. Bryan Lawrence Asistin"
+                 data-email="blasistin@pup.edu.ph"
+                 data-schedule="SAT 2:30 PM - 5:30 PM (Room 203)"
+                 data-task="Wireframe Prototype (Due: Apr 5, 2026)">
+              <div class="course-title">HUMAN COMPUTER INTERACTION</div>
+              <div class="course-code">COURSE CODE: COMP 013</div>
+            </div>
+
+          </div>
+
+          <!--Pendings thingy-->
+          <div class="right-column">
+            <div class="task-header">Pending Tasks</div>
+            <div class="task-list">
+              <div class="task-item">
+                <strong>Assignment 1</strong>
+                <span>Due: Mar 20, 2026</span>
+              </div>
+              <div class="task-item">
+                <strong>Quiz: Web Dev</strong>
+                <span>Due: Mar 22, 2026</span>
+              </div>
+              <div class="task-item">
+                <strong>Project Proposal</strong>
+                <span>Due: Mar 25, 2026</span>
+              </div>
+              <div class="task-item">
+                <strong>Midterm Exam</strong>
+                <span>Due: Apr 2, 2026</span>
+              </div>
+              <div class="task-item">
+                <strong>Group Report</strong>
+                <span>Due: Apr 5, 2026</span>
+              </div>
+              <div class="task-item">
+                <strong>Code Review</strong>
+                <span>Due: Apr 10, 2026</span>
+              </div>
+              <div class="task-item">
+                <strong>Final Presentation</strong>
+                <span>Due: May 1, 2026</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+    </section>
+
+    <!--Courses Preview - eto yung pag pinendot, lalabas yung mini info nung sub/course. sheeeesh...-->
+      <div id="course-modal" class="modal-overlay">
+        <div class="modal-content">
+          <button class="close-modal">&times;</button>
+          
+          <div class="modal-header">
+            <span id="modal-code" class="modal-badge">COMP 000</span>
+            <h3 id="modal-title">Course Title</h3>
+          </div>
+          
+          <div class="modal-body">
+            <p><strong>Instructor:</strong> <span id="modal-instructor">Name</span></p>
+            <p><strong>Schedule:</strong> <span id="modal-schedule">Time</span></p>
+            <p><strong>Next Task:</strong> <span id="modal-task">Task</span></p>
+          </div>
+          
+          <div class="modal-footer">
+            <a href="/student/course-overview" class="enter-course-btn">Enter Full Course Dashboard</a>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="../scripts/courses.js"></script>
+  </body>
+        <!--View Profile-->
+        <div id="profile-modal" class="modal-overlay">
+              <div class="profile-modal-content">
+                <button class="close-profile-modal">&times;</button>
+                
+                <div class="profile-left">
+                  <div class="profile-icon-large">
+                    <svg viewBox="0 0 24 24" fill="white" width="90" height="90">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                    </svg>
+                  </div>
+                  <h2>Juan C. Dela Cruz</h2>
+                  <p class="profile-role">Student</p>
+                  <p class="profile-id">2024-00205-SM-0</p>
+                  
+                  <button class="edit-profile-btn">
+                    <svg viewBox="0 0 24 24" fill="white" width="24" height="24">
+                        <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                    </svg>
+                  </button>
+        </div>
+        
+        <div class="profile-right">
+          <div class="profile-info-grid">
+            
+            <div class="profile-column-1">
+              <div class="form-group">
+                <label>Student Number</label>
+                <input type="text" value="2024-00205-SM-0" readonly>
+              </div>
+              <div class="form-group">
+                <label>Name</label>
+                <input type="text" value="Dela Cruz, Juan Cruz" readonly>
+              </div>
+              <div class="form-group">
+                <label>Gender</label>
+                <input type="text" value="Male" readonly>
+              </div>
+              <div class="form-group">
+                <label>Date of Birth</label>
+                <input type="text" value="July 10, 2005" readonly>
+              </div>
+              <div class="form-group">
+                <label>Place of Birth</label>
+                <input type="text" value="Navotas City" readonly>
+              </div>
+              <div class="form-group">
+                <label>Mobile Number</label>
+                <input type="text" value="09999999999" readonly>
+              </div>
+              <div class="form-group">
+                <label>Email Address</label>
+                <input type="text" value="juandc@gmail.com" readonly>
+              </div>
+            </div>
+
+            <div class="profile-column-2">
+              <div class="form-group">
+                <label>Residential Address <span>(Where you stay while you are studying in PUP)</span></label>
+                <textarea readonly>123 Maayos St. Pulong Buhangin Santa Maria, Bulacan</textarea>
+              </div>
+              <div class="form-group">
+                <label>Permanent Address</label>
+                <textarea readonly>123 Maayos St. Pulong Buhangin Santa Maria, Bulacan</textarea>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src ="{{ url_for('static', filename='js/modules/lms-student/courses.js') }}"></script>
+    <script src ="{{ url_for('static', filename='js/modules/lms-student/profile.js') }}"></script>
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const hamburger = document.getElementById("mobile-hamburger");
+    const dropdown = document.getElementById("mobile-nav-dropdown");
+    if (hamburger && dropdown) {
+        hamburger.addEventListener("click", function () {
+            hamburger.classList.toggle("open");
+            dropdown.classList.toggle("open");
+        });
+    }
+});
+    </script> 
+  </body>
+</html>

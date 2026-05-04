@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PUPLMS: Course Overview</title>
+    <!-- Main stylesheet for course pages -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/courses.css') }}" />
+    <!-- Google Material Icons for UI icons (close, send, download, etc.) -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- PUP favicon shown on browser tab -->
+    <link rel="icon" href="{{ url_for('static', filename='images/logo88x88pup.png') }}" type="image/png">
+  </head>
+
+  <body>
+
+    <!-- ============================================================
+         SIDEBAR NAVIGATION
+         Fixed left panel containing the PUP logo, student info,
+         navigation links (Home, Courses, Inbox, Calendar),
+         and a Return to SIS button at the footer.
+    ============================================================ -->
+    <nav class="sidebar" id="sidebar">
+
+      <!-- Sidebar top: PUP logo and portal label -->
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">
+            <img src="{{ url_for('static', filename='images/logo88x88pup.png') }}" alt="Logo">
+          </div>
+          <div class="sidebar-logo-text">
+            <strong>PUPLMS: Student Portal</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Logged-in student identity block: avatar initials, display name, student number -->
+      <a href="/student/profile" class="sidebar-user" style="text-decoration: none; color: inherit; display: block;">
+          <div class="user-avatar">AF</div>
+            <div class="user-name">AltF26</div>
+          <div class="user-number">2024-00123-SM-0</div>
+      </a>
+
+      <!-- Primary navigation links -->
+      <div class="sidebar-nav">
+          <a class="nav-item" href="/student/home">Home</a>
+          <a class="nav-item active-nav" href="/student/lmscourses">Courses</a>
+          <a class="nav-item" href="/student/lmsinbox">Inbox</a>
+          <a class="nav-item" href="/student/calendar">Calendar</a>
+      </div> 
+      
+      <!-- Sidebar footer: redirects student back to the SIS portal -->
+      <div class="sidebar-footer">
+        <form action="/sis" method="GET">
+          <button type="submit" class="logout-btn">Return to SIS</button>
+        </form>
+      </div>
+    </nav>
+
+    <!-- ============================================================
+         MAIN CONTENT AREA
+         Contains the course overview page: banner, info box,
+         tab navigation, and individual tab panels.
+    ============================================================ -->
+    <main class="main-content">
+      <section class="content-section active">
+        
+        <!-- Back button: returns student to the full course listing -->
+        <a href="/student/lmscourses" class="back-btn">← Back to Courses</a>
+
+        <!-- Welcome banner: course title and code/section are injected dynamically via JS -->
+        <div class="welcome-banner">
+          <h2 class="welcome-title" id="overview-title">Course Title Loading...</h2>
+          <p class="welcome-subtitle" id="overview-subtitle">COURSE CODE: --- | Section: BSIT 2-1</p>
+        </div>
+
+        <!-- Course metadata card: instructor name, email, schedule, and syllabus download -->
+        <div class="course-info-box">
+          <p><strong>Instructor:</strong> <span id="overview-instructor">Loading...</span></p>
+          <p><strong>Email:</strong> <span id="overview-email">Loading...</span></p>
+          <p><strong>Schedule:</strong> <span id="overview-schedule">Loading...</span></p>
+          <hr style="margin: 15px 0; border: 0; border-top: 1px solid #ddd;">
+          <!-- Triggers a PDF download of the course syllabus -->
+          <button class="info-download-btn">Download Syllabus (PDF)</button>
+        </div>
+
+        <!-- Tab navigation bar: switches between Overview, Modules, Assignments, Quizzes, and Grades panels -->
+        <div class="course-navbar">
+          <button class="course-tab active" data-target="tab-overview">Overview</button>
+          <button class="course-tab" data-target="tab-modules">Modules</button>
+          <button class="course-tab" data-target="tab-assignments">Assignments</button>
+          <button class="course-tab" data-target="tab-quizzes">Quizzes</button>
+          <button class="course-tab" data-target="tab-grades">Grades</button>
+        </div>
+
+        <!-- --------------------------------------------------------
+             TAB: OVERVIEW
+             Default active tab. Shows a general welcome message
+             pointing students to the Modules tab to begin lessons.
+        -------------------------------------------------------- -->
+        <div id="tab-overview" class="tab-content active">
+          <div class="left-column-course">
+            <div class="module-card">
+              <div class="module-header">Welcome to the Course!</div>
+              <div class="module-body">
+                <p>This course introduces the fundamental concepts of your subject. Please check the Modules tab to begin your lessons.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- --------------------------------------------------------
+             TAB: MODULES
+             Lists all course modules with their lessons, assignments,
+             and quizzes. Each assignment/quiz link carries data
+             attributes consumed by the modal logic in courses.js.
+        -------------------------------------------------------- -->
+        <div id="tab-modules" class="tab-content">
+          <div class="left-column-course">
+
+            <!-- Module 1 card: contains a lesson, a standard assignment, and a quiz -->
+            <div class="module-card">
+              <div class="module-header">Module 1: Introduction</div>
+              <div class="module-body">
+                <ul>
+                  <li><a href="#">📖 Lesson 1.1: Basics</a></li>
+                  <!-- Opens the standard assignment submission modal -->
+                  <li><a href="/student/seatwork" class="open-assignment-btn" data-type="standard" data-title="Assignment 1" data-due="Due 20 Mar" data-points="30 points">📝 Assignment 1 (Due: Mar 20, 2026)</a></li>
+                  <!-- Opens the quiz start modal; data-target-url points to the quiz page -->
+                  <li><a href="/student/quiz" class="open-assignment-btn" data-type="quiz" data-title="Quiz 1" data-due="Due 22 Mar" data-points="20 points" data-target-url="/student/quiz">❓ Quiz 1: Syllabus & Basics</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Module 2 card: contains a lesson and an available multiple-choice assignment -->
+            <div class="module-card">
+              <div class="module-header">Module 2: Advanced Topics</div>
+              <div class="module-body">
+                <ul>
+                  <li><a href="#">📖 Lesson 2.1: Key Concepts</a></li>
+                  <!-- Gold color indicates this item is currently available/unlocked -->
+                  <li><a href="#" class="open-assignment-btn" data-type="quiz" style="color: #b08d57;" data-title="Assignment 2" data-due="Due 25 Mar" data-points="50 points" data-target-url="/student/seatwork">🔓 Assignment 2 - Multiple Choice (Available Now)</a></li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- --------------------------------------------------------
+             TAB: ASSIGNMENTS
+             Consolidated list of all course assignments with their
+             current submission status (Pending, Submitted, etc.).
+        -------------------------------------------------------- -->
+        <div id="tab-assignments" class="tab-content">
+          <div class="module-card">
+            <div class="module-header">Upcoming Assignments</div>
+            <div class="module-body">
+              <ul>
+                <!-- Assignment 1: standard file-upload submission -->
+                <li><a href="#" class="open-assignment-btn" data-type="standard" data-title="Assignment 1" data-due="Due 20 Mar" data-points="30 points">📝 Assignment 1 (Due: Mar 20, 2026)</a> - <strong style="color: #b08d57;">Pending</strong></li>
+                <!-- Assignment 2: multiple-choice seatwork, redirects to seatwork.html -->
+                <li><a href="#" class="open-assignment-btn" data-type="quiz" data-title="Assignment 2" data-due="Due 25 Mar" data-points="50 points" data-target-url="/student/seatwork">📝 Assignment 2 (Due: Mar 25, 2026)</a> - <strong style="color: #b08d57;">Pending</strong></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- --------------------------------------------------------
+             TAB: QUIZZES
+             Lists all available quizzes and their open/closed status.
+        -------------------------------------------------------- -->
+        <div id="tab-quizzes" class="tab-content">
+          <div class="module-card">
+            <div class="module-header">Available Quizzes</div>
+            <div class="module-body">
+              <ul>
+                <!-- Quiz 1: currently open; clicking opens the quiz start modal -->
+                <li><a href="/student/quiz" class="open-assignment-btn" data-type="quiz" data-title="Quiz 1" data-due="Due 22 Mar" data-points="20 points" data-target-url="/student/quiz">❓ Quiz 1: Syllabus & Basics</a> - <strong style="color: #b08d57;">Open</strong></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- --------------------------------------------------------
+             TAB: GRADES
+             Displays the student's graded items in a table.
+             Supports toggling between Raw Score and Percentage views.
+             Final grade equivalent is computed and shown in the footer row.
+        -------------------------------------------------------- -->
+        <div id="tab-grades" class="tab-content">
+          <div class="module-card">
+
+            <!-- Header row: title on the left, Raw/Percentage toggle on the right -->
+            <div class="module-header" style="display: flex; justify-content: space-between; align-items: center;">
+              <span>Academic Performance</span>
+              
+              <!-- Toggle group: switches score display mode between raw and percentage -->
+              <div class="grade-toggle">
+                <button class="toggle-btn active" id="view-raw">Raw Score</button>
+                <button class="toggle-btn" id="view-percent">Percentage</button>
+              </div>
+            </div>
+            
+            <div class="module-body">
+              <!-- Grades table: each row carries data-earned and data-total for JS calculations -->
+              <table class="grades-table" id="student-grades-table">
+                <thead>
+                  <tr>
+                    <th>Lesson</th>
+                    <th>Type</th>
+                    <th>Score</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Graded item: Activity 1 (scored) -->
+                  <tr class="grade-item" data-earned="19" data-total="20">
+                    <td>Introduction to Modeling</td>
+                    <td>Activity 1</td>
+                    <td class="score-display">19/20</td>
+                  </tr>
+                  <!-- Pending item: Quiz 1 (not yet graded; data-earned left empty) -->
+                  <tr class="grade-item" data-earned="" data-total="50">
+                    <td>Introduction to Modeling</td>
+                    <td>Quiz 1</td>
+                    <td class="score-display">-</td>
+                  </tr>
+                  <!-- Graded item: Activity 2 (scored) -->
+                  <tr class="grade-item" data-earned="42" data-total="50">
+                    <td>Data Structures</td>
+                    <td>Activity 2</td>
+                    <td class="score-display">42/50</td>
+                  </tr>
+                </tbody>
+                <!-- Footer row: computed final grade equivalent injected by courses.js -->
+                <tfoot>
+                  <tr class="total-row">
+                    <td colspan="2"><strong>Final Grade Equivalent</strong></td>
+                    <td id="final-grade-display"><strong>-</strong></td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </main>
+
+    <!-- ============================================================
+         MODAL: STANDARD ASSIGNMENT SUBMISSION
+         Shown when a student clicks a standard assignment link.
+         Contains assignment instructions, a reference PDF attachment,
+         a file-upload submission panel, and a private comments section.
+         Visibility is toggled by courses.js via display: none/flex.
+    ============================================================ -->
+    <div id="assignment-modal" class="assignment-modal-overlay" style="display: none;">
+      <div class="assignment-modal-content custom-lms-theme">
+        
+        <!-- Modal top banner: close button, course breadcrumb, dynamic title, instructor meta, and points badge -->
+        <div class="modal-top-banner">
+          <button class="close-assignment-btn" id="close-assignment-modal">
+            <span class="material-icons">close</span>
+          </button>
+          
+          <div class="banner-content">
+            <!-- Breadcrumb showing course context -->
+            <span class="course-tag">INTE 202 › Assignments</span>
+            <!-- Title and due date are populated dynamically from the clicked link's data attributes -->
+            <h2 id="dynamic-assignment-title">Assignment 1</h2>
+            <div class="meta-row">
+              <span class="meta-item"><span class="material-icons">person</span> Prof. Philip Lorenz Sarmiento</span>
+              <span class="meta-item"><span class="material-icons">schedule</span> <span id="dynamic-assignment-due">Due 20 Mar</span></span>
+            </div>
+          </div>
+          
+          <!-- Points badge: value populated from data-points attribute of the clicked link -->
+          <div class="points-badge" id="dynamic-assignment-points">30 points</div>
+        </div>
+
+        <!-- Modal body: two-column layout — instructions/attachments (left) + submission panel (right) -->
+        <div class="assignment-modal-body" id="standard-assignment-view">
+
+          <!-- Left column: assignment instructions and downloadable reference materials -->
+          <div class="main-content-panel" style="overflow-y: auto;">
+            <div class="content-section-block">
+              <h3 class="section-title">Instructions</h3>
+              <div class="assignment-instructions">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+              </div>
+            </div>
+
+            <!-- Reference materials: downloadable PDF file attachment pill -->
+            <div class="content-section-block">
+              <h3 class="section-title">Reference Materials</h3>
+              <div class="attachment-grid">
+                <!-- Inline base64-encoded PDF for the project guidelines download -->
+                <a href="data:application/pdf;base64,JVBERi0xLjQKJcOkw7zDtsOfCjIgMCBvYmoKPDwvTGVuZ3RoIDMgMCBSL0ZpbHRlci9GbGF0ZURlY29kZT4+CnN0cmVhbQp4nDPQM1Qo5ypUMFAwALJMLU31jBQsTAz1LBSK0osSQTz9xJLUIgVDAwO9ZAA1qwi2CmVuZHN0cmVhbQplbmRvYmoKCjMgMCBvYmoKMzEKZW5kb2JqCgo0IDAgb2JqCjw8L1R5cGUvUGFnZS9NZWRpYUJveFswIDAgNTk1IDg0Ml0vUmVzb3VyY2VzPDwvRm9udDw8L0YxIDEgMCBSPj4+Pi9Db250ZW50cyAyIDAgUi9QYXJlbnQgNSAwIFI+PgplbmRvYmoKCjEgMCBvYmoKPDwvVHlwZS9Gb250L1N1YnR5cGUvVHlwZTEvQmFzZUZvbnQvSGVsdmV0aWNhPj4KZW5kb2JqCgo1IDAgb2JqCjw8L1R5cGUvUGFnZXMvQ291bnQgMS9LaWRzWzQgMCBSXT4+CmVuZG9iagoKNiAwIG9iago8PC9UeXBlL0NhdGFsb2cvUGFnZXMgNSAwIFI+PgplbmRvYmoKCjcgMCBvYmoKPDwvUHJvZHVjZXIoR2hvc3RzY3JpcHQgOS41MCkvQ3JlYXRpb25EYXRlKEQ6MjAyMzA2MTIxNDE0MTdaMDAnMDAnKT4+CmVuZG9iagoKeHJlZgowIDgKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMjM1IDAwMDAwIG4gCjAwMDAwMDAwMTUgMDAwMDAgbiAKMDAwMDAwMDEzMiAwMDAwMCBuIAowMDAwMDAwMTUxIDAwMDAwIG4gCjAwMDAwMDAzMjMgMDAwMDAgbiAKMDAwMDAwMDM4MCAwMDAwMCBuIAowMDAwMDAwNDI5IDAwMDAwIG4gCnRyYWlsZXIKPDwvU2l6ZSA4L1Jvb3QgNiAwIFIvSW5mbyA3IDAgUj4+CnN0YXJ0eHJlZgo1MzIKJSVFT0YK" download="Project_Guidelines.pdf" class="attachment-pill">
+                  <div style="background: #cc0000; color: white; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 6px; font-size: 11px; font-weight: bold; margin-right: 15px;">PDF</div>
+                  <div class="file-info">
+                    <span class="file-name">Project_Guidelines.pdf</span>
+                    <span class="file-type">PDF Document</span>
+                  </div>
+                  <span class="material-icons download-icon">download</span>
+                </a>
+              </div>
+            </div>
+          </div> 
+          
+          <!-- Right column: submission status card and private comments to instructor -->
+          <div class="action-sidebar" style="overflow-y: auto;">
+
+            <!-- Submission status card: shows current status badge, upload button, and submit button -->
+            <div class="status-card">
+              <div class="status-header">
+                <h3>Your Submission</h3>
+                <!-- Status badge text (e.g., "Assigned", "Submitted") updated by courses.js -->
+                <span class="status-badge assigned" id="submission-status">Assigned</span>
+              </div>
+              
+              <div class="action-buttons-stack">
+                <!-- Hidden file input triggered by the Upload button below -->
+                <input type="file" id="file-upload-input" style="display: none;">
+                
+                <!-- Upload button: programmatically clicks the hidden file input -->
+                <button class="btn-outline-dark" id="upload-btn-trigger">
+                  <span class="red-plus">+</span> Upload
+                </button>
+                
+                <!-- Displays the name of the file chosen by the student after upload -->
+                <div id="uploaded-file-name" class="uploaded-file-text"></div>
+
+                <!-- Submit button: finalizes and submits the uploaded file -->
+                <button class="btn-solid-red" id="submit-assignment-btn">
+                  Submit
+                </button>
+              </div>
+              <!-- Warning note reminding student that late submissions are not accepted -->
+              <p class="due-warning"><span class="material-icons" style="color: #f2a900;">info</span> Work cannot be turned in after the due date.</p>
+            </div>
+
+            <!-- Private comments panel: allows student to message the instructor directly -->
+            <div class="private-chat-card">
+              <h3>Private Comments</h3>
+              <p class="chat-desc">Message your instructor directly...</p>
+              <div class="modern-input-box">
+                <input type="text" placeholder="Type a message...">
+                <button class="send-btn"><span class="material-icons">send</span></button>
+              </div>
+            </div>
+          </div>
+        </div> 
+      </div> 
+    </div>
+
+    <!-- ============================================================
+         MODAL: SEATWORK / QUIZ START CONFIRMATION
+         Shown before redirecting the student to a quiz or seatwork page.
+         Displays the number of questions, time limit, and a Start button.
+         Title, due date, points, and question count are set dynamically.
+    ============================================================ -->
+    <div id="seatwork-modal" class="modal-overlay">
+      <div class="modal-wrapper custom-lms-theme" style="max-width: 450px; height: auto;">
+        
+        <!-- Modal header: breadcrumb, dynamic title, due date, and points badge -->
+        <div class="modal-header modal-top-banner" style="padding: 25px 30px;">
+          <button class="close-assignment-btn" id="close-seatwork-modal">
+            <span class="material-icons">close</span>
+          </button>
+
+          <!-- Course breadcrumb for context -->
+          <div class="breadcrumb">INTE 202 › Quiz</div>
+          <!-- Title populated from the clicked item's data-title attribute -->
+          <h1 id="seatwork-title" style="font-size: 22px; margin-bottom: 10px;">Quiz 1</h1>
+          <div class="meta-info">
+            <span>&#128338; <span id="seatwork-due">Due 25 Mar</span></span>
+          </div>
+          <!-- Points populated from the clicked item's data-points attribute -->
+          <div class="points-badge" id="seatwork-points">50 points</div>
+        </div>
+
+        <!-- Modal body: centered confirmation layout with icon, message, stats, and start button -->
+        <div class="modal-body" style="flex-direction: column; align-items: center; padding: 40px 30px; text-align: center; background: white;">
+            <!-- Decorative icon circle -->
+            <div class="icon-circle" style="margin: 0 auto 20px; width: 60px; height: 60px; background: #ffebee; color: #800000; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                <span class="material-icons" style="font-size: 30px;">assignment</span>
+            </div>
+            <h3 style="color: #333; margin-bottom: 15px;">Ready to begin?</h3>
+            <p style="color: #666; font-size: 15px; margin-bottom: 30px; line-height: 1.5;">
+                Please read each question carefully. You have <strong>1 attempt</strong> to submit this seatwork.
+            </p>
+            
+            <!-- Stats row: question count and time limit displayed side by side with a divider -->
+            <div style="display: flex; justify-content: center; align-items: center; gap: 40px; margin-bottom: 35px;">
+              <!-- Number of questions; value set dynamically by modal-timer.js -->
+              <div>
+                  <span style="display: block; font-size: 24px; font-weight: bold; color: #800000;" id="seatwork-questions-count">10</span>
+                  <span style="font-size: 12px; color: #777; text-transform: uppercase; font-weight: bold;">Questions</span>
+              </div>
+              
+              <!-- Vertical divider between the two stat blocks -->
+              <div id="modal-timer-divider" style="width: 1px; height: 35px; background: #e0e0e0;"></div>
+              
+              <!-- Time limit in minutes; value set dynamically by modal-timer.js -->
+              <div id="modal-timer-block">
+                  <span style="display: block; font-size: 24px; font-weight: bold; color: #800000;" id="modal-timer-value">15</span>
+                  <span style="font-size: 12px; color: #777; text-transform: uppercase; font-weight: bold;">Minutes</span>
+              </div>
+          </div>
+
+            <!-- Start button: navigates to the seatwork/quiz page (href set by modal-timer.js) -->
+            <a href="/student/seatwork" id="modal-start-btn" style="background: #800000; color: white; display: inline-block; text-decoration: none; padding: 14px 40px; border-radius: 30px; font-size: 16px; font-weight: bold;">
+                Start Seatwork
+            </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         MODAL: STUDENT PROFILE
+         Displays the student's personal information in a two-column
+         read-only form. An edit button (pencil icon) can toggle fields
+         to editable mode. Opened and closed by profile.js.
+    ============================================================ -->
+    <div id="profile-modal" class="modal-overlay">
+      <div class="profile-modal-content">
+        <button class="close-profile-modal">&times;</button>
+        
+        <!-- Left panel: large avatar icon, student name, role, ID, and edit button -->
+        <div class="profile-left">
+          <!-- SVG person icon used as the profile avatar placeholder -->
+          <div class="profile-icon-large">
+            <svg viewBox="0 0 24 24" fill="white" width="90" height="90">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+            </svg>
+          </div>
+          <h2>Juan C. Dela Cruz</h2>
+          <p class="profile-role">Student</p>
+          <p class="profile-id">2024-00205-SM-0</p>
+          
+          <!-- Edit button (pencil icon SVG): toggles profile fields to editable state via profile.js -->
+          <button class="edit-profile-btn">
+             <svg viewBox="0 0 24 24" fill="white" width="24" height="24">
+                <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+             </svg>
+          </button>
+        </div>
+
+        <!-- Right panel: two-column read-only form with personal and address details -->
+        <div class="profile-right">
+          <div class="profile-info-grid">
+            
+            <!-- Column 1: student number, name, gender, DOB, birthplace, mobile, email -->
+            <div class="profile-column-1">
+              <div class="form-group">
+                <label>Student Number</label>
+                <input type="text" value="2024-00205-SM-0" readonly>
+              </div>
+              <div class="form-group">
+                <label>Name</label>
+                <input type="text" value="Dela Cruz, Juan Cruz" readonly>
+              </div>
+              <div class="form-group">
+                <label>Gender</label>
+                <input type="text" value="Male" readonly>
+              </div>
+              <div class="form-group">
+                <label>Date of Birth</label>
+                <input type="text" value="July 10, 2005" readonly>
+              </div>
+              <div class="form-group">
+                <label>Place of Birth</label>
+                <input type="text" value="Navotas City" readonly>
+              </div>
+              <div class="form-group">
+                <label>Mobile Number</label>
+                <input type="text" value="09999999999" readonly>
+              </div>
+              <div class="form-group">
+                <label>Email Address</label>
+                <input type="text" value="juandc@gmail.com" readonly>
+              </div>
+            </div>
+
+            <!-- Column 2: residential address (near school) and permanent address -->
+            <div class="profile-column-2">
+              <div class="form-group">
+                <label>Residential Address <span>(Where you stay while you are studying in PUP)</span></label>
+                <textarea readonly>123 Maayos St. Pulong Buhangin Santa Maria, Bulacan</textarea>
+              </div>
+              <div class="form-group">
+                <label>Permanent Address</label>
+                <textarea readonly>123 Maayos St. Pulong Buhangin Santa Maria, Bulacan</textarea>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Populate banner + course info from sessionStorage (set when user clicks a course card) -->
+    <script>
+      (function() {
+        const title      = sessionStorage.getItem("course_title");
+        const code       = sessionStorage.getItem("course_code");
+        const instructor = sessionStorage.getItem("course_instructor");
+        const email      = sessionStorage.getItem("course_email");
+        const schedule   = sessionStorage.getItem("course_schedule");
+
+        if (title) {
+          const titleEl = document.getElementById("overview-title");
+          if (titleEl) titleEl.textContent = title;
+        }
+        if (code) {
+          const subtitleEl = document.getElementById("overview-subtitle");
+          if (subtitleEl) subtitleEl.textContent = code + " | Section: BSIT 2-1";
+        }
+        if (instructor) {
+          const instrEl = document.getElementById("overview-instructor");
+          if (instrEl) instrEl.textContent = instructor;
+        }
+        if (email) {
+          const emailEl = document.getElementById("overview-email");
+          if (emailEl) emailEl.textContent = email;
+        }
+        if (schedule) {
+          const schedEl = document.getElementById("overview-schedule");
+          if (schedEl) schedEl.textContent = schedule;
+        }
+      })();
+    </script>
+    <!-- profile.js: handles profile modal open/close and edit-mode toggling -->
+    <script src ="{{ url_for('static', filename='js/modules/lms-student/profile.js') }}"></script>
+    <!-- courses.js: handles tab switching, modal triggers, grade toggle, and submission logic -->
+    <script src ="{{ url_for('static', filename='js/modules/lms-student/courses.js') }}"></script>
+    <!-- modal-timer.js: sets question count and timer values in the seatwork start modal -->
+    <script src ="{{ url_for('static', filename='js/modules/lms-student/modal-timer.js') }}"></script>
+  </body>
+</html>

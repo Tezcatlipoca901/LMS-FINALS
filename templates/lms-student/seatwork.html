@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PUPLMS: Active Seatwork</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/courses.css') }}" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static', filename='images/logo88x88pup.png') }}" type="image/png">
+  </head>
+
+  <body>
+    <nav class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">
+            <img src="{{ url_for('static', filename='images/logo88x88pup.png') }}" alt="Logo">
+          </div>
+          <div class="sidebar-logo-text">
+            <strong>PUPLMS: Student Portal</strong>
+          </div>
+        </div>
+      </div>
+
+      <a href="profile.html" class="sidebar-user" style="text-decoration: none; color: inherit; display: block;">
+          <div class="user-avatar">AF</div>
+            <div class="user-name">AltF26</div>
+          <div class="user-number">2024-00123-SM-0</div>
+        </a>
+
+      <div class="sidebar-nav">
+          <a class="nav-item" href="/student/home">Home</a>
+          <a class="nav-item" href="/student/lmscourses">Courses</a>
+          <a class="nav-item" href="/student/lmsinbox">Inbox</a>
+          <a class="nav-item" href="/student/calendar">Calendar</a>
+      </div> 
+      
+      <div class="sidebar-footer">
+        <form action="/sis" method="GET">
+          <button type="submit" class="logout-btn">Return to SIS</button>
+        </form>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <section class="content-section active">
+        
+        <a href="/student/course-overview" class="back-btn">← Back to Course Overview</a>
+
+        <div style="max-width: 800px; margin: 0 auto; background: transparent;">
+          
+          <div style="width: 100%; border-radius: 12px; margin-bottom: 45px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow: visible;">
+            <div class="modal-top-banner" style="border-radius: 12px; position: relative;">
+              
+              <div class="banner-content">
+                <span class="course-tag">INTE 202 › Active Seatwork</span>
+                <h2 style="font-size: 28px; margin-bottom: 10px;">Assignment 2</h2>
+                <div class="meta-row">
+                  <span class="meta-item"><span class="material-icons">person</span> Prof. Philip Lorenz Sarmiento</span>
+                </div>
+              </div>
+              <div class="points-badge">50 points</div>
+            </div>
+          </div>
+
+          <div id="seatwork-success" style="display: none; text-align: center; padding: 60px 30px; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-top: 6px solid #1e8e3e; margin-bottom: 30px;">
+            <span class="material-icons" style="font-size: 64px; color: #1e8e3e; margin-bottom: 20px;">check_circle</span>
+            <h2 id="success-title" style="font-size: 28px; color: #333; margin-bottom: 10px;">Seatwork Submitted Successfully!</h2>
+            <p style="color: #666; font-size: 16px; margin-bottom: 40px;">Your answers have been recorded and sent to your instructor. You can safely return to the course overview.</p>
+            <a href="/student/course-overview" class="btn-solid" style="text-decoration: none; padding: 14px 40px; border-radius: 30px;">Return to Course Overview</a>
+          </div>
+
+          <form id="seatwork-form">
+            
+            <div class="seatwork-instructions" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 25px; border-left: 4px solid #b08d57; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+              <p style="margin: 0; color: #555;"><span class="material-icons" style="vertical-align: middle; color: #800000; margin-right: 5px;">info</span> Please select the best answer for each question below.</p>
+            </div>
+
+            <div class="question-card">
+              <div class="question-header">
+                <h4>1. Which of the following is an example of an Object-Oriented Programming language?</h4>
+                <span class="question-pts">10 points</span>
+              </div>
+              <div class="question-options">
+                <label class="q-option"><input type="radio" name="q1" value="A"> HTML</label>
+                <label class="q-option"><input type="radio" name="q1" value="B"> C#</label>
+                <label class="q-option"><input type="radio" name="q1" value="C"> CSS</label>
+                <label class="q-option"><input type="radio" name="q1" value="D"> SQL</label>
+              </div>
+            </div>
+
+            <div class="question-card">
+              <div class="question-header">
+                <h4>2. What does API stand for in software development?</h4>
+                <span class="question-pts">20 points</span>
+              </div>
+              <div class="question-options">
+                <label class="q-option"><input type="radio" name="q2" value="A"> Application Programming Interface</label>
+                <label class="q-option"><input type="radio" name="q2" value="B"> Advanced Program Integration</label>
+                <label class="q-option"><input type="radio" name="q2" value="C"> Automated Processing Index</label>
+                <label class="q-option"><input type="radio" name="q2" value="D"> Application Process Interface</label>
+              </div>
+            </div>
+
+            <div class="question-card">
+              <div class="question-header">
+                <h4>3. Which data structure operates on a Last-In, First-Out (LIFO) principle?</h4>
+                <span class="question-pts">20 points</span>
+              </div>
+              <div class="question-options">
+                <label class="q-option"><input type="radio" name="q3" value="A"> Queue</label>
+                <label class="q-option"><input type="radio" name="q3" value="B"> Linked List</label>
+                <label class="q-option"><input type="radio" name="q3" value="C"> Stack</label>
+                <label class="q-option"><input type="radio" name="q3" value="D"> Array</label>
+              </div>
+            </div>
+
+            <div style="margin-top: 30px; text-align: right; margin-bottom: 50px;">
+              <button type="button" class="btn-solid submit-seatwork-btn" style="padding: 15px 40px; border-radius: 30px; font-size: 16px;">Submit Seatwork</button>
+            </div>
+
+          </form>
+
+        </div>
+      </section>
+    </main>
+
+    <script src ="{{ url_for('static', filename='js/modules/lms-student/quiz.js') }}"></script>
+    <script src ="{{ url_for('static', filename='js/modules/lms-student/profile.js') }}"></script>
+  </body>
+</html>

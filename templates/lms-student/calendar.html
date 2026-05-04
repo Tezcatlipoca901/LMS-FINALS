@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PUPLMS: Calendar</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/calendar.css') }}" />
+    <link rel="icon" href="{{ url_for('static', filename='images/logo88x88pup.png') }}" type="image/png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  </head>
+
+  <body>
+    <div class="mobile-topbar">
+      <div class="mobile-topbar-logo">
+        <img src="{{ url_for('static', filename='images/logo88x88pup.png') }}" alt="Logo">
+        <span>PUPLMS</span>
+      </div>
+      <button class="mobile-hamburger" id="mobile-hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+
+    <div class="mobile-nav-dropdown" id="mobile-nav-dropdown">
+      <a href="/student/profile" class="nav-link">Profile (AltF26)</a>
+      <a href="/student/home" class="nav-link active-nav">Home</a>
+      <a href="/student/lmscourses" class="nav-link">Courses</a>
+      <a href="/student/lmsinbox" class="nav-link">Inbox</a>
+      <a href="/student/calendar" class="nav-link">Calendar</a>
+      <a href="/sis" class="nav-link nav-logout">Return to SIS</a>
+    </div>
+
+    <div class="mobile-nav-overlay" id="mobile-nav-overlay"></div>
+
+    <div class="dashboard-container active">
+      
+      <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-logo">
+            <div class="sidebar-logo-icon">
+              <img src="{{ url_for('static', filename='images/logo88x88pup.png') }}" alt="Logo">
+            </div>
+            <div class="sidebar-logo-text">
+              <strong>PUPLMS: Student Portal</strong>
+            </div>
+          </div>
+        </div>
+
+        <a href="/student/profile" class="sidebar-user" style="text-decoration: none; color: inherit; display: block;">
+          <div class="user-avatar">AF</div>
+            <div class="user-name">AltF26</div>
+          <div class="user-number">2024-00123-SM-0</div>
+        </a>
+
+        <div class="sidebar-nav">
+          <a class="nav-item" href="/student/home">Home</a>
+          <a class="nav-item" href="/student/lmscourses">Courses</a>
+          <a class="nav-item" href="/student/lmsinbox">Inbox</a>
+          <a class="nav-item active-nav" href="/student/calendar">Calendar</a>
+        </div> 
+        
+        <div class="sidebar-footer">
+          <form action="/sis" method="GET">
+            <button type="submit" class="logout-btn">Return to SIS</button>
+          </form>
+        </div>
+      </nav>
+
+      <main class="main-content">
+        <section class="content-section active">
+          
+          <div class="welcome-banner">
+            <h2 class="welcome-title">Calendar</h2>
+            <p class="welcome-subtitle">
+              Keep up with your academic schedule and activities to stay prepared and on track every day.
+            </p>
+          </div>
+
+            <div class="calendar-layout">
+            
+                <div class="calendar-wrapper">
+                <div class="calendar-header">
+                    <button id="prev-month" class="calendar-btn icon-btn">&#9664;</button>
+                    <h3 id="month-display" class="calendar-month"></h3>
+                    <button id="next-month" class="calendar-btn icon-btn">&#9654;</button>
+                </div>
+                
+                <div id="calendar-grid" class="calendar-grid"></div>
+                </div>
+                <aside  class="event-sidebar">
+                <div class="event-sidebar-header">
+                    <h3 id="selected-date-display">Select a Date</h3>
+                </div>
+                
+                <div class="event-list" id="event-list">
+                    <div class="no-events-msg">No events scheduled.</div>
+                </div>
+
+                <div class="add-event-form">
+                    <input type="text" id="event-title" placeholder="Event title..." autocomplete="off" />
+                    <input type="text" id="event-time" placeholder="--:-- --" readonly style="cursor: pointer; background-color: #fff;" />
+                    <button id="add-event-btn" class="calendar-btn w-100">Add Event</button>
+                </div>
+              <div class="announcements-section">
+                <div class="announcements-header">
+                  <h3>
+                    <svg class="horn-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                      <path d="M18 11v2h4v-2h-4zm-2 6.61c.96.71 2.21 1.65 3.2 2.39.4-.53.8-1.07 1.2-1.6-.99-.74-2.24-1.68-3.2-2.4-.4.54-.8 1.08-1.2 1.61zM20.4 5.6c-.4-.53-.8-1.07-1.2-1.6-.99.74-2.24 1.68-3.2 2.4.4.53.8 1.07 1.2 1.6.96-.72 2.21-1.65 3.2-2.4zM4 9c-1.1 0-2 .9-2 2v2c0 1.1.9 2 2 2h1v4h2v-4h1l5 3V6L8 9H4zm11.5 3c0-1.33-.58-2.53-1.5-3.35v6.69c.92-.81 1.5-2.01 1.5-3.34z"/>
+                    </svg>
+                    University Announcements
+                  </h3>
+                </div>
+                
+                <div class="announcements-list">
+                  
+                  <div class="announcement-accordion">
+                    <button class="accordion-header">
+                      Balik Sinta <span class="accordion-icon">&#9660;</span>
+                    </button>
+                    <div class="accordion-content">
+                      <p><strong>Date:</strong> September 15, 2026</p>
+                      <p>Welcome back to PUP! Join us as we celebrate the start of the new academic year with campus-wide activities.</p>
+                    </div>
+                  </div>
+
+                  <div class="announcement-accordion">
+                    <button class="accordion-header">
+                      Tanglaw <span class="accordion-icon">&#9660;</span>
+                    </button>
+                    <div class="accordion-content">
+                      <p><strong>Date:</strong> December 15, 2026</p>
+                      <p>The annual university lantern parade and holiday festivities to light up the campus.</p>
+                    </div>
+                  </div>
+
+                  <div class="announcement-accordion">
+                    <button class="accordion-header">
+                      Tanglawan <span class="accordion-icon">&#9660;</span>
+                    </button>
+                    <div class="accordion-content">
+                      <p><strong>Date:</strong> January 9, 2027</p>
+                      <p>The official lighting ceremony marking the beginning of our founding anniversary events.</p>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+                </aside>
+            
+          </div>
+          
+        </section>
+      </main>
+    </div>
+    <div id="custom-alert-modal" class="modal-overlay">
+      <div class="custom-alert-content">
+        <div class="custom-alert-header">
+          <strong>Notice</strong>
+          <button class="close-alert-btn">&times;</button>
+        </div>
+        <div class="custom-alert-body">
+          <p id="custom-alert-message">Please enter an event title.</p>
+        </div>
+        <div class="custom-alert-footer">
+          <button class="alert-ok-btn">OK</button>
+        </div>
+      </div>
+    </div>
+    <script src ="{{ url_for('static', filename='js/modules/lms-student/profile.js') }}"></script>
+    <script src ="{{ url_for('static', filename='js/modules/lms-student/calendar.js') }}"></script>
+    <div id="ios-time-modal" class="modal-overlay">
+      <div class="ios-time-content">
+        <div class="ios-time-header">
+          <button id="ios-time-cancel">Cancel</button>
+          <strong>Set Time</strong>
+          <button id="ios-time-done">Done</button>
+        </div>
+        <div class="ios-time-wheels">
+          <div class="wheel-highlight"></div>
+          <ul id="wheel-hours" class="wheel"></ul>
+          <ul id="wheel-minutes" class="wheel"></ul>
+          <ul id="wheel-ampm" class="wheel">
+            <li>AM</li>
+            <li>PM</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const hamburger = document.getElementById("mobile-hamburger");
+    const dropdown = document.getElementById("mobile-nav-dropdown");
+    if (hamburger && dropdown) {
+        hamburger.addEventListener("click", function () {
+            hamburger.classList.toggle("open");
+            dropdown.classList.toggle("open");
+        });
+    }
+});
+    </script> 
+  </body>
+</html>
