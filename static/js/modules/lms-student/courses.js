@@ -69,6 +69,42 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // ==========================================================
+    // LIST DEADLINE CHECKER & STATUS UPDATER
+    // ==========================================================
+    function checkListDeadlines() {
+        const assignmentLinks = document.querySelectorAll('.open-assignment-btn');
+        const now = new Date();
+
+        assignmentLinks.forEach(link => {
+            const listItem = link.closest('li');
+            if (!listItem) return;
+            const statusBadge = listItem.querySelector('.list-status') || listItem.querySelector('strong');
+            if (!statusBadge) return;
+
+            const deadlineStr = link.getAttribute('data-deadline');
+            const isSubmitted = link.getAttribute('data-submitted') === "true";
+
+            if (!deadlineStr) return; 
+            
+            const deadlineDate = new Date(deadlineStr);
+
+            if (isSubmitted) {
+                statusBadge.textContent = "Submitted";
+                statusBadge.style.color = "#28a745"; // Green
+            } else if (now > deadlineDate) {
+                statusBadge.textContent = "Closed";
+                statusBadge.style.color = "#dc3545"; // Red
+            } else {
+                statusBadge.textContent = "Pending";
+                statusBadge.style.color = "#b08d57"; // Yellow
+            }
+        });
+    }
+
+    checkListDeadlines();
+    setInterval(checkListDeadlines, 1000);
+
+    // ==========================================================
     // ASSIGNMENT & SEATWORK POP-UP LOGIC
     // ==========================================================
     const assignmentLinks = document.querySelectorAll(".open-assignment-btn");
@@ -76,16 +112,28 @@ document.addEventListener("DOMContentLoaded", () => {
     const seatworkModal = document.getElementById("seatwork-modal");
     const closeAssignmentBtn = document.getElementById("close-assignment-modal");
     const closeSeatworkBtn = document.getElementById("close-seatwork-modal");
+    const submitAssignmentBtn = document.getElementById("submit-assignment-btn");
+    
+    // Core modal state trackers
+    let isSubmitted = false; 
+    let currentActiveAssignmentLink = null;
 
     if (assignmentLinks.length > 0) {
         assignmentLinks.forEach(link => {
             link.addEventListener("click", function(e) {
                 e.preventDefault(); 
                 
+                currentActiveAssignmentLink = this;
+
                 const type = this.getAttribute("data-type") || "standard";
                 const title = this.getAttribute("data-title") || "Assignment";
                 const due = this.getAttribute("data-due") || "Due Date";
                 const points = this.getAttribute("data-points") || "Points";
+                const deadline = this.getAttribute("data-deadline") || "2099-12-31T23:59:59";
+
+                const deadlineDate = new Date(deadline);
+                const now = new Date();
+                const isClosed = now > deadlineDate;
 
                 if (type === "quiz") {
                     if (document.getElementById("seatwork-title")) document.getElementById("seatwork-title").textContent = title;
@@ -94,18 +142,109 @@ document.addEventListener("DOMContentLoaded", () => {
                     
                     const targetUrl = this.getAttribute("data-target-url") || "/student/seatwork";
                     const startBtn = document.getElementById("modal-start-btn");
+                    const seatworkInstructions = document.getElementById("seatwork-instructions");
+
                     if (startBtn) {
-                        startBtn.href = targetUrl;
-                        startBtn.textContent = title.toLowerCase().includes("quiz") ? "Start Quiz" : "Start Seatwork";
+                        if (isClosed) {
+                            startBtn.href = "#";
+                            startBtn.textContent = "Closed (Deadline Passed)";
+                            startBtn.style.background = "#6c757d"; // Gray background
+                            startBtn.style.cursor = "not-allowed";
+                            startBtn.style.pointerEvents = "none";
+                            
+                            if (seatworkInstructions) {
+                                seatworkInstructions.innerHTML = "<strong style='color:#dc3545;'>This seatwork is no longer available.</strong> The deadline has passed.";
+                            }
+                        } else {
+                            startBtn.href = targetUrl;
+                            startBtn.textContent = title.toLowerCase().includes("quiz") ? "Start Quiz" : "Start Seatwork";
+                            startBtn.style.background = "#800000"; // Red background
+                            startBtn.style.cursor = "pointer";
+                            startBtn.style.pointerEvents = "auto";
+                            
+                            if (seatworkInstructions) {
+                                seatworkInstructions.innerHTML = "Please read each question carefully. You have <strong>1 attempt</strong> to submit this seatwork.";
+                            }
+                        }
                     }
 
                     if (seatworkModal) seatworkModal.style.display = "flex";
                     
                 } else {
+                    // It's a standard assignment upload
                     if (document.getElementById("dynamic-assignment-title")) document.getElementById("dynamic-assignment-title").textContent = title;
                     if (document.getElementById("dynamic-assignment-due")) document.getElementById("dynamic-assignment-due").textContent = due;
                     if (document.getElementById("dynamic-assignment-points")) document.getElementById("dynamic-assignment-points").textContent = points;
                     
+                    // 1. Sync the modal state with the specific item clicked
+                    isSubmitted = this.getAttribute("data-submitted") === "true";
+                    const savedTime = this.getAttribute("data-submission-time") || "";
+                    
+                    if (submitAssignmentBtn) {
+                        submitAssignmentBtn.setAttribute("data-deadline", deadline);
+                    }
+
+                    const uploadBtnTrigger = document.getElementById("upload-btn-trigger");
+                    const fileUploadInput = document.getElementById("file-upload-input");
+                    const uploadedFileName = document.getElementById("uploaded-file-name");
+                    const submissionStatus = document.getElementById("submission-status");
+
+                    // 2. Reset the file inputs completely when opening
+                    if (fileUploadInput) fileUploadInput.value = "";
+                    if (uploadedFileName) uploadedFileName.innerHTML = "";
+                    if (uploadBtnTrigger) uploadBtnTrigger.innerHTML = `<span class="red-plus">+</span> Upload`;
+
+                    // 3. Configure the UI based on its state
+                    if (isSubmitted) {
+                        // It was already submitted! Show the green UI
+                        submissionStatus.innerHTML = `<strong>Submitted on ${savedTime}</strong>`;
+                        submissionStatus.style.color = "white"; 
+                        submissionStatus.classList.remove("assigned");
+                        submissionStatus.classList.add("submitted"); 
+                        
+                        submitAssignmentBtn.textContent = "Undo Turn In";
+                        submitAssignmentBtn.disabled = false;
+                        submitAssignmentBtn.style.opacity = "1";
+                        submitAssignmentBtn.style.cursor = "pointer";
+                        
+                        uploadBtnTrigger.disabled = true;
+                        uploadBtnTrigger.style.opacity = "0.5";
+                        uploadBtnTrigger.style.cursor = "not-allowed";
+
+                    } else if (isClosed) {
+                        // It was missed! Show the red UI
+                        submissionStatus.innerHTML = `<strong>Auto-Submitted (No File)</strong>`;
+                        submissionStatus.style.color = "#dc3545"; 
+                        submissionStatus.classList.remove("assigned");
+                        submissionStatus.classList.add("submitted"); 
+                        
+                        submitAssignmentBtn.textContent = "Deadline Passed";
+                        submitAssignmentBtn.disabled = true;
+                        submitAssignmentBtn.style.opacity = "0.7";
+                        submitAssignmentBtn.style.cursor = "not-allowed";
+                        
+                        uploadBtnTrigger.disabled = true;
+                        uploadBtnTrigger.style.opacity = "0.5";
+                        uploadBtnTrigger.style.cursor = "not-allowed";
+                        
+                        uploadedFileName.innerHTML = `<span style="color: #dc3545; font-size: 13px; text-align: center; display: block; margin-top: 8px;">Deadline passed. Submission locked.</span>`;
+                    } else {
+                        // It is pending! Show the default UI
+                        submissionStatus.textContent = "Assigned";
+                        submissionStatus.style.color = ""; 
+                        submissionStatus.classList.remove("submitted");
+                        submissionStatus.classList.add("assigned"); 
+                        
+                        submitAssignmentBtn.textContent = "Submit";
+                        submitAssignmentBtn.disabled = false;
+                        submitAssignmentBtn.style.opacity = "1";
+                        submitAssignmentBtn.style.cursor = "pointer";
+                        
+                        uploadBtnTrigger.disabled = false;
+                        uploadBtnTrigger.style.opacity = "1";
+                        uploadBtnTrigger.style.cursor = "pointer";
+                    }
+
                     if (standardModal) standardModal.style.display = "flex";
                 }
             });
@@ -128,17 +267,77 @@ document.addEventListener("DOMContentLoaded", () => {
     const uploadBtnTrigger = document.getElementById("upload-btn-trigger");
     const fileUploadInput = document.getElementById("file-upload-input");
     const uploadedFileName = document.getElementById("uploaded-file-name");
-    const submitAssignmentBtn = document.getElementById("submit-assignment-btn");
     const submissionStatus = document.getElementById("submission-status");
+
+    // Background interval checker for an open modal
+    function checkAndAutoSubmit() {
+        if (!submitAssignmentBtn || !submissionStatus) return;
+        const standardModal = document.getElementById("assignment-modal");
+        
+        // Only run the lock animation if the modal is currently open and looking at a pending assignment
+        if (!standardModal || standardModal.style.display === "none") return;
+        if (isSubmitted) return; 
+
+        const deadlineString = submitAssignmentBtn.getAttribute("data-deadline") || "2099-12-31T23:59:59";
+        const deadlineDate = new Date(deadlineString);
+        const now = new Date();
+
+        if (now > deadlineDate) {
+            isSubmitted = true; // Lock it internally
+            
+            if (currentActiveAssignmentLink) {
+                currentActiveAssignmentLink.setAttribute("data-submitted", "false");
+            }
+
+            submissionStatus.innerHTML = `<strong>Auto-Submitted (No File)</strong>`;
+            submissionStatus.style.color = "#dc3545"; 
+            submissionStatus.classList.remove("assigned");
+            submissionStatus.classList.add("submitted"); 
+
+            submitAssignmentBtn.textContent = "Deadline Passed";
+            submitAssignmentBtn.disabled = true;
+            submitAssignmentBtn.style.opacity = "0.7";
+            submitAssignmentBtn.style.cursor = "not-allowed";
+            
+            if (uploadBtnTrigger) {
+                uploadBtnTrigger.disabled = true;
+                uploadBtnTrigger.style.opacity = "0.5";
+                uploadBtnTrigger.style.cursor = "not-allowed";
+            }
+            
+            if (uploadedFileName) {
+                uploadedFileName.innerHTML = `<span style="color: #dc3545; font-size: 13px; text-align: center; display: block; margin-top: 8px;">Deadline passed. Submission locked.</span>`;
+            }
+        }
+    }
+
+    checkAndAutoSubmit();
+    setInterval(checkAndAutoSubmit, 1000);
+
 
     if (uploadBtnTrigger && fileUploadInput) {
         uploadBtnTrigger.addEventListener("click", () => {
-            fileUploadInput.click(); 
+            if (!isSubmitted) fileUploadInput.click(); 
         });
 
         fileUploadInput.addEventListener("change", (e) => {
             if (e.target.files.length > 0) {
-                uploadedFileName.textContent = `Attached: ${e.target.files[0].name}`;
+                const file = e.target.files[0];
+                const fileName = file.name;
+                
+                let iconName = "description"; 
+                if (file.type.startsWith("image/")) iconName = "image";
+                else if (file.type === "application/pdf") iconName = "picture_as_pdf";
+                else if (file.type.startsWith("video/")) iconName = "movie";
+                else if (file.type.startsWith("audio/")) iconName = "audiotrack";
+
+                uploadedFileName.innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 6px;">
+                        <span class="material-icons" style="font-size: 18px;">${iconName}</span>
+                        <span style="word-break: break-all;">${fileName}</span>
+                    </div>
+                `;
+                
                 uploadBtnTrigger.innerHTML = `<span class="plus-icon">&#8634;</span> Change File`;
             }
         });
@@ -146,30 +345,59 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (submitAssignmentBtn && submissionStatus && fileUploadInput) {
         submitAssignmentBtn.addEventListener("click", () => {
-            if (fileUploadInput.files.length === 0) {
-                alert("Please upload a file before submitting the assignment.");
-                return;
+            if (!isSubmitted) {
+                if (fileUploadInput.files.length === 0) {
+                    alert("Please upload a file before submitting the assignment.");
+                    return;
+                }
+
+                const now = new Date();
+                const dateOptions = { month: 'short', day: 'numeric', year: 'numeric' };
+                const timeOptions = { hour: 'numeric', minute: '2-digit', hour12: true };
+                const formattedDate = now.toLocaleDateString('en-US', dateOptions);
+                const formattedTime = now.toLocaleTimeString('en-US', timeOptions);
+                const fullTimeString = `${formattedDate} at ${formattedTime}`;
+
+                // Mark the list item as officially submitted and save the time!
+                if (currentActiveAssignmentLink) {
+                    currentActiveAssignmentLink.setAttribute("data-submitted", "true");
+                    currentActiveAssignmentLink.setAttribute("data-submission-time", fullTimeString);
+                    checkListDeadlines(); 
+                }
+
+                submissionStatus.innerHTML = `<strong>Submitted on ${fullTimeString}</strong>`;
+                submissionStatus.style.color = "white"; 
+                submissionStatus.classList.remove("assigned");
+                submissionStatus.classList.add("submitted"); 
+                
+                isSubmitted = true;
+
+                submitAssignmentBtn.textContent = "Undo Turn In";
+                uploadBtnTrigger.disabled = true;
+                uploadBtnTrigger.style.opacity = "0.5";
+                uploadBtnTrigger.style.cursor = "not-allowed";
+
+            } else {
+                // Remove the submitted state from the list item
+                if (currentActiveAssignmentLink) {
+                    currentActiveAssignmentLink.setAttribute("data-submitted", "false");
+                    currentActiveAssignmentLink.removeAttribute("data-submission-time");
+                    checkListDeadlines(); 
+                }
+
+                isSubmitted = false;
+                
+                submissionStatus.textContent = "Not Submitted";
+                submissionStatus.classList.remove("submitted");
+                submissionStatus.classList.add("assigned");
+                submissionStatus.style.color = ""; 
+
+                submitAssignmentBtn.textContent = "Submit Assignment";
+                
+                uploadBtnTrigger.disabled = false;
+                uploadBtnTrigger.style.opacity = "1";
+                uploadBtnTrigger.style.cursor = "pointer";
             }
-
-            const now = new Date();
-            const dateOptions = { month: 'short', day: 'numeric', year: 'numeric' };
-            const timeOptions = { hour: 'numeric', minute: '2-digit', hour12: true };
-            
-            const formattedDate = now.toLocaleDateString('en-US', dateOptions);
-            const formattedTime = now.toLocaleTimeString('en-US', timeOptions);
-
-            submissionStatus.textContent = `Submitted on ${formattedDate} at ${formattedTime}`;
-            submissionStatus.classList.remove("assigned");
-            submissionStatus.classList.add("submitted"); 
-
-            submitAssignmentBtn.textContent = "Turned In";
-            submitAssignmentBtn.disabled = true;
-            submitAssignmentBtn.style.opacity = "0.7";
-            submitAssignmentBtn.style.cursor = "not-allowed";
-            
-            uploadBtnTrigger.disabled = true;
-            uploadBtnTrigger.style.opacity = "0.5";
-            uploadBtnTrigger.style.cursor = "not-allowed";
         });
     }
 
