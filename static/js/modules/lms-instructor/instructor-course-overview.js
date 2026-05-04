@@ -1,5 +1,61 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    // ── Watermark helper ──────────────────────────────
+    // Reuses the PUP logo already in the sidebar img.
+    function buildWatermark(label) {
+        const logoSrc = document.querySelector('.sidebar-logo-icon img')?.src || '';
+        const wm = document.createElement('div');
+        wm.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-20deg);z-index:0;opacity:0.10;text-align:center;pointer-events:none;width:80%;';
+
+        const img = document.createElement('img');
+        img.src = logoSrc;
+        img.style.cssText = 'max-width:220px;width:100%;display:block;margin:0 auto;';
+        img.alt = 'PUP Logo';
+
+        const lbl = document.createElement('div');
+        lbl.textContent = label;
+        lbl.style.cssText = 'font-size:28px;font-weight:900;letter-spacing:6px;color:#800000;margin-top:10px;font-family:serif;text-transform:uppercase;';
+
+        wm.appendChild(img);
+        wm.appendChild(lbl);
+        return wm;
+    }
+
+// ── Print Header helper ──────────────────────────────
+    function buildPrintHeader(titleText, metaText) {
+        // Grab logo from the favicon link which is guaranteed to have the correct Flask url_for path
+        const logoSrc = document.querySelector('link[rel="icon"]')?.href || '/static/images/logo88x88pup.png';
+
+        const headerContainer = el('div', {
+            attrs: { style: 'display:flex; align-items:center; margin-bottom:25px; padding-bottom:15px; border-bottom:2px solid #800000;' }
+        });
+
+        // The Logo
+        const logoImg = el('img', {
+            attrs: { 
+                src: logoSrc, 
+                alt: 'PUP Logo', 
+                style: 'width:90px; height:90px; margin-right:20px; object-fit:contain;' 
+            }
+        });
+
+        const textContainer = el('div', { attrs: { style: 'display:flex; flex-direction:column; justify-content:center;' } });
+
+        // PUP Headers (Removed the degree text)
+        const rpText = el('div', { text: 'Republic of the Philippines', attrs: { style: 'font-size:14px; font-family:Arial, sans-serif; margin-bottom:2px; color:#000;' } });
+        const pupText = el('div', { text: 'POLYTECHNIC UNIVERSITY OF THE PHILIPPINES', attrs: { style: 'font-size:18px; font-family:"Times New Roman", Times, serif; font-weight:bold; margin-bottom:12px; color:#000;' } });
+        
+        // Existing Course Texts
+        const cTitle = el('div', { text: titleText, attrs: { style: 'font-size:18px; font-family:Arial, sans-serif; font-weight:bold; color:#800000; margin-bottom:4px;' } });
+        const cMeta = el('div', { text: metaText, attrs: { style: 'font-size:13px; font-family:Arial, sans-serif; color:#555;' } });
+
+        append(textContainer, rpText, pupText, cTitle, cMeta);
+        append(headerContainer, logoImg, textContainer);
+
+        return headerContainer;
+    }
+
+
     // ==========================================
     // XSS DEFENCE — one helper, used everywhere
     // Never interpolate untrusted strings into
@@ -928,12 +984,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const courseCode  = document.getElementById('overviewCode')?.textContent?.trim()  || '';
         const section     = document.getElementById('overviewSection')?.textContent?.trim() || '';
 
-        const printHeader = el('div', { cls: 'print-header' });
-        append(printHeader,
-            el('div', { cls: 'print-title', text: courseTitle }),
-            el('div', { cls: 'print-meta',  text: `${courseCode}  |  ${section}  |  Printed: ${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}` })
-        );
+        const metaText = `${courseCode}  |  ${section}  |  Class Record  |  Printed: ${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`;
+        const printHeader = buildPrintHeader(courseTitle, metaText);
         region.appendChild(printHeader);
+        region.appendChild(buildWatermark('CLASS RECORD'));
 
         // ── Clone the table structure ─────────────────────────
         // We re-build from gradeColumns/gradeStudents/gradeData
@@ -1426,12 +1480,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const region = el('div', { attrs: { id: 'print-region' } });
 
-        const printHeader = el('div', { cls: 'print-header' });
-        append(printHeader,
-            el('div', { cls: 'print-title', text: courseTitle }),
-            el('div', { cls: 'print-meta',  text: `${courseCode}  |  ${section}  |  Attendance Sheet  |  Printed: ${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}` })
-        );
+        const metaText = `${courseCode}  |  ${section}  |  Attendance Sheet  |  Printed: ${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`;
+        const printHeader = buildPrintHeader(courseTitle, metaText);
         region.appendChild(printHeader);
+        region.appendChild(buildWatermark('ATTENDANCE SHEET'));
 
         const table = el('table', { cls: 'att-table', attrs: { style: 'width:100%;border-collapse:collapse;' } });
         const thead = el('thead');
